@@ -1,0 +1,73 @@
+<head>
+  <link rel="stylesheet" href="css/login.css" />
+
+</head>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 offset-md-3">
+      <br /><br />
+      <h2 class="text-center text-dark mt-5"> Login</h2>
+
+      <div class="card my-5" style="border: none;">
+        {{#if usernotfound}}
+          <p class="text-danger text-center">user not found !</p>
+        {{/if}}
+        {{#if wrongpassword}}
+          <p class="text-danger text-center">wrong password!</p>
+        {{/if}}
+        {{#if userstatus}}
+          <p class="text-danger text-center">denied access</p>
+        {{/if}}
+        <form
+          class="card-body cardbody-color p-lg-5"
+          method="post"
+          action="/userlogin"
+        >
+
+          {{! <div class="text-center">
+            <img
+              src=""
+              class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+              width="200px"
+              alt="profile"
+            />
+          </div> }}
+
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="Username"
+              aria-describedby="emailHelp"
+              placeholder="email"
+              name="email"
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="password"
+              name="Password"
+            />
+          </div>
+          <div class="text-center"><button
+              type="submit"
+              class="btn btn-color px-5 mb-5 w-100"
+            >Login</button></div>
+
+        </form>
+        <div class="text-center">
+          <a href="/signup">New User Please Signup</a>
+          {{! <button
+              type="submit"
+              class="btn btn-color px-5 mb-5 w-100"
+            >Login</button> }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

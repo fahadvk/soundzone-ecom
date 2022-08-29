@@ -1,0 +1,50 @@
+ 
+ <body>  <div class="container-fluid pt-4 px-4">
+                <div class="row g-4 d-flex justify-content-center">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4 table-responsive">
+                          
+                            <h4 class="mb-4 text-center">User Table</h4>
+                           
+                             <br><br>
+                            <table class="table text-center table-responsive  ">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">id</th>
+                                        <th scope="col"> Name</th>
+                                        <th scope="col">Mobile</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Status</th>
+   <th><button class="btn-outline-success"><a href="/admin/adduser"  style="text-decoration: none;color:black"> Add User</a></button></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   {{#each user}} 
+                                    <tr>
+                                      
+                                        <th scope="row">{{inc @index}}</th>
+                                        
+                                        <td>{{this.Name}}</td>
+                                        <td>{{this.Mobile}}</td>
+                                        <td>{{this.email}}</td>
+                                       
+                                        {{#if IsActive}}
+                                         <td>Active</td>
+                                        <td><button class="btn-outline-dark" onclick="return confirm('Block ?')"><a href="/admin/blockuser/{{this.id}}"> Block</a></button></td>
+                                       
+                                        {{else}}
+                                         <td>Blocked</td>
+                                         
+                                         <td><button class="btn-outline-white " onclick="return confirm('unBlock ?')"><a href="/admin/unblockuser/{{this.id}}">UnBlock</a></button></td>
+                                        
+                                      {{/if}}
+                                    </tr>
+                                    {{/each}} 
+                                </tbody>
+                            </table>
+                            
+                            
+                        </div>
+                    </div>
+                    </div>
+                    </body>

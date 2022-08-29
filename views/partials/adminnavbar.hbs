@@ -1,0 +1,117 @@
+{{! <button
+  class="btn btn-primary ms-2 mt-5"
+  type="button"
+  data-bs-toggle="offcanvas"
+  data-bs-target="#offcanvasExample"
+  aria-controls="offcanvasExample"
+>
+Menu
+</button>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasExample"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body"> }}
+{{! <div>
+      Some text as placeholder. In real life you can have the elements you have
+      chosen. Like, text, images, lists, etc.
+    </div> }}
+{{! <div class="dropdown mt-3">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div> }}
+
+<div class="sidebar pe-4 pb-3">
+  <nav class="navbar bg-light navbar-light">
+    <a href="index.html" class="navbar-brand mx-4 mb-3">
+      <h3 class="text-primary">Admin</h3>
+    </a>
+    <div class="d-flex align-items-center ms-4 mb-4">
+      <div class="position-relative">
+        <img
+          class="rounded-circle"
+          src="images/user.jpg"
+          alt=""
+          style="width: 40px; height: 40px;"
+        />
+        <div
+          class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"
+        ></div>
+      </div>
+      <div class="ms-3">
+        <h6 class="mb-0">Admin</h6>
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <div class="navbar-nav w-100">
+      <a href="/admin" class="nav-item nav-link"><i
+          class="fa fa-tachometer-alt me-2"
+        ></i>Dashboard</a>
+      <div class="nav-item nav-link">
+        <a
+          href="/admin/users"
+          class="nav-link"
+          {{! dropdown-toggle"
+          data-bs-toggle="dropdown" }}
+        ><i class="fa fa-user" aria-hidden="true"></i>User</a>
+        {{! <div class="dropdown-menu bg-transparent border-0">
+          <a href="button.html" class="dropdown-item">Buttons</a>
+          <a href="typography.html" class="dropdown-item">Typography</a>
+          <a href="element.html" class="dropdown-item">Other Elements</a>
+        </div> }}
+      </div>
+
+      <a href="/admin/category" class="nav-item nav-link"><i
+          class="fa fa-th me-2"
+        ></i>Categories</a>
+      <div class="nav-item dropdown">
+        <a
+          href="#"
+          class="nav-link dropdown-toggle"
+          data-bs-toggle="dropdown"
+        ><i class="fa fa-shopping-bag"></i>Products</a>
+        <div class="dropdown-menu bg-transparent border-0">
+          <a href="/admin/product" class="dropdown-item">Manage Products</a>
+          <a href="/admin/product/add-product" class="dropdown-item">Add new
+            Product</a>
+          {{! <a href="404.html" class="dropdown-item">404 Error</a>
+          <a href="blank.html" class="dropdown-item">Blank Page</a> }}
+        </div>
+      </div>
+      {{! <div class="nav-item dropdown-menu"> }}
+      {{! <a href="/admin/product" class="nav-item nav-link d"><i
+          class="fa fa-shopping-bag"
+          aria-hidden="true"
+        ></i>Products</a> }}
+
+      <a href="table.html" class="nav-item nav-link"><i
+          class="fa fa-table me-2"
+        ></i>Orders</a>
+      <a href="chart.html" class="nav-item nav-link"><i
+          class="fa fa-chart-bar me-2"
+        ></i>Coupons</a>
+
+      {{! </div>
+     </div> }}
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,48 @@
+<body>
+   <nav class="navbar navbar-light bg-light justify-content-center">
+  {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
+     <h4 class="text-primary mt-3">Products</h4>
+{{!-- <button
+  type="button"
+  class="btn btn-primary mt-4"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  Add Category
+</button>  --}}
+
+
+    </nav>
+    
+  </div>
+</div>
+<div class="row g-4 d-flex text-center justify-content-center mt-4">
+
+<table class="table text-center display ms-5" style="width:50%">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">SubCategory</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+       {{#each products}}
+      <th scope="row">{{inc @index}}</th>
+     
+      <td>{{this.Name}}</td>
+      <td>{{this.Category.Name}}</td>
+      <td>{{this.SubCategory.Name}}</td>
+      <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark" href="/admin/product/editproduct/{{this.id}}" >Update</a></button>
+      <button class="btn btn-outline-danger my-sm-0 " onclick="return confirm(`delete`)" type="button"><a class="text-dark" href="/admin/product/deleteproduct/{{this.id}}" >Delete</a></button></td>
+
+     
+    </tr>
+     {{/each}}
+    
+  </tbody>
+</table>
+</div>

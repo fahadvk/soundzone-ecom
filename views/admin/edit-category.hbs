@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="admincss/addcategory.css" />
+  </head>
+
+  <body>
+    <center>
+    <h4 class="text-center mt-5 center">Edit Category</h4>
+    <form action="/admin/category/editcategory/:id" method="post">
+  <label for="Name">Name</label>
+      <input
+        name="Name"
+        type="text"
+        class="feedback-input"
+        placeholder="Name"
+        value="{{editingcat.Name}}"
+      />
+      <br> <br>
+      <label for="Description">Description</label>
+
+      <input
+        name="Description"
+        class="feedback-input"
+        value="{{editingcat.Description}}"
+      ></textarea>
+    
+ <br>
+      <input type="submit" value="SUBMIT" />
+      </center>
+    </form>
+  </body>
+</html>
