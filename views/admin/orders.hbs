@@ -12,39 +12,26 @@
     </div>
     </div>
     <div class="row g-4 d-flex text-center justify-content-center mt-4">
-        <table class="table text-center display ms-5" style="width:50%">
+        <div id="demo_info" class="box"></div>
+        <table id="example" class="display" style="width:100%;">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Customer Name</th>
-                    <th scope="col"></th>
-                    <th scope="col">SubCategory</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Age</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-
-                    <th scope="row">{{inc @index}}</th>
-
-                    <td>{{this.Name}}</td>
-                    <td>{{this.Category.Name}}</td>
-                    <td>{{this.SubCategory.Name}}</td>
-                    <td><img style="width: 50px; height: 50px;" src="/products/{{this.Images.[0]}}"></td>
-                    <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark"
-                                href="/admin/product/editproduct/{{this.id}}">Edit</a></button></td>
-                    <td><label class="badge badge-danger">d</label></td>
-                    <td> <button class="btn btn-outline-danger my-sm-0 " onclick="confirmdelete('{{this.id}}')">
-                            {{!-- <a class="text-dark" href="/admin/product/deleteproduct/{{this.id}}"> --}}
-                                Delete
-                                {{!-- </a> --}}
-                        </button>
-                    </td>
-
-
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011-04-25</td>
+                    <td>$320,800</td>
                 </tr>
-
             </tbody>
         </table>

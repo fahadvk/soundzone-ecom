@@ -1,4 +1,4 @@
-require("mongoose");
+const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const Address = require("../models/Address");
@@ -142,40 +142,25 @@ viewAddresses:async(req,res,next)=>{
 editaddress:async(req,res,next)=>{
   let addressid = req.body.id;
   console.log(addressid);
-
-  //   console.log(Data);
-  // })
-  console.log(`new ObjectId("${addressid}")`);
 Address.aggregate([
-  // {
-  //   '$match': {
-  //     //  'Addresses.Pincode': 154
-  //     User:req.session.user._id
-      
-  //   }
-  // },
-  {
-    '$unwind': {
+{
+  '$unwind': {
       'path': '$Addresses'
     }
   },
-  //  {
-  //   '$match': {
-  //     //  'Addresses.Pincode': 154
-  //    'Addresses.$._id': addressid
-      
-  //   }
-  // }
+   {
+    '$match': {
+     'Addresses._id': mongoose.Types.ObjectId(addressid)  
+    }
+  }
 ])
-
 .then((data)=>{
-  const filter = 
-console.log(data)
+ console.log(data.Addresses);
+res.render("user/edit-address",{data:data.Addresses})
   })
 },
 ProfileSecurity:(req,res,next)=>{
-  res.render("user/accountsettings",{user:req.session.user})
+  res.render("user/accountsettings",{user:req.session.user,userlogged:true})
 }
-
 
 };
