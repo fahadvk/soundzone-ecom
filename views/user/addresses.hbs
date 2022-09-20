@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="main-body mt-5">
+        <br> <br><br>
+        <h3>Your Addresses</h3>
+        <section class="bg0 p-t-23 p-b-140">
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's content.</p>
+                    <a href="#" class="card-link">Edit</a>
+
+                </div>
+            </div>
+            <form action="/add-address" method="post">
+                <div class="row col-md-6 ">
+                    <div class="col-md-6 mb-3">
+                        <label for="first_name">First Name
+                            <span>*</span></label>
+                        <input type="text" class="form-control" id="first_name" value="" required name="FirstName">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="last_name">Last Name <span>*</span></label>
+                        <input type="text" class="form-control" id="last_name" value="" required name="LastName">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="phone_number">Phone No
+                            <span>*</span></label>
+                        <input type="tel" class="form-control" id="phone_number" min="0" value="" name="Phone" required>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label for="email_address">Email Address
+                            <span>*</span></label>
+                        <input type="email" class="form-control" id="email_address" value="" name="Email" required>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="company">Company/House Name</label>
+                        <input type="text" class="form-control" id="company" value="" name="House" required>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="street_address">Address
+                            <span>*</span></label>
+                        <textarea type="text" class="form-control mb-3" id="street_address" value="" name="Address"
+                            required></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="postcode">Postcode <span>*</span></label>
+                        <input type="text" class="form-control" id="postcode" value="" name="Pincode" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="city">Town/City <span>*</span></label>
+                        <input type="text" class="form-control" id="city" value="" name="City" required>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="state">State <span>*</span></label>
+                        <input type="text" class="form-control" id="state" value="" name="State" required>
+                    </div>
+                    <div class="col-12 mb-3 text-center">
+
+                        <button class="btn btn-outline-primary my-sm-0 " type="submit">Add New Address</button>
+                    </div>
+                </div>
+        </section>
+    </div>
+</div>

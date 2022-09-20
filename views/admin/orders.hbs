@@ -1,0 +1,50 @@
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-center">
+        {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
+        <h4 class="text-primary mt-3">Orders</h4>
+        {{!-- <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Add Category
+        </button> --}}
+
+
+    </nav>
+
+    </div>
+    </div>
+    <div class="row g-4 d-flex text-center justify-content-center mt-4">
+        <table class="table text-center display ms-5" style="width:50%">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col"></th>
+                    <th scope="col">SubCategory</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <th scope="row">{{inc @index}}</th>
+
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Category.Name}}</td>
+                    <td>{{this.SubCategory.Name}}</td>
+                    <td><img style="width: 50px; height: 50px;" src="/products/{{this.Images.[0]}}"></td>
+                    <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark"
+                                href="/admin/product/editproduct/{{this.id}}">Edit</a></button></td>
+                    <td><label class="badge badge-danger">d</label></td>
+                    <td> <button class="btn btn-outline-danger my-sm-0 " onclick="confirmdelete('{{this.id}}')">
+                            {{!-- <a class="text-dark" href="/admin/product/deleteproduct/{{this.id}}"> --}}
+                                Delete
+                                {{!-- </a> --}}
+                        </button>
+                    </td>
+
+
+                </tr>
+
+            </tbody>
+        </table>

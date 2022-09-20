@@ -2,6 +2,9 @@
   background-color: #0e1c36;
   color: #fff;
 }
+body {
+  background-color: #fff;
+}
 
 .profile-image-pic {
   height: 200px;

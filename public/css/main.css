@@ -3082,10 +3082,6 @@ input.num-product::-webkit-inner-spin-button {
   opacity: 0;
 }
 
-.how-itemcart1:hover:after {
-  opacity: 1;
-}
-
 /*---------------------------------------------*/
 .how-bor2,
 .how-bor1 {

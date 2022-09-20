@@ -1,48 +1,73 @@
 <body>
-   <nav class="navbar navbar-light bg-light justify-content-center">
-  {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
-     <h4 class="text-primary mt-3">Products</h4>
-{{!-- <button
-  type="button"
-  class="btn btn-primary mt-4"
-  data-bs-toggle="modal"
-  data-bs-target="#exampleModal"
->
-  Add Category
-</button>  --}}
+  <nav class="navbar navbar-light bg-light justify-content-center">
+    {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
+    <h4 class="text-primary mt-3">Products</h4>
+    {{!-- <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Add Category
+    </button> --}}
 
 
-    </nav>
-    
+  </nav>
+
   </div>
-</div>
-<div class="row g-4 d-flex text-center justify-content-center mt-4">
+  </div>
+  <div class="row g-4 d-flex text-center justify-content-center mt-4">
 
-<table class="table text-center display ms-5" style="width:50%">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Category</th>
-      <th scope="col">SubCategory</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-       {{#each products}}
-      <th scope="row">{{inc @index}}</th>
-     
-      <td>{{this.Name}}</td>
-      <td>{{this.Category.Name}}</td>
-      <td>{{this.SubCategory.Name}}</td>
-      <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark" href="/admin/product/editproduct/{{this.id}}" >Update</a></button>
-      <button class="btn btn-outline-danger my-sm-0 " onclick="return confirm(`delete`)" type="button"><a class="text-dark" href="/admin/product/deleteproduct/{{this.id}}" >Delete</a></button></td>
+    <table class="table text-center display ms-5" style="width:50%">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">SubCategory</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {{#each products}}
+          <th scope="row">{{inc @index}}</th>
 
-     
-    </tr>
-     {{/each}}
-    
-  </tbody>
-</table>
-</div>
+          <td>{{this.Name}}</td>
+          <td>{{this.Category.Name}}</td>
+          <td>{{this.SubCategory.Name}}</td>
+          <td><img style="width: 50px; height: 50px;" src="/products/{{this.Images.[0]}}"></td>
+          <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark"
+                href="/admin/product/editproduct/{{this.id}}">Edit</a></button></td>
+          <td> <button class="btn btn-outline-danger my-sm-0 " onclick="confirmdelete('{{this.id}}')">
+              {{!-- <a class="text-dark" href="/admin/product/deleteproduct/{{this.id}}"> --}}
+                Delete
+                {{!-- </a> --}}
+            </button>
+          </td>
+
+
+        </tr>
+        {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+  <script>
+    function confirmdelete(id) {
+      //  return swal.("are you sure")
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this deletion!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("This Products is deleting..!", {
+              icon: "warning"
+            });
+            location.assign(`/admin/product/deleteproduct/${id}`);
+          }
+        });
+
+    }
+  </script>

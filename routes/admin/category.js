@@ -9,8 +9,11 @@ const multer = require("multer");
 const adminController = require("../../Controller/adminController");
 const categoryController = require("../../Controller/categoryController");
 const SubCategery = require("../../models/subcategory");
-router.get("/", (req, res) => {
-  if (req.session.adminlogin) {
+const AppError = require("../../utils/apperr");
+const Products = require("../../models/products");
+const Auth = require("../../middlewares/auth")
+router.get("/",Auth.Adminlogged, (req, res) => {
+  
     Category.find((err, docs) => {
       subcategory.find((err, subdocs) => {
         res.render("admin/categories", {
@@ -21,23 +24,26 @@ router.get("/", (req, res) => {
         });
       });
     });
-  } else {
-    res.redirect("/admin");
-  }
+ 
 });
 
-router.post("/addcategory", (req, res) => {
-  categoryController.addcategory(req.body).then((response) => {
-    if (response.status) {
-      res.redirect("/admin/category");
-    } else {
-      res.redirect("/addcategory");
-    }
-  });
+router.post("/addcategory", (req, res, next) => {
+  categoryController
+    .addcategory(req.body)
+    .then((response) => {
+      if (response.status) {
+        res.redirect("/admin/category");
+      } else {
+        res.redirect("/addcategory");
+      }
+    })
+    .catch((e) => {
+      next(new AppError("failed to add category", 500));
+    });
 });
 //edit category
 let editingcat;
-router.get("/editcategory/:id", async function (req, res) {
+router.get("/editcategory/:id",Auth.Adminlogged, async function (req, res) {
   editingcat = await Category.findById(req.params.id);
 
   res.render("admin/edit-category", {
@@ -47,18 +53,39 @@ router.get("/editcategory/:id", async function (req, res) {
   });
 });
 
-router.post("/editcategory/:id", async (req, res) => {
+router.post("/editcategory/:id",Auth.Adminlogged, async (req, res, next) => {
   // editingcat = await Categery.findById(req.params.id);
 
   categoryController
     .editcategory(editingcat._id, req.body)
-    .then((response) => {});
-  res.redirect("/admin/category");
+    .then((response) => {
+      res.redirect("/admin/category");
+    })
+    .catch((e) => {
+      next(new AppError("failed editing Category", 500));
+    });
 });
 //Delete Category
-router.get("/deletecategory/:id", async function (req, res) {
-  await Category.findByIdAndDelete({ _id: req.params.id });
-  res.redirect("/admin/category");
+router.get("/deletecategory/:id",Auth.Adminlogged, async function (req, res, next) {
+  try {
+    let flag =await Products.findOne({Category:req.params.id})
+    if(!flag){
+      await Category.findByIdAndDelete({ _id: req.params.id });
+     res.json("Deleted")
+    }
+    else{
+     res.json( `Can't Delete,! its linked with ${flag.Name}`)
+      //  Swal("Oops!", "Something went wrong!", "error");
+      //  swal("Oops!", "Can't Delete,!", "its linked with ");
+    //  sweetAlert.apply("Oops!", "Can't Delete,!", "its linked with ")
+   
+    }
+   
+    res.redirect("/admin/category");
+  } catch (error) {
+    console.log(error);
+    next(new AppError("Error occured while deleting", 500));
+  }
 });
 
 // router.get("/addsubcategory", (req, res) => {
@@ -83,7 +110,8 @@ const filefilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/webp"
   ) {
     cb(null, true);
   } else {
@@ -108,19 +136,34 @@ router.post("/addsubcategory", upload.single("image"), (req, res) => {
     });
 });
 
-router.post("/editsubcategory/:id", async (req, res) => {
-  // editingcat = await Categery.findById(req.params.id);
+// router.post("/editsubcategory/:id", async (req, res, next) => {
+//   // editingcat = await Categery.findById(req.params.id);
 
-  console.log(editingcat.id);
-  categoryController
-    .editcategory(editingcat.id, req.body)
-    .then((response) => {});
-  res.redirect("/admin/category");
-});
+//   console.log(editingcat.id);
+//   categoryController
+//     .editcategory(editingcat.id, req.body)
+//     .then((response) => {
+//       res.redirect("/admin/category");
+//     })
+//     .catch((e) => {
+//       next(new AppError("failed", 500));
+//     });
+// });
 //Delete SubCategory
-router.get("/deletesubcategory/:id", async function (req, res) {
-  await subcategory.findByIdAndDelete({ _id: req.params.id });
-  res.redirect("/admin/category");
+router.get("/deletesubcategory/:id",Auth.Adminlogged, async function (req, res, next) {
+  try {
+   let flag =await Products.findOne({SubCategory:req.params.id})
+   if(!flag){
+    await subcategory.findByIdAndDelete({ _id: req.params.id });
+    res.json("Deleted")
+   }
+   else{
+    res.json( `Can't Delete,! its linked with ${flag.Name}`)
+   }
+    res.redirect("/admin/category");
+  } catch (error) {
+    next(new AppError("failed Deletion", 500));
+  }
 });
 
 module.exports = router;

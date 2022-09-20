@@ -1,177 +1,219 @@
 <head>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 </head>
+
 <body>
-   <nav class="navbar navbar-light bg-light justify-content-between">
-  <a class="navbar-brand ms-5 justify-self-center">AudioZone</a>
+  <nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand ms-5 justify-self-center">AudioZone</a>
     <h4 class="text-primary mt-3">Categories</h4>
-  
-  <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Add  Category
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Add Category
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="category/addcategory" method="post">
+              <input name="name" type="text" class="feedback-input text-dark" placeholder="Name" />
+              {{! <input name="images" type="file" class="feedback-input" /> }}
+              <textarea name="description" class="feedback-input text-dark" placeholder="description"></textarea>
+              <input type="submit" value="SUBMIT" />
+            </form>
+          </div>
+          {{!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> --}}
+        </div>
       </div>
-      <div class="modal-body">
-        <form action="category/addcategory" method="post">
-    <input
-      name="name"
-      type="text"
-      class="feedback-input text-dark"
-      placeholder="Name"
-    />
-    {{! <input name="images" type="file" class="feedback-input" /> }}
-    <textarea
-      name="description"
-      class="feedback-input text-dark"
-      placeholder="description"
-    ></textarea>
-    <input type="submit" value="SUBMIT" />
-  </form>
-      </div>
-      {{!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
     </div>
-  </div>
-</div>
-    {{!-- <button class="btn btn-outline-primary my-2 my-sm-0 me-5" type="button"><a href="/admin/category/addsubcategory" >Add subCategory</a></button> --}}
- {{!-- SubCategory --}}
+    {{!-- <button class="btn btn-outline-primary my-2 my-sm-0 me-5" type="button"><a
+        href="/admin/category/addsubcategory">Add subCategory</a></button> --}}
+    {{!-- SubCategory --}}
 
 
- <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary me-4 mt-4" data-bs-toggle="modal" data-bs-target="#exampleModale">
-  Add  SubCategory
-</button>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary me-4 mt-4" data-bs-toggle="modal" data-bs-target="#exampleModale">
+      Add SubCategory
+    </button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModale" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabele">Add SubCategory</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModale" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabele">Add SubCategory</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="category/addsubcategory" method="post" enctype="multipart/form-data">
+              <input name="name" type="text" class="feedback-input text-dark" placeholder="Name" />
+
+
+
+              <select name="Category" id="cars">
+
+                <option>Select</option>
+                {{#each data}}
+                <option value="{{this.id}}">{{this.Name}}</option>
+                {{/each}}
+              </select>'
+              </input>
+
+              <textarea name="description" class="feedback-input text-dark" placeholder="description"></textarea>
+              <input type="file" name="image" , placeholder=" image" />
+              <input type="submit" value="SUBMIT" />
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <form action="category/addsubcategory" method="post" enctype="multipart/form-data">
-    <input
-      name="name"
-      type="text"
-      class="feedback-input text-dark"
-      placeholder="Name"
-    />
-  
-    
 
-      <select name="Category" id="cars">
 
-        <option>Select</option>
+
+
+  </nav>
+  <div class="row g-4 d-flex text-center justify-content-center ">
+    <table id="example" class="display table text-center " style="width:50%">
+      <thead>
+
+        <tr>
+
+          <th>
+            #
+          </th>
+          <th>Category Name</th>
+          <th></th>
+
+        </tr>
+
+      </thead>
+      <tbody>
         {{#each data}}
-        <option value="{{this.id}}">{{this.Name}}</option>
+        <tr>
+          <td>{{inc @index}}</td>
+          <td>{{this.Name}}</td>
+
+          <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark"
+                href="/admin/category/editcategory/{{this.id}}">Update</a></button>
+            <button class="btn btn-outline-danger my-sm-0 " onclick="DeleteCat('{{this.id}}')">
+              {{!-- <a --}} {{!-- class="text-dark" href="/admin/category/deletecategory/{{this.id}}"> --}}
+                Delete
+                {{!-- </a> --}}
+            </button>
+          </td>
+        </tr>
         {{/each}}
-      </select>'
-      </input>
-   
-    <textarea
-      name="description"
-      class="feedback-input text-dark"
-      placeholder="description"
-    ></textarea>
-    <input type="file" name="image" , placeholder=" image" />
-    <input type="submit" value="SUBMIT" />
-  </form>
- </div>
+      </tbody>
+    </table>
+
   </div>
-</div>
-
-
-
-
-</nav>
-    <div class="row g-4 d-flex text-center justify-content-center ">
-      <table id="example" class="display table text-center " style="width:50%">
-        <thead >
-          
-            <tr>
-               
-              <th>
-                #
-              </th>
-                <th >Category Name</th>
-                  <th ></th>
-                 
-            </tr>
-        
-        </thead>
-        <tbody>
-              {{#each data}}
-            <tr>
-                <td>{{inc @index}}</td>
-                <td>{{this.Name}}</td>
-               
-               <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark" href="/admin/category/editcategory/{{this.id}}" >Update</a></button>
-               <button class="btn btn-outline-danger my-sm-0 " onclick="return confirm(`delete`)" type="button"><a class="text-dark" href="/admin/category/deletecategory/{{this.id}}" >Delete</a></button></td>
-            </tr>
-                {{/each}}
-            </tbody>
-            </table>
-            
-        </div>
-      </div>
-    </div>
   </div>
-   <div class="row g-4 d-flex text-center justify-content-center ">
-      <table id="example" class="display table text-center " style="width:50%">
-        <thead >
-          
-            <tr>
-               
-              <th>
-                #
-              </th>
-                <th >SubCategory Name</th>
-                  {{!-- <th > Category Name</th> --}}
-                  <th>image</th>
-                  <th ></th> 
-                {{!-- <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th> --}} 
-            </tr>
-        
-        </thead>
-        <tbody>
-              {{#each sub}}
-            <tr>
-                <td>{{inc @index}}</td>
-                <td>{{this.Name}}</td>
-                {{!-- <td>{{this.Category}}</td> --}}
-                <td><img style="width: 50px; height: 50px;" src="/Subcategories/{{this.image}}"></td>
-                <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark" href="/admin/category/editsubcategory/{{this.id}}" >Update</a></button>
-               <button class="btn btn-outline-danger my-sm-0 " onclick="return confirm(`delete`)" type="button"><a class="text-dark" href="/admin/category/deletesubcategory/{{this.id}}" >Delete</a></button></td>
-            </tr>
-                {{/each}}
-            </tbody>
-            </table>
-            
-        </div>
-      </div>
-    </div>
+  </div>
+  </div>
+  <div class="row g-4 d-flex text-center justify-content-center ">
+    <table id="example" class="display table text-center " style="width:50%">
+      <thead>
+
+        <tr>
+
+          <th>
+            #
+          </th>
+          <th>SubCategory Name</th>
+          {{!-- <th> Category Name</th> --}}
+          <th>image</th>
+          <th></th>
+          {{!-- <th>Office</th>
+          <th>Age</th>
+          <th>Start date</th>
+          <th>Salary</th> --}}
+        </tr>
+
+      </thead>
+      <tbody>
+        {{#each sub}}
+        <tr>
+          <td>{{inc @index}}</td>
+          <td>{{this.Name}}</td>
+          {{!-- <td>{{this.Category}}</td> --}}
+          <td><img style="width: 50px; height: 50px;" src="/Subcategories/{{this.image}}"></td>
+          <td> {{!--
+          <td><button class="btn btn-outline-success me-2 " type="button"><a class="text-dark"
+                href="/admin/category/editsubcategory/{{this.id}}">Update</a></button> --}}
+            <button class="btn btn-outline-danger my-sm-0 " onclick="DeleteSubCat('{{this.id}}')">
+              {{!-- <a class="text-dark" href="/admin/category/deletesubcategory/{{this.id}}"> --}}
+                Delete
+                {{!-- </a> --}}
+            </button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+  </div>
+  </div>
   </div>
 </body>
 
 
 
 <script>
-$(document).ready(function () {
+  $(document).ready(function () {
     $('#example').DataTable();
-});
+  });
+</script>
+{{!--
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script>
+  function DeleteCat(id) {
+    const Catid = id;
+
+
+    $.ajax({
+      url: `/admin/category/deletecategory/${Catid}`,
+
+
+      method: "GET",
+      success: (response) => {
+        console.log(response);
+        swal(response)
+
+        location.reload();
+
+      },
+
+
+    });
+
+  }
+  function DeleteSubCat(id) {
+    const Catid = id;
+
+
+    $.ajax({
+      url: `/admin/category/deletesubcategory/${Catid}`,
+
+
+      method: "GET",
+      success: (response) => {
+        console.log(response);
+        swal(response)
+
+        location.reload();
+
+      },
+
+
+    });
+  }
 </script>

@@ -18,6 +18,7 @@ const Userschema = new mongoose.Schema(
     Mobile: {
       type: Number,
       required: [true, "enter the number"],
+      unique: true,
     },
     Password: {
       type: String,
@@ -31,17 +32,12 @@ const Userschema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    Address: {
-      type: Array,
-    },
+   
     Cart: {
       type: ObjectId,
       ref: "cart",
     },
-    Wishlist: {
-      type: ObjectId,
-      ref: "wishlist",
-    },
+
     Orders: {
       type: ObjectId,
       ref: "orders",

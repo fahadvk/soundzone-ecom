@@ -1,0 +1,96 @@
+<html>
+
+<body>
+  <form class="bg0 p-t-75 p-b-85">
+    <div class="container">
+
+      <div class="row">
+        {{!-- <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50"> --}}
+          {{!-- {{#if cartnull}}
+          <h3>This Cart is Empty</h3>
+          {{else}} --}}
+
+          {{!-- <div class="m-l-25 m-r--38 m-lr-0-xl"> --}}
+            <div>
+              {{!-- <table class="table-shopping-cart">
+                <tr class="table_head">
+                  <th class="column-1">Product</th>
+                  <th class="column-2"></th>
+                </tr>
+                {{!-- {{#each Products}} --}}
+                {{!-- <tr class="table_row">
+                  <td class="column-1">
+                    <div class="how-itemcart1">
+                      <img {{! src="../public/images/item-cart-04.jpg" }} {{!-- src="/products/{{this.Items.Images.0}}"
+                        alt="IMG" />
+                    </div>
+                  </td>
+                </tr>
+              </table> --}}
+
+              <div class="row" id="wish">
+                {{#each data}}
+                <div class="card" style="width: 18rem;height:23rem;">
+                  <button onclick="addtowishlist('{{this.id}}')" type="submit" style="width: 5px;"> <span
+                      class="fa fa-times " aria-hidden="true"></span></button>
+                  <img class="card-img-top" src="/products/{{this.Images.[0]}}" alt="Card image cap"
+                    style="height: 200px;" />
+                  <div class="card-body">
+                    <h6 class="card-title">{{this.Name}}</h6>
+                    <p class="text-danger">Price:{{this.SellingPrice}}</p>
+                    <form action="/add-tocart" method="post">
+                      <input hidden name="productqnty" value="1">
+                      <input hidden value="{{this.id}}" name="productid">
+                      <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                    <a href="/productpage/{{this.id}}" class="btn btn-primary">View</a>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+
+  <script src="/javascripts/script.js"></script>
+  <script>
+
+    function addtowishlist(id) {
+      const Prodid = id;
+      console.log(Prodid);
+      $.ajax({
+        url: "/add-to-wishlist",
+        data: {
+          Product: Prodid,
+          // Qty: qty,
+          // val: val,
+        },
+
+        method: "POST",
+        success: (response) => {
+          console.log(response);
+          if (response === "added") {
+
+            swal("added to wishlist !", {
+              icon: "success"
+            });
+          }
+          if (response === "removed") {
+            swal("removed from wishlist!",)
+          }
+
+        },
+
+      });
+      $("#wish").load(location.href + " #wish")
+    }
+  </script>
+</body>
+
+</html>

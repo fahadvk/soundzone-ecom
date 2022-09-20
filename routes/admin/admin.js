@@ -7,13 +7,14 @@ const User = require("../../models/user");
 const Categery = require("../../models/category");
 const userController = require("../../Controller/userController");
 const adminController = require("../../Controller/adminController");
-
+const OrderController = require("../../Controller/OrderController")
 const Swal = require("sweetalert2");
-
+const Auth = require("../../middlewares/auth")
 const { response } = require("../../app");
 const {
   LogContext,
 } = require("twilio/lib/rest/serverless/v1/service/environment/log");
+const AppError = require("../../utils/apperr");
 let adminlogged = false;
 
 router.get("/", (req, res) => {
@@ -56,8 +57,7 @@ router.post("/login", (req, res) => {
 //   }
 // });
 //user management page
-router.get("/users", (req, res) => {
-  if (req.session.adminlogin) {
+router.get("/users",Auth.Adminlogged, (req, res) => {
     User.find((err, docs) => {
       res.render("admin/userdata", {
         layout: "admin/adminlayout",
@@ -66,17 +66,13 @@ router.get("/users", (req, res) => {
         user: docs,
       });
     });
-  } else {
-    res.redirect("/admin");
-  }
+ 
 });
 //add user
-router.get("/adduser", (req, res) => {
-  if (req.session.adminlogin) {
+router.get("/adduser",Auth.Adminlogged, (req, res) => {
+ 
     res.render("admin/adduser", { layout: "admin/adminlayout" });
-  } else {
-    res.redirect("/admin");
-  }
+
 });
 router.post("/adduser", (req, res) => {
   userController.adduser(req.body).then((response) => {
@@ -95,29 +91,44 @@ router.post("/adduser", (req, res) => {
   });
 });
 //block
-router.get("/blockuser/:id", (req, res) => {
+router.get("/blockuser/:id", Auth.Adminlogged,(req, res, next) => {
   console.log(req.params.id);
-  adminController.blockuser(req.params.id).then((response) => {
-    if (response.status) {
-      console.log("blocked");
+  adminController
+    .blockuser(req.params.id)
+    .then((response) => {
+      if (response.status) {
+        console.log("blocked");
 
-      res.redirect("/admin/users");
-    }
-  });
+        res.redirect("/admin/users");
+      }
+    })
+    .catch((err) => {
+      next(new AppError("Error while blocking", 500));
+    });
 });
 //unblock user
-router.get("/unblockuser/:id", (req, res) => {
+router.get("/unblockuser/:id",Auth.Adminlogged,(req, res) => {
   console.log(req.params.id);
-  adminController.unblockuser(req.params.id).then((response) => {
-    console.log(response);
-    if (response.status) {
-      console.log("unblocked");
-      req.session.activeuser = true;
+  adminController
+    .unblockuser(req.params.id)
+    .then((response) => {
+      console.log(response);
+      if (response.status) {
+        console.log("unblocked");
+        req.session.activeuser = true;
 
-      res.redirect("/admin/users");
-    }
-  });
+        res.redirect("/admin/users");
+      }
+    })
+    .catch((err) => {
+      next(new AppError("Unblocking failed", 500));
+    });
 });
+router.post("/verifyPayment",Auth.Isauth, OrderController.verifypayment)
+router.get("/coupons",adminController.viewcoupons)
+router.post('/addcoupon',adminController.addcoupon)
+router.post('/deletecoupon',adminController.Deletecoupon)
+router.get("/orders",OrderController.getallorders)
 
 // logout
 router.get("/logout", (req, res) => {

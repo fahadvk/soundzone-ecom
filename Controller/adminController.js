@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Category = require("../models/category");
 const bcrypt = require("bcrypt");
 const { response } = require("../app");
+const Coupons = require("../models/coupons");
 module.exports = {
   adminlogin: (data) => {
     return new Promise(async (resolve, reject) => {
@@ -88,41 +89,64 @@ module.exports = {
   // },
   blockuser: (id) => {
     return new Promise(async function (resolve, reject) {
-      let response = {
-        status: false,
-      };
-      const filter = { _id: id };
-      const update = { IsActive: false };
-      await User.findByIdAndUpdate(filter, update, { new: true })
-        .then(() => {
-          (response.status = true), resolve(response);
-        })
-        .catch(() => {
-          resolve(response);
-        });
+      try {
+        let response = {
+          status: false,
+        };
+        const filter = { _id: id };
+        const update = { IsActive: false };
+        await User.findByIdAndUpdate(filter, update, { new: true })
+          .then(() => {
+            (response.status = true), resolve(response);
+          })
+          .catch(() => {
+            resolve(response);
+          });
+      } catch (error) {
+        reject(errro);
+      }
     });
   },
   unblockuser: (id) => {
     return new Promise(async function (resolve, reject) {
-      let response = {
-        status: false,
-      };
-      // console.log(response.status);
-      const filter = { _id: id };
-      const update = { IsActive: true };
-      await User.findByIdAndUpdate(
-        filter,
-        update,
+      try {
+        let response = {
+          status: false,
+        };
+        // console.log(response.status);
+        const filter = { _id: id };
+        const update = { IsActive: true };
+        await User.findByIdAndUpdate(
+          filter,
+          update,
 
-        { new: true }
-      )
-        .then(() => {
-          response.status = true;
-          resolve(response);
-        })
-        .catch(() => {
-          resolve(response);
-        });
+          { new: true }
+        )
+          .then(() => {
+            response.status = true;
+            resolve(response);
+          })
+          .catch(() => {
+            resolve(response);
+          });
+      } catch (error) {
+        reject(err);
+      }
     });
   },
+  viewcoupons:(req,res,next)=>{
+    Coupons.find({}).then((data)=>{
+    res.render("admin/coupons",{data,layout:"admin/adminlayout"})
+})
+  },
+  addcoupon:(req,res,next)=>{
+    Coupons.create(req.body).then(()=>{
+      res.redirect("/admin/coupons")
+    })
+  },
+  Deletecoupon:(req,res,next)=>{
+    Coupons.findOneAndDelete({id:req.body.id}).then(()=>{
+    res.redirect("/admin/coupons")
+    })
+  }
 };

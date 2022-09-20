@@ -28,11 +28,11 @@
   <div class="container ">
     <div
       class="row d-flex justify-content-center align-items-center "
-    
+    ;"
     >
       <div class="col-lg-12 col-xl-11">
        
-            <div class="row justify-content-center"  >
+            <div class="row justify-content-center  >
                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                 <p class="text-center h3 fw-bold mb-3 mx-1 mx-md-4 ">Edit Products</p>
@@ -47,7 +47,7 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="/admin/product/edit-product/{{data._id}}" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
+                <form action="/admin/product/edit-product/{{data.id}}" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   <div class="form-group mb-3">
                     <label
                       for="name"
@@ -83,7 +83,7 @@
                       class="custom-select tm-select-accounts"
                       id="category"
                       name="Category"
-                    >{{#each Category}}
+                    >{{#each data}}
                       <option value="{{this.id}}">{{this.Name}}</option>
                    {{/each}}
                     </select>
@@ -97,7 +97,7 @@
                       class="custom-select tm-select-accounts"
                       id="category"
                       name="SubCategory"
-                    >{{#each subCategory}}
+                    >{{#each subdata}}
                       <option  value="{{this.id}}" selected>
                         {{this.Name}}
                       </option>
@@ -112,9 +112,9 @@
                           </label>
                           <input
                             id=""
-                            value="{{data.Brand}}"
-                            name="Brand"
+                            name="brand"
                             type="text"
+                            value="{{data.Brand}}"
                             size="30%"
                             class="form-control validate"
                             data-large-mode="true"
@@ -128,16 +128,13 @@
                           <input
                             id="stock"
                             name="Quantity"
-                            type="text"
                             value="{{data.Quantity}}"
+                            type="text"
                             class="form-control validate"
                             required
                           />
                         </div>
                         </div>
-                        {{!-- {{#each data.images}}
-                         <img src="/products/{{this.images}}"
-                        {{/each}} --}}
                    
                   <div class="row">
                       <div class="form-group mb-3 col-xs-12 col-sm-6">
@@ -149,8 +146,8 @@
                             id="expire_date"
                             name="Price"
                             type="text"
-                            size="30%"
                             value="{{data.Price}}"
+                            size="30%"
                             class="form-control validate"
                             data-large-mode="true"
                           />
@@ -162,9 +159,9 @@
                           </label>
                           <input
                             id="stock"
-                            value="{{data.SellingPrice}}"
                             name="SellingPrice"
                             type="text"
+                            value="{{data.SellingPrice}}"
                             class="form-control validate"
                             required
                           />
@@ -186,13 +183,7 @@
   <label for="formFileMultiple" class="form-label">Choose images</label>
   <input class="form-control" name="images" type="file" id="formFileMultiple" multiple="multiple">
 </div>
-                  {{!-- <input id="files" type="files" style="display:none;" />
-                  <input
-                    type="files"
-                    class="btn btn-primary btn-block mx-auto"
-                    value="UPLOAD PRODUCT IMAGES"
-                    onclick="document.getElementById('fileInput').click();"
-                  /> --}}
+                 
                   <div class="form-group mb-3 ms-5">
                     <label
                       for="description"
@@ -201,7 +192,6 @@
                     <textarea
                       class="form-control validate"
                       rows="3"
-                      
                       name="Description"
                       
                       required
@@ -216,7 +206,6 @@
                       class="form-control validate"
                       rows="3"
                       name="Specs"
-                     
                       required
                     >{{data.Specs}}</textarea>
                   </div>

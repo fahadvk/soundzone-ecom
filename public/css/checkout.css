@@ -1,0 +1,119 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #000000;
+  line-height: 1.3;
+  font-weight: 700;
+}
+  /* font-family: "Ubuntu", sans-serif; } */
+
+p {
+  color: #787878;
+  font-size: 14px;
+  line-height: 2;
+  font-weight: 400; }
+
+a {
+  -webkit-transition: all 500ms ease 0s;
+  transition: all 500ms ease 0s;
+  text-decoration: none;
+  outline: 0 solid transparent;
+  color: #787878;
+  /* color: #fbf5f5; */
+  font-weight: 600;
+  font-size: 12px; }
+  a:hover, a:focus {
+    -webkit-transition: all 500ms ease 0s;
+    transition: all 500ms ease 0s;
+    text-decoration: none;
+    outline: 0 solid transparent;
+    color: #000000;
+    font-weight: 600;
+    font-size: 12px; }
+
+ul,
+ol {
+  margin: 0; }
+  ul li,
+  ol li {
+    list-style: none; }
+
+/* :: 14.0 Checkout Area CSS */
+    .checkout_details_area form label {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600; }
+      .checkout_details_area form label span {
+        color: #0315ff; }
+    .checkout_details_area form .form-control {
+      height: 42px;
+      border: 1px solid #ebebeb;
+      background-color: transparent;
+      border-radius: 0; }
+    .checkout_details_area form .nice-select {
+      border-radius: 0;
+      border: 1px solid #ebebeb; }
+      .checkout_details_area form .nice-select .list {
+        width: 100%;
+        border-radius: 0; }
+    
+    .order-details-confirmation {
+      width: 100%;
+      border: 2px solid #ebebeb;
+      padding: 40px; }
+      @media only screen and (max-width: 767px) {
+        .order-details-confirmation {
+          margin-top: 100px;
+          padding: 20px; } }
+      .order-details-confirmation .order-details-form li {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -ms-grid-row-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 0;
+        font-size: 12px;
+        text-transform: uppercase;
+        padding: 20px 0;
+        border-bottom: 2px solid #ebebeb;
+        font-weight: 600; }
+      .order-details-confirmation .card-header h6 a {
+        display: block;
+        font-size: 14px;
+        text-transform: uppercase; }
+        .order-details-confirmation .card-header h6 a i {
+          color: #9f9f9f; }
+      .order-details-confirmation .card {
+        border: none; }
+      .order-details-confirmation .card-header {
+        background-color: transparent;
+        border-bottom: none; }
+      .order-details-confirmation .card-body p {
+        font-size: 12px;
+        line-height: 2;
+        color: #9f9f9f; }
+        .essence-btn {
+          display: inline-block;
+          min-width: 170px;
+          height: 50px;
+          color: #ffffff;
+          border: none;
+          border-radius: 0;
+          padding: 0 40px;
+          text-transform: uppercase;
+          font-size: 12px;
+          line-height: 50px;
+          background-color: #0315ff;
+          letter-spacing: 1.5px;
+          font-weight: 600; }
+          .essence-btn:hover, .essence-btn:focus {
+            color: #ffffff;
+            background-color: #dc0345; }

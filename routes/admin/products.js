@@ -6,21 +6,23 @@ const Products = require("../../models/products");
 const Category = require("../../models/category");
 const SubCategory = require("../../models/subcategory");
 const ProductController = require("../../Controller/ProductController");
-const ProductModel = require("../../models/products");
+const AppError = require("../../utils/apperr");
+const Auth = require("../../middlewares/auth")
+router.get("/",Auth.Adminlogged, (req, res) => {
 
-router.get("/", (req, res) => {
-  Products.find({})
-    .populate("Category")
-    .populate("SubCategory")
-    .then((data) => {
-      res.render("admin/products", {
-        layout: "admin/adminlayout",
-        adminlogged: true,
-        products: data,
+    Products.find({})
+      .populate("Category")
+      .populate("SubCategory")
+      .then((data) => {
+        res.render("admin/products", {
+          layout: "admin/adminlayout",
+          adminlogged: true,
+          products: data,
+        });
       });
-    });
+ 
 });
-router.get("/add-product", (req, res) => {
+router.get("/add-product",Auth.Adminlogged, (req, res) => {
   Category.find((err, data) => {
     SubCategory.find((err, subdata) => {
       res.render("admin/add-product", {
@@ -49,7 +51,7 @@ router.post(
     // ProductController.addproduct(req.body, req.files);
   }
 );
-router.get("/editproduct/:id", (req, res) => {
+router.get("/editproduct/:id",Auth.Adminlogged, (req, res) => {
   Products.findById(req.params.id)
     .populate("Category")
     .populate("SubCategory")
@@ -60,19 +62,17 @@ router.get("/editproduct/:id", (req, res) => {
 router.post(
   "/edit-product/:id",
   ProductController.uploadproductimage,
-  (req, res) => {
+  (req, res, next) => {
     console.log(req.body);
-    ProductController.editproduct(req.params.id, req.body, req.files).then(
-      () => {
+    ProductController.editproduct(req.params.id, req.body, req.files)
+      .then(() => {
         res.redirect("/admin/product");
-      }
-    );
+      })
+      .catch((e) => {
+        next(new AppError("Error while editing", 400));
+      });
   }
 );
-router.get("/deleteproduct/:id", async (req, res) => {
-  await ProductModel.findByIdAndDelete(req.params.id);
-
-  res.redirect("/admin/product");
-});
+router.get("/deleteproduct/:id",Auth.Adminlogged, ProductController.DeleteProduct);
 
 module.exports = router;

@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand ms-5 justify-self-center">AudioZone</a>
+        <h4 class="text-primary mt-3">Coupons</h4>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary me-4 mt-4" data-bs-toggle="modal" data-bs-target="#exampleModale">
+            Add Coupons
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModale" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/addcoupon" method="post">
+                            <input name="Name" type="text" class="feedback-input text-dark" placeholder="Name" />
+
+                            {{! <input name="images" type="file" class="feedback-input" /> }}
+                            <textarea name="description" class="feedback-input text-dark"
+                                placeholder="description"></textarea>
+                            <input name="Discount" type="text" class="feedback-input text-dark"
+                                placeholder="Discount" />
+                            <input name="CouponCode" type="text" class="feedback-input text-dark"
+                                placeholder="CouponCode" />
+                            <input name="MaxDiscount" type="text" class="feedback-input text-dark"
+                                placeholder="MaxDiscount" size="30%" />
+                            <input name="Minamount" type="text" class="feedback-input text-dark" placeholder="Minamount"
+                                size="30%" />
+                            <input type="submit" value="SUBMIT" />
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="row g-4 d-flex text-center justify-content-center ">
+        <table id="example" class="display table text-center " style="width:50%">
+            <thead>
+
+                <tr>
+
+                    <th>
+                        #
+                    </th>
+                    <th>Name</th>
+                    <th>Discount</th>
+                    <th>CouponCode</th>
+                    <th> MaxDiscount</th>
+                    <th> Minamount</th>
+
+                </tr>
+
+            </thead>
+
+            </thead>
+            <tbody>
+                {{#each data}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td>{{this.Name}}</td>
+                    {{!-- <td>{{this.Category}}</td> --}}
+                    <td>{{Discount}}</td>
+                    <td>{{CouponCode}}</td>
+                    <td>{{MaxDiscount}}</td>
+                    <td>{{Minamount}}</td>
+                    <form action="/admin/deletecoupon" method="post">
+                        <input name="id" hidden value="{{this.id}}">
+                        <td> <button class="btn btn-outline-danger my-sm-0 " type="submit">Delete</button>
+
+                        </td>
+                    </form>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+<script>
+    $.
+</script>
