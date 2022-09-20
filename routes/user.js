@@ -217,9 +217,9 @@ router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
 router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
 router.get("/myaccount/addresses",Auth.Isauth,Controller.viewAddresses)
-router.get("/myaccount/orders",(req,res,next)=>{
-  res.render("user/orders")
-})
+router.post("/edit-address",Auth.Isauth,Controller.editaddress)
+router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)
+router.get("/myaccount/account-security",Auth.Isauth,Controller.ProfileSecurity)
 
 
 

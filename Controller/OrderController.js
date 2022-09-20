@@ -129,7 +129,14 @@ orderconfirmation:(req,res,next)=>{
    getallorders:(req,res,next)=>{
     res.render("admin/orders",{  layout: "admin/adminlayout",adminlogged:true})
    }
+,
+viewuserOrders:(req,res,next)=>{
+ Orders.find({User:req.session.user._id}).then((data)=>{
+  res.render("user/orders",{data})
+})
 
+  
+}
 }
 
 

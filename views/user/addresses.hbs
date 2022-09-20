@@ -3,18 +3,26 @@
         <br> <br><br>
         <h3>Your Addresses</h3>
         <section class="bg0 p-t-23 p-b-140">
+            <div class="d-flex">
+                {{#each Address}}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.FirstName}}</h5>
 
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                    <a href="#" class="card-link">Edit</a>
-
+                        <p class="card-text">{{this.House}} &nbsp; <br> {{this.Address}} &nbsp; <br>{{this.Pincode}}
+                            &nbsp;
+                            {{this.City}} &nbsp;{{this.State}} <br>
+                            {{this.Phone}}</p>
+                        <form action="/edit-address" method="post">
+                            <input hidden name="id" value="{{this.id}}">
+                            <button type="submit" class="btn-sm btn-primary ">Edit</button>
+                        </form>
+                    </div>
                 </div>
+                {{/each}}
             </div>
+            <br>
+
             <form action="/add-address" method="post">
                 <div class="row col-md-6 ">
                     <div class="col-md-6 mb-3">
@@ -64,6 +72,7 @@
                         <button class="btn btn-outline-primary my-sm-0 " type="submit">Add New Address</button>
                     </div>
                 </div>
+            </form>
         </section>
     </div>
 </div>

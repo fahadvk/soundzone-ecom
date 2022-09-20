@@ -8,7 +8,7 @@ const Categery = require("../../models/category");
 const userController = require("../../Controller/userController");
 const adminController = require("../../Controller/adminController");
 const OrderController = require("../../Controller/OrderController")
-const Swal = require("sweetalert2");
+
 const Auth = require("../../middlewares/auth")
 const { response } = require("../../app");
 const {

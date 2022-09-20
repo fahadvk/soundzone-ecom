@@ -3,7 +3,7 @@ const AppError = require("../utils/apperr");
 const UserModel = require("../models/user");
 const Products = require("../models/products");
 const wishlist = require("../models/wishlilst");
-const { default: Swal } = require("sweetalert2");
+
 
 module.exports = {
   addtocart: async (req, res, next) => {

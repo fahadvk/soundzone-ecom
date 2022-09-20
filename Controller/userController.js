@@ -137,7 +137,44 @@ viewProfile:(req,res,next)=>{
 },
 viewAddresses:async(req,res,next)=>{
  let userAddress = await Address.findOne({User:req.session.user._id})
-  res.render("user/addresses",{Address:Address.Addresses})
+  res.render("user/addresses",{Address:userAddress.Addresses})
+},
+editaddress:async(req,res,next)=>{
+  let addressid = req.body.id;
+  console.log(addressid);
+
+  //   console.log(Data);
+  // })
+  console.log(`new ObjectId("${addressid}")`);
+Address.aggregate([
+  // {
+  //   '$match': {
+  //     //  'Addresses.Pincode': 154
+  //     User:req.session.user._id
+      
+  //   }
+  // },
+  {
+    '$unwind': {
+      'path': '$Addresses'
+    }
+  },
+  //  {
+  //   '$match': {
+  //     //  'Addresses.Pincode': 154
+  //    'Addresses.$._id': addressid
+      
+  //   }
+  // }
+])
+
+.then((data)=>{
+  const filter = 
+console.log(data)
+  })
+},
+ProfileSecurity:(req,res,next)=>{
+  res.render("user/accountsettings",{user:req.session.user})
 }
 
 

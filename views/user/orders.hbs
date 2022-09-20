@@ -14,28 +14,28 @@
                     <th scope="col">#</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
-                    <th scope="col">Handle</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
+                {{#each data}}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row">{{inc @index}}</th>
+                    <td></td>
+                    <td></td>
+                    <td>{{this.OrderStatus}}</td>
+                    <td>{{this.TotalPrice}}</td>
+                    <td> <a href="/viewsingleorder/{{this.id}}" class="btn btn-primary">
+                            View
+                        </a></td>
+                    <td>{{date this.createdAt}}</td>
+
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                {{/each}}
+
             </tbody>
         </table>
     </div>

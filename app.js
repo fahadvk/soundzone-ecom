@@ -26,6 +26,11 @@ hbs.registerPartials(path.join(__dirname, "/views/partials"));
 hbs.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
+hbs.registerHelper("date",function(val){
+ val = val.toUTCString().slice(0, 16);
+  return val;
+
+})
 
 hbs.registerHelper("mult",function (value1,value2) {
   return value1 * value2;  
