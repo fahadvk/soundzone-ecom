@@ -215,12 +215,8 @@ router.post("/placeorder",Auth.Isauth,OrderController.placeorder)
 router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
 
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
-router.get("/myaccount",(req,res)=>{
-  res.render("user/myaccount")
-})
-router.get("/myaccount/addresses",(req,res,next)=>{
-  res.render("user/addresses")
-})
+router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
+router.get("/myaccount/addresses",Auth.Isauth,Controller.viewAddresses)
 router.get("/myaccount/orders",(req,res,next)=>{
   res.render("user/orders")
 })

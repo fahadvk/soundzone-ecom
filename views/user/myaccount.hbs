@@ -134,10 +134,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-3">
-                            <h6 class="mb-0">Full Name</h6>
+                            <h6 class="mb-0">User Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            Kenneth Valdez
+                            {{user.Name}}
                         </div>
                     </div>
                     <hr>
@@ -146,7 +146,7 @@
                             <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            fip@jukmuh.al
+                            {{user.email}}
                         </div>
                     </div>
                     <hr>
@@ -155,18 +155,18 @@
                             <h6 class="mb-0">Phone</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            (239) 816-9029
+                            {{user.Mobile}}
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    {{!-- <div class="row">
                         <div class="col-sm-3">
                             <h6 class="mb-0">Account Created at</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            (320) 380-4539
+                            {{user.updatedAt}}
                         </div>
-                    </div>
+                    </div> --}}
 
                     {{!-- <div class="row">
                         <div class="col-sm-3">

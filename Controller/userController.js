@@ -130,6 +130,14 @@ module.exports = {
   }catch(e){
     next(new AppError("Error While Adding Address",500))
   }
+},
+viewProfile:(req,res,next)=>{
+
+  res.render("user/myaccount",{user:req.session.user})
+},
+viewAddresses:async(req,res,next)=>{
+ let userAddress = await Address.findOne({User:req.session.user._id})
+  res.render("user/addresses",{Address:Address.Addresses})
 }
 
 
