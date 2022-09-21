@@ -112,7 +112,7 @@ module.exports = {
   },
   
   addAddress:async(req,res,next)=>{
-    url = req.originalUrl;
+   
     try{
    const addressfound = await Address.findOne({User:req.session.user._id})
    if(!addressfound)
@@ -137,30 +137,61 @@ viewProfile:(req,res,next)=>{
 },
 viewAddresses:async(req,res,next)=>{
  let userAddress = await Address.findOne({User:req.session.user._id})
+ if(!userAddress){
+  userAddress = {}
+ }
   res.render("user/addresses",{Address:userAddress.Addresses})
 },
-editaddress:async(req,res,next)=>{
+vieweditaddress:async(req,res,next)=>{
   let addressid = req.body.id;
   console.log(addressid);
-Address.aggregate([
-{
-  '$unwind': {
-      'path': '$Addresses'
-    }
-  },
-   {
-    '$match': {
-     'Addresses._id': mongoose.Types.ObjectId(addressid)  
-    }
-  }
-])
-.then((data)=>{
- console.log(data.Addresses);
-res.render("user/edit-address",{data:data.Addresses})
-  })
+  findAddress(addressid).then((data)=>{
+ console.log(data[0].Addresses);
+res.render("user/edit-address",{data:data[0].Addresses})
+  })  
 },
 ProfileSecurity:(req,res,next)=>{
   res.render("user/accountsettings",{user:req.session.user,userlogged:true})
+},
+editAddress:async(req,res,next)=>{
+  console.log(req.body);
+  Address.findOneAndUpdate({'Addresses._id':req.body.id},{'$set':{'Addresses.$.FirstName':req.body.FirstName,
+   'Addresses.$.LastName':req.body.LastName, 
+   'Addresses.$.Phone':req.body.Phone,
+   'Addresses.$.Email':req.body.Email,
+   'Addresses.$.House':req.body.House,
+   'Addresses.$.Address':req.body.Address,
+   'Addresses.$.Pincode':req.body.Pincode,
+   'Addresses.$.City':req.body.City,
+   'Addresses.$.State':req.body.State,
+      }})
+  .then((data)=>{
+    console.log(data);
+      res.redirect("/myaccount/addresses")
+    }).catch((e)=>{
+      next(new AppError("Error while fetching Address !!",500))
+    })
+  
+
 }
 
 };
+ function findAddress(addressid){
+  return new Promise ((resolve,reject)=>{
+ Address.aggregate([
+  {
+    '$unwind': {
+        'path': '$Addresses'
+      }
+    },
+     {
+      '$match': {
+       'Addresses._id': mongoose.Types.ObjectId(addressid)  
+      }
+    }
+  ]).then((data)=>{
+  resolve(data)
+  }).catch((e)=>{reject(e)})
+})
+    }
+

@@ -213,14 +213,15 @@ router.all("/checkout",Auth.Isauth,OrderController.viewcheckout)
 router.post("/add-address",Auth.Isauth,Controller.addAddress)
 router.post("/placeorder",Auth.Isauth,OrderController.placeorder)
 router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
-
+//User Profile
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
 router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
 router.get("/myaccount/addresses",Auth.Isauth,Controller.viewAddresses)
-router.post("/edit-address",Auth.Isauth,Controller.editaddress)
+router.post("/view-edit-address",Auth.Isauth,Controller.vieweditaddress)
 router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)
 router.get("/myaccount/account-security",Auth.Isauth,Controller.ProfileSecurity)
-
+router.post("/edit-address",Auth.Isauth,Controller.editAddress)
+router.get("/view-single-order/:id",Auth.Isauth,OrderController.viewsingle)
 
 
 module.exports = router;

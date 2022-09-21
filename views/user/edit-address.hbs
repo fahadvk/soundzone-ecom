@@ -1,6 +1,7 @@
 <div class="container">
     <div class="main-body mt-5">
-        <form action="/add-address" method="post">
+        <br>
+        <form action="/edit-address" method="post">
             <div class="row col-md-6 ">
                 <div class="col-md-6 mb-3">
                     <label for="first_name">First Name
@@ -33,8 +34,8 @@
                 <div class="col-12 mb-3">
                     <label for="street_address">Address
                         <span>*</span></label>
-                    <textarea type="text" class="form-control mb-3" id="street_address" value="{{data.Address}}"
-                        name="Address" required></textarea>
+                    <textarea type="text" class="form-control mb-3" id="street_address" name="Address"
+                        required>{{data.Address}}</textarea>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="postcode">Postcode <span>*</span></label>
@@ -49,11 +50,11 @@
                     <label for="state">State <span>*</span></label>
                     <input type="text" class="form-control" id="state" value="{{data.State}}" name="State" required>
                 </div>
-                <div class="col-12 mb-3 text-center">
+                <input hidden name="id" value="{{data._id}}" <div class="col-12 mb-3 text-center">
 
-                    <button class="btn btn-outline-primary my-sm-0 " type="submit">Add New Address</button>
-                </div>
+                <button class="btn btn-outline-primary my-sm-0 " type="submit">Add New Address</button>
             </div>
-        </form>
     </div>
+    </form>
+</div>
 </div>

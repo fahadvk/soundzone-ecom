@@ -1,0 +1,68 @@
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-12 mt-5">
+            <div class="page-title text-center">
+                <h3> Order Details</h3>
+            </div>
+        </div>
+        <table class="table table-borderless " style="margin-bottom: 3rem;">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Products</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+
+                    <th scope="col">total</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orderDetails.Products}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.Items.Name}}</td>
+                    <td>{{this.Qty}}</td>
+                    <td>{{this.Items.SellingPrice}}</td>
+
+
+
+                    <td>{{mult Qty this.Items.SellingPrice}}</td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>SubTotal</td>
+
+                    <td>{{orderDetails.TotalPrice}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Discount</td>
+
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+
+                    <td>{{orderDetails.TotalPrice}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Payment Method</td>
+
+                    <td>{{orderDetails.Paymentmethod}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

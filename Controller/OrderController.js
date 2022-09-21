@@ -17,11 +17,16 @@ module.exports={
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
           Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images" ).then((data)=>{
-         console.log();
+          if(!Addresses)
+          {
+            Addresses ={}
+          }
             res.render("user/checkout",{Products:data.Products,
             title:"Checkout",
          subtotal :  req.body.subtotal,
          Addresses:Addresses.Addresses})
+          }).catch((err)=>{
+            next(new AppError("Error while viewing Checkout Page",500))
           })
         
         } catch (error) {
@@ -116,11 +121,16 @@ try {
 orderconfirmation:(req,res,next)=>{
   // console.log(req.params.id)
   try {
-    Order.findOne({_id:req.params.id}).populate("Products.Items").then((data)=>{
+    Orders.findOne({_id:req.params.id}).populate("Products.Items").then((data)=>{
       console.log(data)
-      Coupons.find({},{Name,CouponCode}).
+      if(!data){
+        next(new AppError("can't get any orders",500))
+      }
+      // Coupons.find({},{Name,CouponCode}).
       res.render("user/order-confirmation",{data})
       
+    }).catch((e)=>{
+      next(new AppError("Error while loading this page",404))
     })
   } catch (error) {
     next(new AppError("Error while loading this page",404))
@@ -134,9 +144,15 @@ viewuserOrders:(req,res,next)=>{
  Orders.find({User:req.session.user._id}).then((data)=>{
   res.render("user/orders",{data})
 })
-
+ },
+ viewsingle:async(req,res,next)=>{
   
+  let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
+  console.log(orderDetails);
+    res.render("user/viewsingle",{orderDetails,userlogged:true})
+
 }
+
 }
 
 
