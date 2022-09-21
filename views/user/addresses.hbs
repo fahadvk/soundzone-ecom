@@ -13,10 +13,17 @@
                             &nbsp;
                             {{this.City}} &nbsp;{{this.State}} <br>
                             {{this.Phone}}</p>
-                        <form action="/view-edit-address" method="post">
-                            <input hidden name="id" value="{{this.id}}">
-                            <button type="submit" class="btn-sm btn-primary ">Edit</button>
-                        </form>
+                        <div class="d-flex">
+                            <form action="/view-edit-address" method="post">
+                                <input hidden name="id" value="{{this.id}}">
+                                <button type="submit" class=""> <i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></button>
+                            </form>
+                            <form action="/delete-address" method="post">
+                                <input hidden name="id" value="{{this.id}}">
+                                <button type="submit" class=""> <i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 {{/each}}

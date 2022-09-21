@@ -15,6 +15,7 @@
 
         </div>
 
+
         <table id="order-table" class="table">
             <thead>
                 <tr>
@@ -31,12 +32,13 @@
                 {{#each data}}
                 <tr>
                     <th scope="row">{{inc @index}}</th>
-                    <td></td>
-                    <td></td>
+                    <td>{{this.id}}</td>
+                    {{!--
+                    <td>{{}}</td> --}}
                     <td>{{this.OrderStatus}}</td>
                     <td>{{this.TotalPrice}}</td>
-                    <td> <a href="/view-single-order/{{this.id}}" class="btn btn-primary">
-                            View
+                    <td> <a href="/view-single-order/{{this.id}}" class="">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
                         </a></td>
                     <td>{{date this.createdAt}}</td>
 

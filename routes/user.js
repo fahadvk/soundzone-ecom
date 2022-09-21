@@ -222,6 +222,6 @@ router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)
 router.get("/myaccount/account-security",Auth.Isauth,Controller.ProfileSecurity)
 router.post("/edit-address",Auth.Isauth,Controller.editAddress)
 router.get("/view-single-order/:id",Auth.Isauth,OrderController.viewsingle)
-
+router.post("/delete-address",Auth.Isauth,Controller.deleteaddress)
 
 module.exports = router;

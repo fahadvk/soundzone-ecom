@@ -19,32 +19,36 @@
 
     </div>
     </div>
-    <div class="row g-4 d-flex text-center justify-content-center mt-4">
-        <div id="demo_info" class="box"></div>
-        <table id="order-table" class="display" style="width:100%;">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011-04-25</td>
-                    <td>$320,800</td>
-                </tr>
-            </tbody>
-        </table>
-        <script>
-            $(document).ready(function () {
-                $('#order-table').DataTable();
-            });
-        </script>
+
+    <div class="row g-4 d-flex text-center justify-content-center mt-4" style="width: 100%;">
+        <div class="container " style="width: 50%;">
+            <div id="demo_info" class="box"></div>
+            <table id="order-table" class="display" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start date</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data}}
+                    <tr>
+                        <td> {{inc @index}}</td>
+                        <td>{{this.id}}</td>
+                        <td>{{this.User.Name}}</td>
+                        <td>{{this.TotalPrice}}</td>
+                        <td>2011-04-25</td>
+                        <td>$320,800</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <script>
+                $(document).ready(function () {
+                    $('#order-table').DataTable();
+                });
+            </script>

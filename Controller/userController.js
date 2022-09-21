@@ -173,7 +173,14 @@ editAddress:async(req,res,next)=>{
     })
   
 
+},
+deleteaddress:async(req,res,next)=>{
+console.log(req.body);
+  await Address.findOneAndUpdate({User:req.session.user._id},
+    // {$pull:{'Addresses._id':req.body.id}})
+  { $pull: { Addresses: { _id: req.body.id } } })
 }
+
 
 };
  function findAddress(addressid){

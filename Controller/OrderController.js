@@ -137,11 +137,14 @@ orderconfirmation:(req,res,next)=>{
   }
    },
    getallorders:(req,res,next)=>{
-    res.render("admin/orders",{  layout: "admin/adminlayout",adminlogged:true})
-   }
+    Orders.find({}).sort({'createdAt':-1}).populate('Products.Items').populate('User').then((data)=>{
+      console.log(data);
+    res.render("admin/orders",{  layout: "admin/adminlayout",data,adminlogged:true})
+    }) 
+  }
 ,
 viewuserOrders:(req,res,next)=>{
- Orders.find({User:req.session.user._id}).then((data)=>{
+ Orders.find({User:req.session.user._id}).sort({'createdAt':-1}).then((data)=>{
   res.render("user/orders",{data})
 })
  },

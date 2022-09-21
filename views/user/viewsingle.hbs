@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                     <th scope="col">Products</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Price</th>
@@ -21,6 +22,7 @@
                 {{#each orderDetails.Products}}
                 <tr>
                     <th scope="row">{{inc @index}}</th>
+                    <td><img src="/products/{{this.Items.Images.[0]}}" style="width:100px;height:80px;" </td>
                     <td>{{this.Items.Name}}</td>
                     <td>{{this.Qty}}</td>
                     <td>{{this.Items.SellingPrice}}</td>
@@ -64,5 +66,6 @@
                 </tr>
             </tbody>
         </table>
+
     </div>
 </div>
