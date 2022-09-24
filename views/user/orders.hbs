@@ -14,44 +14,161 @@
 
 
         </div>
+        <div class="card">
+            <div class="card-body d-flex  justify-content-around">
+                <div style="width:30%">
+                    <p></p>
+                </div>
+                <div class="" style="width:25%">
+                    <table>
+
+                        <tr>
+                            <td>Products</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div style="width:100%;">
+                    <ul class="d-flex justify-content-around">
+                        <p>OrderStatus</p>
+                        <li>
+                            TotalPrice</li>
+                        <li>Ordered Date</li>
+                        <li>View</li>
+                        <li>Cancel</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+        {{#each data}}
+        <div class="card">
+            <div class="card-body d-flex  justify-content-around  align-items-around">
+                <div style="width:30%;height:100px;">
+                    {{#each this.Products}}
+                    <ol>
+                        <img src="/products/{{this.Items.Images.[0]}}" style="width:50px;height:50px">
+                    </ol>
+                    {{/each}}
+                </div>
+                <div class="" style="width:25%">
+                    <table>
+                        {{#each this.Products}}
+                        <ol>
+                            <li> {{this.Items.Name}}</li>
+                        </ol>
+                        {{/each}}
+                    </table>
+                </div>
+                <div style="width:100%;" class="d-flex justify-content-around align-items-around">
+                    {{!-- <ul style="background-color:;" class="d-flex  justify-content-around"> --}}
+
+                        <input type="hidden" name="stat" class="stat class" value="{{this.OrderStatus}}">
+                        {{!--
+                        <script>
+                            $(document).ready(function () {
+                                // let stat = document.getElementsByName('stat').value
+                                // let stat = $('input[name="stat"]').val()
+                                //alert(stat)
+                                console.log(stat)
+                                if (stat == 'Cancelled') {
+
+                                    $("p.OrderStatus").addClass("text-danger");
+                                }
+                            });
+                        </script> --}}
+                        <div style="width: 20%;">
+
+                            <p style="" class="OrderStatus text-center text-success">
+                                {{this.OrderStatus}}</p>
+
+                        </div>
+
+                        <div class="d-flex justify-content-center" style="width: 20%;">
+
+                            <span style="" class="text-center ms-3">{{this.TotalPrice}}</span>
 
 
-        <table id="order-table" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each data}}
-                <tr>
-                    <th scope="row">{{inc @index}}</th>
-                    <td>{{this.id}}</td>
-                    {{!--
-                    <td>{{}}</td> --}}
-                    <td>{{this.OrderStatus}}</td>
-                    <td>{{this.TotalPrice}}</td>
-                    <td> <a href="/view-single-order/{{this.id}}" class="">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                        </a></td>
-                    <td>{{date this.createdAt}}</td>
+                        </div>
+                        <div class="d-flex justify-content-center" style="width: 20%; ">
+                            <li style="">{{date this.createdAt}}</li>
+                        </div>
+                        <div class="d-flex justify-content-center" style="width: 15%;">
+                            <li style=""> <a href="/view-single-order/{{this.id}}" class="">
+                                    <i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                        </div>
+                        <div class="d-flex justify-content-center" style="width: 15%;">
+                            <li style=""> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;"
+                                        class=" fa fa-ban" aria-hidden="true"></i>
+                                </button></li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div>
 
-                </tr>
-                {{/each}}
-
-            </tbody>
-        </table>
+            </div>
+        </div>
+        {{/each}}
     </div>
+    {{!-- <table id="order-table" class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+            <tr>
+                <th scope="row">{{inc @index}}</th>
+                <td>{{this.id}}</td>
+                {{!--
+                <td>{{}}</td> --}}
+                {{!-- <td>{{this.OrderStatus}}</td>
+                <td>{{this.TotalPrice}}</td>
+                <td>{{date this.createdAt}}</td>
+                <td> <a href="/view-single-order/{{this.id}}" class="">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a></td>
+
+                <td> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;" class=" fa fa-ban"
+                            aria-hidden="true"></i>
+                    </button></td>
+            </tr>
+            {{/each}}
+
+        </tbody>
+    </table> --}}
+</div>
 </div>
 </div>
 <script>
-    $(document).ready(function () {
-        $('#order-table').DataTable();
-    });
+    function cancelorder(id) {
+        //  return swal.("are you sure")
+        swal({
+            title: "Are you sure?",
+            text: "Once you Cancelled, you will not be able to recover this action!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("This Order is Cancelling.!", {
+                        icon: "warning"
+                    });
+                    location.assign(`/cancel-order/${id}`);
+                }
+            });
+
+    }
 </script>

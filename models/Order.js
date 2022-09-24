@@ -50,9 +50,10 @@ const Orderschema = new mongoose.Schema({
             "Shipped",
             "In-transist",
             "Delivered",
-            "Cancelled",
             "Returned",
-            "Return-Confirmed"
+            "Return-Confirmed",
+            "Refunded",
+            "Cancelled",
         ]
      
       },

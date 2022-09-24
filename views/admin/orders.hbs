@@ -1,12 +1,5 @@
 <body>
-    <link rel="stylesheet" type="text/css"
-        href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css"
-        href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css">
-    <script type="text/javascript" charset="utf8"
-        src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+
     <nav class="navbar navbar-light bg-light justify-content-center">
         {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
         <h4 class="text-primary mt-3">Orders</h4>
@@ -15,40 +8,107 @@
         </button> --}}
 
 
+
+
     </nav>
 
     </div>
     </div>
 
     <div class="row g-4 d-flex text-center justify-content-center mt-4" style="width: 100%;">
-        <div class="container " style="width: 50%;">
+        <div class="container " style="width: 60%">
             <div id="demo_info" class="box"></div>
-            <table id="order-table" class="display" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each data}}
-                    <tr>
-                        <td> {{inc @index}}</td>
-                        <td>{{this.id}}</td>
-                        <td>{{this.User.Name}}</td>
-                        <td>{{this.TotalPrice}}</td>
-                        <td>2011-04-25</td>
-                        <td>$320,800</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-            <script>
-                $(document).ready(function () {
-                    $('#order-table').DataTable();
-                });
-            </script>
+            <div id="dynamic">
+                <table id="order-table" class="display table  " style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th> Order id</th>
+                            <th>Customer Name</th>
+                            <th>Amount</th>
+                            <th>Ordered date</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each data}}
+                        <tr>
+                            <td> {{inc @index}}</td>
+                            <td>{{this.id}}</td>
+                            <td>{{this.User.Name}}</td>
+                            <td>{{this.TotalPrice}}</td>
+                            <td>{{date this.createdAt}}</td>
+                            <td>{{this.OrderStatus}}</td>
+                            {{!-- <td> <select name="statusd" id="status">
+                                    <option va> Pending</option>
+                                    <option> Placed</option>
+                                    <option value=""> Shipped</option>
+                                    <option value="">In-transist</option>
+                                    <option value="">Delivered</option>
+                                    <option value="">Cancelled</option>
+                                    <option value="">Returned</option>
+                                    <option value="">Return-Confirmed</option>
+                                </select></td> --}}
+                            <td>
+                                {{!-- <button class="btn" onclick="changestat('{{this.id}}',-1)"><i
+                                        class="fa fa-chevron-circle-left" aria-hidden="true"></i></button> --}}
+                                <button class="btn" onclick="changestat('{{this.id}}')"><i
+                                        class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+
+                                <button class="btn" onclick="cancelorder('{{this.id}}')"><i class="fa fa-ban"
+                                        aria-hidden="true"></i></button>
+
+                                {{!-- <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target=".bd-example-modal-sm">Small modal</button> --}}
+
+
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            function changestat(id) {
+                // let x = document.getElementById(Odstatus).value;
+                console.log(id)
+                $.ajax({
+                    url: "/admin/changeOrderStat",
+                    data: {
+                        id: id,
+
+                        //  Status: x,
+                    },
+
+                    method: "POST",
+                    success: (response) => {
+                        loadPage()
+                    },
+
+                })
+
+            }
+            function loadPage() {
+                $("#dynamic").load(location.href + " #dynamic")
+            }
+            function cancelorder(id) {
+                $.ajax({
+                    url: "/admin/cancelorder/" + id,
+                    method: "GET",
+                    success: (response) => {
+                        loadPage()
+                    },
+
+                })
+
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#order-table').DataTable();
+            });
+        </script>

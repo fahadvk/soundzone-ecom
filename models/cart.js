@@ -24,6 +24,14 @@ const cartschema = new mongoose.Schema(
         },
       },
     ],
+    Total:{
+      type:Number,
+    },
+    Discount:{
+      type:Number,
+      default:0,
+    }
+
   },
   { timestamps: true }
 );

@@ -179,6 +179,33 @@ console.log(req.body);
   await Address.findOneAndUpdate({User:req.session.user._id},
     // {$pull:{'Addresses._id':req.body.id}})
   { $pull: { Addresses: { _id: req.body.id } } })
+},
+viewchangePassword:(req,res,next)=>{
+  res.render("user/changePassword",{notmatch:req.session.passwordnotmatch,Notmatch:req.session.confirmnotmatch})
+  req.session.passwordnotmatch = null;
+},
+changePassword:async(req,res,next)=>{
+  if (req.body.Password!==req.body.ConfirmPassword)
+  {
+    req.session.confirmnotmatch = true;
+    res.redirect("/changePassword")
+  }
+ let data = await User.findOne({email:req.session.email} ,"Password -_id")
+await bcrypt.compare(req.body.OldPassword,data.Password).then(async(doc)=>{
+  if(doc){
+
+    console.log(doc);
+    Password = await bcrypt.hash(req.body.Password,10)
+    User.findOneAndUpdate({email:req.session.email},{Password:Password}).then((d)=>{
+      res.redirect("/myaccount/account-security")
+    })
+  }
+  else{
+    console.log("old Password Not Match !!")
+    req.session.passwordnotmatch = true;
+    res.redirect("/changePassword")
+  }
+})
 }
 
 

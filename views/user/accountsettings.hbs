@@ -12,6 +12,7 @@
                             <div id="Name" class="Name col-sm-9 text-secondary">
                                 {{user.Name}}
                             </div>
+
                         </div>
                         <hr>
                         <div class="row">
@@ -21,6 +22,8 @@
                             <div class="col-sm-9 text-secondary">
                                 {{user.email}}
                             </div>
+
+
                         </div>
                         <hr>
                         <div class="row">
@@ -32,6 +35,16 @@
                             </div>
                         </div>
                         <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Password</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                *******
+
+                            </div>
+
+                        </div>
                         {{!-- <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Phone</h6>
@@ -40,17 +53,21 @@
                                 {{date user.updatedAt}}
                             </div>
                         </div> --}}
-                        <button type="button" onclick="editevent()">Ediit</button>
-
+                        {{!-- <button class="justify-content-end "><i class=" fa fa-pencil-square-o"
+                                aria-hidden="true"></i></button> --}}
+                        <button type="button">Ediit</button>
+                        <a href="/changePassword" style="float: right; color: dimgray;">change
+                            Password</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 <script>
     function editevent() {
-        $("div.Name").replaceWith("<input value='{{userDetails.Name}}' type = 'text'>");
+        $("div.Name").replaceWith("<input value='{{userDetails.Name}}' type = 'text'>")
     }
 
 

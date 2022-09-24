@@ -129,7 +129,8 @@ router.get("/coupons",adminController.viewcoupons)
 router.post('/addcoupon',adminController.addcoupon)
 router.post('/deletecoupon',adminController.Deletecoupon)
 router.get("/orders",OrderController.getallorders)
-
+router.post("/changeOrderStat",OrderController.updateStatus)
+router.get("/cancelorder/:id",OrderController.cancelorder)
 // logout
 router.get("/logout", (req, res) => {
   req.session.adminlogin = false;

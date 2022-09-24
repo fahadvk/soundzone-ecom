@@ -209,10 +209,11 @@ router.post("/add-to-wishlist", Auth.Isauth, cartController.addtowishlist);
 router.post("/changeQty", cartController.changeQty);
 router.post("delete-wish-item",cartController.Removefromwishlist)
 //Checkout
-router.all("/checkout",Auth.Isauth,OrderController.viewcheckout)
+router.post("/checkout",Auth.Isauth,OrderController.viewcheckout)
 router.post("/add-address",Auth.Isauth,Controller.addAddress)
 router.post("/placeorder",Auth.Isauth,OrderController.placeorder)
 router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
+router.post("/verifycoupon",Auth.Isauth,OrderController.verifycoupon)
 //User Profile
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
 router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
@@ -222,6 +223,9 @@ router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)
 router.get("/myaccount/account-security",Auth.Isauth,Controller.ProfileSecurity)
 router.post("/edit-address",Auth.Isauth,Controller.editAddress)
 router.get("/view-single-order/:id",Auth.Isauth,OrderController.viewsingle)
+router.get("/cancel-order/:id",Auth.Isauth,OrderController.cancelorder)
 router.post("/delete-address",Auth.Isauth,Controller.deleteaddress)
-
+router.route("/changePassword")
+.get(Auth.Isauth,Controller.viewchangePassword)
+.post(Auth.Isauth,Controller.changePassword)
 module.exports = router;

@@ -16,16 +16,28 @@ module.exports={
         // console.log(req.body);
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
+
           Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images" ).then((data)=>{
           if(!Addresses)
           {
             Addresses ={}
           }
+          
+          let Total = req.body.subtotal - req.session.discount;
+          if(isNaN(Total)){
+            Total = req.body.subtotal
+          }
+     console.log(Total,req.session.discount);
             res.render("user/checkout",{Products:data.Products,
             title:"Checkout",
          subtotal :  req.body.subtotal,
-         Addresses:Addresses.Addresses})
+         Addresses:Addresses.Addresses,
+        Discount:req.session.discount,
+        userlogged:req.session.login,
+      Total},
+        )
           }).catch((err)=>{
+            console.log(err);
             next(new AppError("Error while viewing Checkout Page",500))
           })
         
@@ -138,22 +150,85 @@ orderconfirmation:(req,res,next)=>{
    },
    getallorders:(req,res,next)=>{
     Orders.find({}).sort({'createdAt':-1}).populate('Products.Items').populate('User').then((data)=>{
-      console.log(data);
+      // console.log(data);
     res.render("admin/orders",{  layout: "admin/adminlayout",data,adminlogged:true})
     }) 
   }
 ,
 viewuserOrders:(req,res,next)=>{
- Orders.find({User:req.session.user._id}).sort({'createdAt':-1}).then((data)=>{
+ Orders.find({User:req.session.user._id,OrderStatus:{$ne:'Pending'}}).sort({'createdAt':-1}).populate('Products.Items').then((data)=>{
+//  console.log(data);
   res.render("user/orders",{data})
 })
  },
  viewsingle:async(req,res,next)=>{
-  
+  try {
   let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
   console.log(orderDetails);
     res.render("user/viewsingle",{orderDetails,userlogged:true})
+  }
+  catch{
+    next(new AppError("Error While viewing this Order ",500))
+  }
+},
+cancelorder:async(req,res,next)=>{
+ await Orders.findOneAndUpdate({_id:req.params.id},{OrderStatus:'Cancelled'})
+ res.redirect("/myaccount/orders")
+},
+updateStatus:async(req,res,next)=>{
+  console.log(req.body);
+  try {
+    let OrderStatus =await Orders.findOne({_id:req.body.id},"OrderStatus")
+  let Statsuses =  Orders.schema.path('OrderStatus').enumValues;
+  let val = OrderStatus.OrderStatus;
+  let index = Statsuses.indexOf(val);
+   if(index < 7){
+  let update = Statsuses[index+1]
+  console.log(index);
+    Orders.findOneAndUpdate({_id:req.body.id},{OrderStatus:update}).then((data)=>{
+      console.log(data);
+      res.json(data)
+    })
+ }
+} catch (error) {
+    next(new AppError("Error while updating order",500))
+}
+},
+verifycoupon:(req,res,next)=>{
+  let response = {};
+  Coupons.findOne({
+  CouponCode:req.body.check
+  }).then(async(data)=>{
+    if(!data){
+      response.message = "Invalid Coupon"
+      res.json(response)
+    }
+    else{
+      if(!data.ActiveUsers.includes(req.session.user._id))
+      { response.message = "Sorry this Coupon is not Available"
+        res.json(response);
+      }
+  console.log(data);
+  if(req.body.Subtotal >= data.Minamount)
+  {
+    let Discount =req.body.Subtotal * data.Discount/100;
+    console.log(Discount);
+    Discount > data.MaxDiscount ? Discount = data.MaxDiscount:"";
+    response.message = `${data.Name}Coupon applied`
+  // await Cart.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
+      response.status = true;
+      response.Discount = Discount;
 
+
+    res.json(response)
+
+  }
+  else{
+    response.message = `Minimum ${data.Minamount} is requried for this coupon`
+    res.json(response)
+  }
+}
+  })
 }
 
 }

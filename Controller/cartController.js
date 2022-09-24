@@ -130,7 +130,7 @@ module.exports = {
     let user = req.session.user;
     try {
       let cart = user.Cart;
-      await Cart.findOneAndUpdate(
+      await Cart.findOneAndUpdate( 
         { _id: cart },
         { $pull: { Products: { Items: productid } } }
       );

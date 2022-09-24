@@ -140,12 +140,25 @@ module.exports = {
 })
   },
   addcoupon:(req,res,next)=>{
-    Coupons.create(req.body).then(()=>{
+    console.log(req.body);
+  
+    Coupons.create(req.body).then(async(doc)=>{
+      let Data;
+      if(req.body.Category == 'All Current Users' ){
+        User.find({},"_id ").then(async(data)=>{ Data =  data.map((a)=>{ return a._id })
+        console.log(Data);
+        doc.ActiveUsers = Data;
+        console.log(doc);
+         await doc.save() 
+      })
+      }
       res.redirect("/admin/coupons")
     })
+  
   },
   Deletecoupon:(req,res,next)=>{
-    Coupons.findOneAndDelete({id:req.body.id}).then(()=>{
+    console.log(req.body);
+    Coupons.findOneAndDelete({_id:req.body.id}).then(()=>{
     res.redirect("/admin/coupons")
     })
   }
