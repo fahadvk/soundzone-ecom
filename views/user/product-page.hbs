@@ -55,7 +55,6 @@
           </h4>
 
           <span class="mtext-106 cl2 text-danger" style="margin-left: 70px;"> {{product.SellingPrice}} </span>
-
           <span class="mtext- cl2" style="text-decoration-line: line-through;margin-left: 10px;">
             MRP: {{product.Price}}
           </span>
@@ -67,7 +66,8 @@
                     <i class="fs-16 zmdi zmdi-minus"></i>
                   </div>
 
-                  <input class="mtext-104 cl3 txt-center num-product" type="number" name="productqnty" value="1" />
+                  <input id="quantity" class="mtext-104 cl3 txt-center num-product" type="number" name="productqnty"
+                    value="1" />
 
                   <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                     <i class="fs-16 zmdi zmdi-plus"></i>
@@ -75,14 +75,17 @@
                 </div>
                 {{!-- js-addcart-detail --}}
 
-                <input hidden value="{{product.id}}" name="productid">
+                <input id="proid" hidden value="{{product.id}}" name="productid">
                 <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 ">Add to cart
                 </button>
               </form>
-              <form action="/buy-now">
-                <input hidden value="{{product.id}}" name="productid">
-                <button class="mt-1 flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn3   "> Buy Now
+              <form action="/checkout" method="post">
+
+                <input hidden value="{{product.id}}" name="Product">
+                <input type="hidden" name="subtotal" id="productPrice" value="{{product.SellingPrice}}">
+                <button onclick="buynow()" class="mt-1 flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn3   "> Buy Now
                 </button>
+
               </form>
             </div>
           </div>
@@ -210,6 +213,33 @@
 <script src="../vendor/sweetalert/sweetalert.min.js"></script>
 {{!--
 <script src="/javascripts/script.js"></script> --}}
+{{!--
+<script>
+  function buynow() {
+    let price = document.getElementById('productPrice').value
+    let qty = document.getElementById('quantity').value
+    let totalprice = qty * price;
+    let Proid = document.getElementById('proid').value
+    console.log(totalprice, Proid, qty, price)
+    $.ajax({
+      url: "/checkout",
+      data: {
+        Product: Proid,
+        subtotal: totalprice,
+
+
+      },
+
+      method: "POST",
+      success: (response) => {
+
+      },
+      // error: {
+      //   //   alert('error'),
+      // },
+    });
+  }
+</script> --}}
 <script>
   function addtowishlist(id) {
     const Prodid = id;

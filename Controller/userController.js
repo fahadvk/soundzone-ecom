@@ -3,6 +3,8 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const Address = require("../models/Address");
 const AppError = require("../utils/apperr");
+const Coupons = require("../models/coupons");
+const { response } = require("../app");
 
 module.exports = {
   userlogin: (logindata) => {
@@ -77,8 +79,7 @@ module.exports = {
         if (Userdoc) {
           console.log("user already exsit");
           // req.session.duplicateuser = true;
-
-          response.userexist = true;
+         response.userexist = true;
           resolve(response);
         }
       });
@@ -95,11 +96,15 @@ module.exports = {
 
       user
         .save()
-        .then(() => {
+        .then((doc) => {
           response.status = true;
           response.mobile = Mobile;
           response.email = email;
-          resolve(response);
+          
+          Coupons.updateMany({$or:[{Category:'NewUser'},{Category:'AllUser'}]},{$push:{ActiveUsers:doc._id}}).then((data)=>{
+            resolve(response);
+          })
+         
           //res.render("user/confirm");
         })
         .catch((e) => {
@@ -206,6 +211,51 @@ await bcrypt.compare(req.body.OldPassword,data.Password).then(async(doc)=>{
     res.redirect("/changePassword")
   }
 })
+},
+EditName:async(req,res,next)=>{
+  console.log(req.body)
+  try {
+ let updated =  await  User.findOneAndUpdate({_id:mongoose.Types.ObjectId(req.session.user._id)},{Name:req.body.Name},{new:true}) 
+ console.log(updated);
+ res.json(updated)
+  } catch (error) {
+    next(new AppError('Error While Editing Name',500))
+  }
+
+
+},
+EditEmail:async(req,res,next)=>{
+  console.log(req.body.Email)
+  let response = {}
+  try {
+   
+  let exist = await User.findOne({email:req.body.Email})
+  console.log(exist);
+  if(!exist)
+  {
+  let updated = await User.findOneAndUpdate({_id:mongoose.Types.ObjectId(req.session.user._id)},{email:req.body.Email},{new:true})
+  response.data = updated;
+  res.json(response)
+
+  }
+  else{
+    response.message = 'This email is already registered '
+   
+    res.json(response)
+  }
+} catch (error) {
+  response.failed  = true;
+  res.json(response)
+  console.log(error);
+    next(new AppError('Error found While Editing Email Please try later',500))
+}
+  
+},
+EditMobile:async(req,res,next)=>{
+  console.log(req.body);
+let exist = await User.findOne({Mobile:req.body.Mobile})
+console.log(exist);
+
 }
 
 

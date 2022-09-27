@@ -144,7 +144,7 @@ module.exports = {
   
     Coupons.create(req.body).then(async(doc)=>{
       let Data;
-      if(req.body.Category == 'All Current Users' ){
+      if(req.body.Category == 'All Current Users'  || 'AllUser'){
         User.find({},"_id ").then(async(data)=>{ Data =  data.map((a)=>{ return a._id })
         console.log(Data);
         doc.ActiveUsers = Data;

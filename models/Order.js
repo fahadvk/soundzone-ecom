@@ -48,7 +48,7 @@ const Orderschema = new mongoose.Schema({
             "Pending",
             "Placed",
             "Shipped",
-            "In-transist",
+            "In-transist",  
             "Delivered",
             "Returned",
             "Return-Confirmed",

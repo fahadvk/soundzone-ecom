@@ -155,6 +155,7 @@
                             <h5>Your Order</h5>
 
                         </div>
+                        {{#if isFromCart}}
                         <div style="height: 250px;width: 400px;overflow:scroll;overflow-x: hidden;">
                             {{!-- <input hidden name="Products" value="{{Products}}"> --}}
                             {{#each Products}}
@@ -177,7 +178,31 @@
                             </div>
                             {{/each}}
                         </div>
+                        {{else}}
 
+                        <div style="height: 250px;width: 400px;overflow:scroll;overflow-x: hidden;">
+                            {{!-- <input hidden name="Products" value="{{Products}}"> --}}
+
+
+                            <div class="">
+                                <div class="d-flex">
+                                    <img class="ms-1" src="/products/{{Products.Images.[0]}}"
+                                        style="height: 80px;width:100px">
+                                    <h6>{{Products.Name}}</h6>
+                                    <div style="float: right;d-flex">
+                                        <br><br>
+                                        <i class="text-center me-4 j mb-1">{{Products.Qty}}</i>
+                                        <i>X</i>
+                                        <i class="text-center">{{Products.SellingPrice}}</i>
+                                    </div>
+                                </div>
+                                {{!-- <div style="" class="d-flex"> --}}
+                                    {{!-- </div> --}}
+                                <hr>
+                            </div>
+
+                        </div>
+                        {{/if}}
                         <ul id="dynamicArea" class=" order-details-form mb-2">
                             <div class="d-flex flex-w flex-m m-r-20 m-tb-5">
                                 <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"
@@ -274,6 +299,7 @@
             }
         }
         function razorpayPayment(data) {
+            console.log(data)
             var options = {
                 "key": "rzp_test_Uxh9u0c2EwOZ14", // Enter the Key ID generated from the Dashboard
                 "amount": data.amount,  // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

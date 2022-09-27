@@ -15,6 +15,16 @@ const Couponschema = new mongoose.Schema(
     Description: {
       type: String,
     },
+    Category:{
+      type:String,
+      enum:[
+        "All New Users",
+        "All Current Users",
+        "AllUser",
+        
+
+      ]
+    },
     Discount:{
         type:Number,
     },

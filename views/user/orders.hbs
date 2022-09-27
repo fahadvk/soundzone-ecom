@@ -67,22 +67,11 @@
                     {{!-- <ul style="background-color:;" class="d-flex  justify-content-around"> --}}
 
                         <input type="hidden" name="stat" class="stat class" value="{{this.OrderStatus}}">
-                        {{!--
-                        <script>
-                            $(document).ready(function () {
-                                // let stat = document.getElementsByName('stat').value
-                                // let stat = $('input[name="stat"]').val()
-                                //alert(stat)
-                                console.log(stat)
-                                if (stat == 'Cancelled') {
 
-                                    $("p.OrderStatus").addClass("text-danger");
-                                }
-                            });
-                        </script> --}}
                         <div style="width: 20%;">
 
-                            <p style="" class="OrderStatus text-center text-success">
+
+                            <p id="Status_i" style="" class="OrderStatus text-center text-success">
                                 {{this.OrderStatus}}</p>
 
                         </div>
@@ -100,54 +89,108 @@
                             <li style=""> <a href="/view-single-order/{{this.id}}" class="">
                                     <i class="fa fa-eye" aria-hidden="true"></i></a></li>
                         </div>
+                        {{#if (eq this.OrderStatus 'Cancelled') }}
+                        <div class="d-flex justify-content-center" style="width: 15%;">
+                            <li style=""> <button onclick="returnorder('{{this.id}}')" class="">
+                                </button></li>
+                        </div>
+                        {{else if (eq this.OrderStatus 'Deliveried') }}
+                        <div class="d-flex justify-content-center" style="width: 15%;">
+                            <li style=""> <button onclick="returnorder('{{this.id}}')" class=""> <img
+                                        src="https://static.thenounproject.com/png/575813-200.png"
+                                        style="width: 30px;height: 30px;">
+                                </button></li>
+                        </div>
+                        {{else if (eq this.OrderStatus 'Returned') }}
                         <div class="d-flex justify-content-center" style="width: 15%;">
                             <li style=""> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;"
                                         class=" fa fa-ban" aria-hidden="true"></i>
                                 </button></li>
                         </div>
-                    </ul>
                 </div>
-            </div>
-            <div>
+                {{else if (eq this.OrderStatus 'Refunded') }}
+                {{!-- <div class="d-flex justify-content-center" style="width: 15%;">
+                    <li style=""> <button onclick="returnorder('{{this.id}}')" class="">
+                        </button></li>
+                </div> --}}
+                {{else if (eq this.OrderStatus 'Return-Confirmed-') }}
 
+                {{!-- <div class="d-flex justify-content-center" style="width: 15%;">
+                    <li style=""> <button onclick="returnorder('{{this.id}}')" class=""> <i class="fa fa-undo"
+                                aria-hidden="true"></i>
+                        </button></li>
+                </div> --}}
+                {{else}}
+
+                <div class="d-flex justify-content-center" style="width: 15%;">
+                    <li style=""> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;"
+                                class=" fa fa-ban" aria-hidden="true"></i>
+                        </button></li>
+                </div>
+                {{/if}}
+
+
+                </ul>
             </div>
         </div>
-        {{/each}}
+        <div>
+
+        </div>
     </div>
-    {{!-- <table id="order-table" class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each data}}
-            <tr>
-                <th scope="row">{{inc @index}}</th>
-                <td>{{this.id}}</td>
-                {{!--
-                <td>{{}}</td> --}}
-                {{!-- <td>{{this.OrderStatus}}</td>
-                <td>{{this.TotalPrice}}</td>
-                <td>{{date this.createdAt}}</td>
-                <td> <a href="/view-single-order/{{this.id}}" class="">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </a></td>
+    {{/each}}
+    <section class="d-flex justify-content-center mt-2">
+        {{!-- <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black " class="text-center"
+            href="/myaccount/orders?page=1">First Page</a> --}}
+        {{#if hasPreviousPage}}
+        <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black" class="text-center"
+            href="/myaccount/orders?page={{PreviousPage}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+        {{/if}}
 
-                <td> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;" class=" fa fa-ban"
-                            aria-hidden="true"></i>
-                    </button></td>
-            </tr>
-            {{/each}}
+        <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black; border: 1px solid black;"
+            href="/myaccount/orders?page={{page}}">{{page}}</a>
+        {{#if hasNextPage}}
+        <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black;"
+            href="/myaccount/orders?page={{inc page}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        {{/if }}
+        {{!-- <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black"
+            href="/myaccount/orders?page={{LastPage}}">Last Page</a> --}}
 
-        </tbody>
-    </table> --}}
+    </section>
+</div>
+{{!-- <table id="order-table" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.id}}</td>
+            {{!--
+            <td>{{}}</td> --}}
+            {{!-- <td>{{this.OrderStatus}}</td>
+            <td>{{this.TotalPrice}}</td>
+            <td>{{date this.createdAt}}</td>
+            <td> <a href="/view-single-order/{{this.id}}" class="">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </a></td>
+
+            <td> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;" class=" fa fa-ban"
+                        aria-hidden="true"></i>
+                </button></td>
+        </tr>
+        {{/each}}
+
+    </tbody>
+</table> --}}
 </div>
 </div>
 </div>
@@ -171,4 +214,34 @@
             });
 
     }
+    function returnorder(id) {
+        swal({
+            title: "Are you sure?",
+            text: "Do you Want to return this Order!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    location.assign(`/return-order/${id}`);
+                }
+            });
+
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        // let stat = document.getElementsByName('stat').value
+        //let stat = $('input[name="stat"]').val()
+        //alert(stat)
+        console.log(stat)
+        if (stat == 'Cancelled') {
+
+            $("p.OrderStatus").addClass("text-danger");
+        }
+    });
 </script>

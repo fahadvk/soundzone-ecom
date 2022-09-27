@@ -6,6 +6,8 @@ const Orders = require("../models/Order")
 const Razorpay = require("razorpay");
 const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
+const Products = require("../models/products");
+const { default: mongoose } = require("mongoose");
 var instance = new Razorpay({
   key_id: process.env.Razorpaykey,
   key_secret: process.env.Razorpay_secret,
@@ -13,50 +15,64 @@ var instance = new Razorpay({
 
 module.exports={
     viewcheckout:async(req,res,next)=>{
-        // console.log(req.body);
+   let Items = []
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
-
-          Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images" ).then((data)=>{
           if(!Addresses)
           {
             Addresses ={}
           }
-          
-          let Total = req.body.subtotal - req.session.discount;
-          if(isNaN(Total)){
-            Total = req.body.subtotal
-          }
-     console.log(Total,req.session.discount);
-            res.render("user/checkout",{Products:data.Products,
+          let Total = req.body.subtotal;
+         if(req.body.Product){
+          let data = await Products.findOne({_id:mongoose.Types.ObjectId(req.body.Product)},"Products.Items Name SellingPrice Images")
+         Items = data;
+         req.session.placeorder = {
+          status:true,
+          Items:Items,
+        }
+         }
+         else {
+        let data = await  Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images" )
+        Items = data.Products 
+        var isFromCart = true;
+         }
+            res.render("user/checkout",{Products:Items,
             title:"Checkout",
+            isFromCart,
          subtotal :  req.body.subtotal,
-         Addresses:Addresses.Addresses,
-        Discount:req.session.discount,
+         Addresses:Addresses.Addresses, 
         userlogged:req.session.login,
       Total},
         )
-          }).catch((err)=>{
-            console.log(err);
-            next(new AppError("Error while viewing Checkout Page",500))
-          })
-        
-        } catch (error) {
+          } catch (error) {
           console.log(error);
           next(new AppError("Error while viewing Checkout Page",500))
         }
     
       },
-    placeorder:(req,res,next)=>{
-      try {
-      console.log(req.body);
-      Cart.findOne({_id :req.session.user.Cart},'Products.Items Products.Qty').then(async(data)=>{
-        console.log(data);
-     let OrderList ={
-      
-     } 
+ placeorder:async(req,res,next)=>{  
+  try {
+        let data ;
+      console.log(req.body,req.session.placeorder);
+    
+ if(req.session.placeorder == null || undefined)
+ {
+  doc= await  Cart.findOne({_id :req.session.user.Cart},'Products.Items Products.Qty')
+  console.log(doc);
+  data = doc.Products;
+let OrderList ={
+} 
+  }
+ else {   
+  data =  req.session.placeorder.Items;
+  console.log('thtu',data);
+  data = {
+      Items:data._id,
+      Qty:1,
+        }
+    }   
  const Order = new Orders({User: req.session.user._id,
-  Products:data.Products,
+  Products:data,
  Paymentmethod:req.body.Payment,
  Address:req.body.Address,
  TotalPrice:req.body.Total,
@@ -66,12 +82,27 @@ module.exports={
 }) 
 
 Order.save().then((data)=>{
+  console.log(data);
+  if(req.session.placeorder)
+  { console.log('dks');
+    req.session.placeorder = null;
+    req.session.savedplaceorder = true;
+  }
+   Order.Products.map(async(val)=>{
+   await  Products.findOneAndUpdate({_id:val.Items},{$inc:{Quantity: 0-val.Qty,Sold:val.Qty}})
+   console.log(val);
+   })
   let response = {}
   if(req.body.Payment === "COD"){
     // res.render("Order Confirmed");
     Orders.findOneAndUpdate({_id:data._id},{OrderStatus:"Placed"}).then((updateddata)=>{
     // res.redirect("/order-confirm/data._id")
+    if(! req.session.savedplaceorder.status){
     clearCart(req.session.user._id)
+    }
+    else {
+      req.session.savedplaceorder = null;
+    }
     response.data = updateddata;
     response.cod = true;
     console.log("opop",response.data);
@@ -95,7 +126,7 @@ Order.save().then((data)=>{
   }
 
 })
-})
+
 } catch (error) {
      next(new AppError("Error while Placing Order!",500))   
 }
@@ -122,7 +153,12 @@ try {
   
       response.status = true; 
       res.json(response)
+      if(!req.session.savedplaceorder.status){
       clearCart(req.session.user._id)
+      }
+      else {
+        req.session.savedplaceorder = null;
+      }
   
     })
   }} catch (error) {
@@ -155,17 +191,28 @@ orderconfirmation:(req,res,next)=>{
     }) 
   }
 ,
-viewuserOrders:(req,res,next)=>{
- Orders.find({User:req.session.user._id,OrderStatus:{$ne:'Pending'}}).sort({'createdAt':-1}).populate('Products.Items').then((data)=>{
-//  console.log(data);
-  res.render("user/orders",{data})
+viewuserOrders:async(req,res,next)=>{
+  const page =parseInt(req.query.page) || 1;
+  
+   const items_Per_Page = 8;
+  const TotalOrders =  await Orders.find({User:req.session.user._id}).countDocuments();
+ Orders.find({User:req.session.user._id,OrderStatus:{$ne:'Pending'}}).sort({'createdAt':-1}).populate('Products.Items').skip((page-1)*items_Per_Page).limit(items_Per_Page).then((data)=>{ 
+  res.render("user/orders",{data,
+    TotalOrders,
+    page,
+  hasNextPage:items_Per_Page * page < TotalOrders,
+  hasPreviousPage : page > 1,
+  PreviousPage : page -1,
+   })
 })
  },
  viewsingle:async(req,res,next)=>{
   try {
   let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
   console.log(orderDetails);
-    res.render("user/viewsingle",{orderDetails,userlogged:true})
+    res.render("user/viewsingle",{orderDetails,userlogged:true,
+ 
+  })
   }
   catch{
     next(new AppError("Error While viewing this Order ",500))
@@ -175,6 +222,10 @@ cancelorder:async(req,res,next)=>{
  await Orders.findOneAndUpdate({_id:req.params.id},{OrderStatus:'Cancelled'})
  res.redirect("/myaccount/orders")
 },
+returnOrder:async(req,res,next)=>{
+  await Orders.findOneAndUpdate({_id:req.params.id},{OrderStatus:'Returned'})
+  res.redirect("/myaccount/orders")
+ },
 updateStatus:async(req,res,next)=>{
   console.log(req.body);
   try {
@@ -185,8 +236,22 @@ updateStatus:async(req,res,next)=>{
    if(index < 7){
   let update = Statsuses[index+1]
   console.log(index);
-    Orders.findOneAndUpdate({_id:req.body.id},{OrderStatus:update}).then((data)=>{
-      console.log(data);
+    await Orders.findOneAndUpdate({_id:req.body.id},{OrderStatus:update},{new:true}).then(async(data)=>{
+       console.log(data)
+      if(data.OrderStatus == 'Delivered')
+      {console.log("dkdkm");
+        await Orders.findOneAndUpdate({_id:req.body.id},{PaymentStatus:'Completed'})
+      }
+      if(data.OrderStatus == 'Return-Confirmed')
+      {
+        data.Products.map(async(val)=>{
+          await Products.findOneAndUpdate({_id:val.Items},{$inc:{Quantity:val.Qty,Sold:0 - val.Qty}})
+        })
+      }
+      if(data,OrderStatus == 'Refunded')
+      {
+        await Orders.findOneAndUpdate({_id:req.body.id},{PaymentStatus:'Refunded'})
+      }
       res.json(data)
     })
  }
@@ -218,9 +283,8 @@ verifycoupon:(req,res,next)=>{
   // await Cart.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
       response.status = true;
       response.Discount = Discount;
-
-
-    res.json(response)
+      req.session.CouponCode= data.CouponCode;
+     res.json(response)
 
   }
   else{

@@ -26,6 +26,7 @@ hbs.registerPartials(path.join(__dirname, "/views/partials"));
 hbs.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
+hbs.registerHelper("eq",(x,y)=>{return x === y});
 hbs.registerHelper("date",function(val){
  val = val.toUTCString().slice(0, 16);
   return val;
@@ -48,7 +49,7 @@ app.use(
     secret: "myKey",
     saveUninitialized: true,
     resave: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 1800000 },
   })
 );
 app.use("/", indexRouter);

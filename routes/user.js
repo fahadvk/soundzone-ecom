@@ -214,18 +214,29 @@ router.post("/add-address",Auth.Isauth,Controller.addAddress)
 router.post("/placeorder",Auth.Isauth,OrderController.placeorder)
 router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
 router.post("/verifycoupon",Auth.Isauth,OrderController.verifycoupon)
+router.post('/buyNow',Auth.Isauth,OrderController.viewcheckout);
 //User Profile
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
 router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
 router.get("/myaccount/addresses",Auth.Isauth,Controller.viewAddresses)
+
 router.post("/view-edit-address",Auth.Isauth,Controller.vieweditaddress)
+
 router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)
 router.get("/myaccount/account-security",Auth.Isauth,Controller.ProfileSecurity)
+
 router.post("/edit-address",Auth.Isauth,Controller.editAddress)
+
 router.get("/view-single-order/:id",Auth.Isauth,OrderController.viewsingle)
 router.get("/cancel-order/:id",Auth.Isauth,OrderController.cancelorder)
+router.get("/return-order/:id",Auth.Isauth,OrderController.returnOrder)
+
 router.post("/delete-address",Auth.Isauth,Controller.deleteaddress)
+router.post("/editName",Auth.Isauth,Controller.EditName)
+router.post("/editEmail",Auth.Isauth,Controller.EditEmail)
+router.post('/editMobile',Auth.Isauth,Controller.EditMobile)
 router.route("/changePassword")
 .get(Auth.Isauth,Controller.viewchangePassword)
 .post(Auth.Isauth,Controller.changePassword)
+
 module.exports = router;

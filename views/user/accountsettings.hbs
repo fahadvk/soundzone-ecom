@@ -3,26 +3,55 @@
         <br>
         <div class="ms-5 d-flex justify-content-center">
             <div class=" col-md-8 mt-5 text-center">
-                <div class="card mb-3 ">
+                <div id="load" class="card mb-3 ">
                     <div class="card-body">
-                        <div class="row">
+                        <div id="NameArea" class="row d-flex">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">User Name</h6>
                             </div>
-                            <div id="Name" class="Name col-sm-9 text-secondary">
+                            <div id="Name" class="Name col-sm-6 text-secondary">
                                 {{user.Name}}
+
+                            </div>
+                            <div class="col-sm-3">
+                                <button onclick="editName()"> <i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></button>
+                            </div>
+
+                            <div class=" row  d-flex justify-content-center col-sm-12 text-secondary" id="inputFormRow">
+                                <div style="width: 40%;" class="input-group d-flex   justify-content-center">
+                                    <input hidden id="EditingName" type="text" name="Name"
+                                        class="justify-self-center form-control m-input" placeholder="Name">
+                                    <button hidden class="btn btn-dark " onclick="Edit()" id="EditingNamebtn">
+                                        edit</button>
+
+                                </div>
                             </div>
 
                         </div>
                         <hr>
-                        <div class="row">
+                        <div id="EmailArea" class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Email</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div id="Email" class="col-sm-6 text-secondary">
                                 {{user.email}}
                             </div>
-
+                            <div class="col-sm-3">
+                                <button onclick="EditEmail()"> <i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></button>
+                            </div>
+                            <div class=" row  d-flex justify-content-center col-sm-12 text-secondary" id="inputFormRow">
+                                <div style="width: 40%;" class="input-group d-flex   justify-content-center">
+                                    <input hidden id="EditingEmail" type="email" name="Name"
+                                        class="justify-self-center form-control m-input" placeholder="Name">
+                                    <button hidden class="btn btn-dark " onclick="Editemail()" id="Editingemailbtn">
+                                        edit</button>
+                                </div>
+                            </div>
+                            <div id="Email" class="col-sm-12 text-secondary">
+                                <span class=" error" id="errorname"></span>
+                            </div>
 
                         </div>
                         <hr>
@@ -30,67 +59,170 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Phone</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div id="mobile" class="col-sm-6 text-secondary" id="mobil">
                                 {{user.Mobile}}
                             </div>
+                            <div class="col-sm-3">
+                                <button onclick="editMobile()"> <i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></button>
+                            </div>
+                            <div class=" row  d-flex justify-content-center col-sm-12 text-secondary" id="inputFormRow">
+                                <div style="width: 40%;" class="input-group d-flex   justify-content-center">
+                                    <input hidden id="Editingmobile" type="tel" name="mobile"
+                                        class="justify-self-center form-control m-input" placeholder="Name">
+                                    <button hidden class="btn btn-dark " onclick="Editmobile()" id="Editingmobilebtn">
+                                        edit</button>
+                                </div>
+                            </div>
+                            <div id="mobile" class="col-sm-12 text-secondary">
+                                <span class=" error" id="errormobile"></span>
+                            </div>
+
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Password</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-6 text-secondary">
                                 *******
 
                             </div>
-
-                        </div>
-                        {{!-- <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Phone</h6>
+                                <a href="/changePassword" style="float: right; color: dimgray;">change
+                                    Password</a>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{date user.updatedAt}}
-                            </div>
-                        </div> --}}
-                        {{!-- <button class="justify-content-end "><i class=" fa fa-pencil-square-o"
-                                aria-hidden="true"></i></button> --}}
-                        <button type="button">Ediit</button>
-                        <a href="/changePassword" style="float: right; color: dimgray;">change
-                            Password</a>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
 <script>
-    function editevent() {
-        $("div.Name").replaceWith("<input value='{{userDetails.Name}}' type = 'text'>")
+    function editName() {
+        document.getElementById('EditingName').removeAttribute("hidden")
+        document.getElementById('EditingNamebtn').removeAttribute("hidden")
+    }
+    //  $("EditingNamebtn").click(function () {
+    function Edit() {
+
+        let Name = document.getElementById('EditingName').value
+        console.log(Name)
+        swal({
+            title: "Are you sure?",
+            text: "Your User Name Will be Changed!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willEdit) => {
+                if (willEdit) {
+                    $.ajax({
+                        url: "/editName",
+                        data: {
+                            Name: Name,
+                        }, method: "POST",
+                        success: (response) => {
+                            document.getElementById('EditingName').setAttribute("hidden", "hidden")
+                            document.getElementById('EditingNamebtn').setAttribute("hidden", "hidden")
+                            document.getElementById('Name').innerHTML = response.Name;
+                            //  $('#NameArea').load(location.href + '#NameArea')
+                        },
+
+                    });
+                }
+                else {
+
+                }
+            })
+    }
+    function EditEmail() {
+        document.getElementById('EditingEmail').removeAttribute("hidden")
+        document.getElementById('Editingemailbtn').removeAttribute("hidden")
+    }
+    function Editemail() {
+        let Email = document.getElementById('EditingEmail').value
+        function ValidateEmail(mail) {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+                return (true)
+            }
+            document.getElementById('errorname').innerHTML = "Please Enter a vaild mail";
+            return (false)
+        }
+        let result = ValidateEmail(Email)
+        console.log(result)
+        if (result) {
+            $.ajax({
+                url: "/editEmail",
+                data: {
+                    Email,
+                }, method: "POST",
+                success: (response) => {
+                    console.log(response)
+                    if (response.data) {
+                        document.getElementById('errorname').setAttribute('hidden', 'hidden')
+                        document.getElementById('EditingEmail').setAttribute("hidden", "hidden")
+                        document.getElementById('Editingemailbtn').setAttribute("hidden", "hidden")
+                        document.getElementById('Email').innerHTML = response.data.email;
+                    }
+                    else if (response.message) {
+                        document.getElementById('errorname').innerHTML = response.message;
+                    }
+                    else {
+                        location.reload()
+                    }
+
+                },
+
+            });
+        }
+
+    }
+    function editMobile() {
+        document.getElementById('Editingmobile').removeAttribute("hidden")
+        document.getElementById('Editingmobilebtn').removeAttribute("hidden")
+    }
+    function Editmobile() {
+        let Mobile = document.getElementById('Editingmobile').value
+        function validatePhoneNumber(mobile) {
+            var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+            return re.test(mobile);
+        }
+
+        let validationResult = validatePhoneNumber(Mobile)
+        if (validationResult) {
+            $.ajax({
+                url: "/editMobile",
+                data: {
+                    Mobile,
+                }, method: "POST",
+                success: (response) => {
+                    console.log(response)
+                    if (response.data) {
+                        document.getElementById('errorname').setAttribute('hidden', 'hidden')
+                        document.getElementById('EditingEmail').setAttribute("hidden", "hidden")
+                        document.getElementById('Editingemailbtn').setAttribute("hidden", "hidden")
+                        document.getElementById('Email').innerHTML = response.data.email;
+                    }
+                    else if (response.message) {
+                        document.getElementById('errorname').innerHTML = response.message;
+                    }
+                    else {
+                        location.reload()
+                    }
+
+                },
+
+            });
+        }
+        else {
+            document.getElementById('errormobile').innerHTML = "Please Enter a Vailid Mobile Number";
+        }
+
     }
 
-
-
-
-    $(document).on("click", ".editableTxt", function () {
-        var currElmModelAttr = $(this).attr('data-model-attr');
-        var $this = $(this);
-        var input = $('<input />', {
-            'type': 'text',
-            'name': currElmModelAttr,
-            'style': 'width:100px',
-            'class': 'datePicker',
-            'value': $(this).text()
-        });
-        $(this).replaceWith(input);
-        input.datepicker({
-            onSelect: function (date) {
-                $this.text(date);
-                input.replaceWith($this);
-                console.log(date);
-            }
-        })
-
-    });
 </script>

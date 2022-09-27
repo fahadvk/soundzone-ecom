@@ -1,53 +1,4 @@
-<style>
-    /*    .container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }*/
-
-    .steps {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        width: 200px;
-    }
-
-    .step {
-        width: 20px;
-        height: 20px;
-        background: #fff;
-        border: 2px solid #ACACA6;
-        border-radius: 50%;
-        transition: background 1s;
-    }
-
-    .step.selected {
-        border: 2px solid #4B81BD;
-    }
-
-    .step.completed {
-        border: 2px solid #4B81BD;
-        background: #4B81BD;
-    }
-
-    .progress {
-        position: absolute;
-        width: 100%;
-        height: 50%;
-        border-bottom: 2px solid #ACACA6;
-        z-index: -1;
-    }
-
-    .percent {
-        position: absolute;
-        width: 0;
-        height: 100%;
-        border-bottom: 2px solid #4B81BD;
-        z-index: 1;
-        transition: width 1s;
-    }
-</style>
+<link rel="stylesheet" href="/css/orderPage.css">
 <div class="container mt-5">
     <div class="row align-items-center">
         <div class="col-12 mt-5">
@@ -57,13 +8,15 @@
         </div>
 
 
-        <table class="table  " style="margin-bottom: 3rem;">
+        <table class="table  " style="">
             <thead>
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col">Products</th>
-                    <th scope="col">Quantity</th>
+                    <th scope="col">Quantity </th>
+
+
                     <th scope="col">Price</th>
 
                     <th scope="col">total</th>
@@ -122,75 +75,78 @@
                     <td>{{orderDetails.Paymentmethod}}</td>
                 </tr>
             </tbody>
+            <input type="hidden" name="status" id="stat" value="{{orderDetails.OrderStatus}}">
         </table>
-        {{!-- <div class="m-4">
-            <!-- Progress bar HTML -->
-            <div class="progress">
-                <div class="progress-bar progress-bar" style="min-width: 20px;"></div>
 
-            </div>
-            <p id="progress"></p>
 
-            <!-- JavaScript -->
-            <script>
-                var i = 0;
-                var bar = document.querySelector(".progress-bar");
-                function makeProgress() {
-                    if (i < 30) {
-                        i = i + 1;
-                        bar.style.width = i + "%";
-                        bar.innerText = i + "%";
-                    }
-                    if (i == 25) {
-                        document.getElementById("progress").innerHTML = "kdflssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
-                    }
-                    // Wait for sometime before running this script again
-                    setTimeout("makeProgress()", 100);
-                }
-                makeProgress();
-            </script>
-        </div> --}}
-        <div class="container">
-            <div class="progress">
-                <div class="percent"></div>
-            </div>
-            <div class="steps">
-                <hr>
-                <div class="step" id="0"></div>
-                <div class="step" id="1"></div>
-                <div class="step" id="2"></div>
-                <div class="step" id="3"></div>
+        <div class="container  mt-0 mx-auto">
+            <div class="card">
+
+                <!-- Add class 'active' to progress -->
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                        <ul id="progressbar" class="text-center">
+                            <li id="one" class="one step0"></li>
+                            <li id="two" class="two step0"></li>
+                            <li id="three" class="three step0 "></li>
+                            <li id="four" class="four step0  "></li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 </div>
 
-</div>
-</div>
 <script>
-    let els = document.getElementsByClassName('step');
-    let steps = [];
-    Array.prototype.forEach.call(els, (e) => {
-        steps.push(e);
-        e.addEventListener('click', (x) => {
-            progress(x.target.id);
-        });
-    });
+    window.addEventListener('load', function () {
 
-    function progress(stepNum) {
-        let p = stepNum * 30;
-        document.getElementsByClassName('percent')[0].style.width = `${p}%`;
-        steps.forEach((e) => {
-            if (e.id === stepNum) {
-                e.classList.add('selected');
-                e.classList.remove('completed');
-            }
-            if (e.id < stepNum) {
-                e.classList.add('completed');
-            }
-            if (e.id > stepNum) {
-                e.classList.remove('selected', 'completed');
-            }
-        });
-    }
+        let stat = document.getElementById("stat").value
+        //  let d = $('input[name="stat"]').val();
+        //alert(stat)
+        console.log(stat)
+        if (stat == 'Placed' || stat == 'Shipped' || stat == 'In-transist' || stat == 'Delivered') {
+            $("li.one").addClass("active")
+            document.getElementById('four').innerHTML = 'Delivered';
+            document.getElementById('two').innerHTML = 'Shipped';
+            document.getElementById('one').innerHTML = 'Placed';
+            document.getElementById('three').innerHTML = 'In-transist'
+        }
+        if (stat == 'Shipped' || stat == 'In-transist' || stat == 'Delivered') {
+            $("li.two").addClass("active")
+        }
+        if (stat == 'In-transist' || stat == 'Delivered') {
+            $("li.three").addClass("active")
+        }
+        if (stat == 'Delivered') {
+            $("li.four").addClass("active")
+        }
+        if (stat == 'Refunded' || stat == 'Return-Confirmed' || stat == 'Returned') {
+            document.getElementById('four').setAttribute("hidden", "hidden")
+            $("li.three").addClass("cancelled")
+            document.getElementById('three').innerHTML = 'Returned';
+            document.getElementById('one').innerHTML = 'Refunded';
+            //  document.getElementById('one').innerHTML = 'Cancelled';
+            document.getElementById('two').innerHTML = 'Return-Confirmed'
+
+        }
+        if (stat == 'Refunded' || stat == 'Return-Confirmed') {
+            $("li.two").addClass("cancelled")
+
+        }
+        if (stat == 'Refunded') {
+            $("li.two").addClass("cancelled")
+
+        }
+        if (stat == 'Cancelled') {
+            document.getElementById('four').setAttribute("hidden", "hidden")
+            $("li.one").addClass("cancelled")
+            $("li.two").addClass("cancelled")
+            $("li.three").addClass("cancelled")
+        }
+
+    })
+
 </script>

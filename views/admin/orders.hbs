@@ -28,6 +28,7 @@
                             <th>Amount</th>
                             <th>Ordered date</th>
                             <th>Status</th>
+                            <th>Paymentmethod</th>
                             <th>Update Status</th>
 
                         </tr>
@@ -41,6 +42,7 @@
                             <td>{{this.TotalPrice}}</td>
                             <td>{{date this.createdAt}}</td>
                             <td>{{this.OrderStatus}}</td>
+                            <td>{{this.Paymentmethod}}</td>
                             {{!-- <td> <select name="statusd" id="status">
                                     <option va> Pending</option>
                                     <option> Placed</option>
@@ -56,10 +58,11 @@
                                         class="fa fa-chevron-circle-left" aria-hidden="true"></i></button> --}}
                                 <button class="btn" onclick="changestat('{{this.id}}')"><i
                                         class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
-
+                                {{#if (eq this.OrderStatus 'Cancelled')}}
+                                {{else}}
                                 <button class="btn" onclick="cancelorder('{{this.id}}')"><i class="fa fa-ban"
                                         aria-hidden="true"></i></button>
-
+                                {{/if}}
                                 {{!-- <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target=".bd-example-modal-sm">Small modal</button> --}}
 
