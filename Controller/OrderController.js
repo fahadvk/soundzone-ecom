@@ -15,6 +15,7 @@ var instance = new Razorpay({
 
 module.exports={
     viewcheckout:async(req,res,next)=>{
+      
    let Items = []
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
@@ -32,9 +33,26 @@ module.exports={
         }
          }
          else {
-        let data = await  Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images" )
+        let data = await  Cart.findById(req.session.user.Cart).populate("Products.Items","Name SellingPrice Images Quantity" )
         Items = data.Products 
+     let OutofStock =   Items.map((val)=>{
+          console.log(val.Qty,val.Items.Quantity);
+
+          if(val.Qty>val.Items.Quantity)
+          { let nostock;
+            (val.Items.Quantity <= 0)? nostock=true:""
+            let NoStockItems = {
+              AvailableQty: val.Items.Quantity,
+              ProductName:val.Items.Name,
+              nostock,
+              
+            }
+            return NoStockItems
+          }
+        //  req.session.NoStock = OutofStock;
+        })
         var isFromCart = true;
+
          }
             res.render("user/checkout",{Products:Items,
             title:"Checkout",
@@ -283,9 +301,9 @@ verifycoupon:(req,res,next)=>{
   // await Cart.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
       response.status = true;
       response.Discount = Discount;
-      req.session.CouponCode= data.CouponCode;
-     res.json(response)
-
+       req.session.CouponCode= data.CouponCode;
+    await  Coupons.findOneAndUpdate({_id:data._id},{$pull:{ActiveUsers:req.session.user._id}})
+  res.json(response)
   }
   else{
     response.message = `Minimum ${data.Minamount} is requried for this coupon`

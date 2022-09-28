@@ -11,7 +11,7 @@ const ErrorHandler = require("./Controller/ErrorController");
 const adminRouter = require("./routes/admin/admin");
 const category = require("./routes/admin/category");
 const productRouter = require("./routes/admin/products");
-const multer = require("multer");
+
 const hbs = require("hbs");
 const { create } = require("hbs");
 

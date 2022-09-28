@@ -1,3 +1,91 @@
+<style>
+    /*  body {
+        background-color: red
+    }
+
+    .height-100 {
+        height: 100vh
+    } 
+
+    .card {
+        width: 400px;
+        border: none;
+        height: 300px;
+        box-shadow: 0px 5px 20px 0px #d2dae3;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+    .card h6 {
+        color: red;
+        font-size: 20px
+    } */
+
+    .inputs input {
+        width: 40px;
+        height: 40px
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0
+    }
+
+    .card-2 {
+        background-color: #fff;
+        padding: 10px;
+        width: 350px;
+        height: 100px;
+        bottom: -50px;
+        left: 20px;
+        position: absolute;
+        border-radius: 5px
+    }
+
+    .card-2 .content {
+        margin-top: 50px
+    }
+
+    .card-2 .content a {
+        color: red
+    }
+
+    .modal {
+        text-align: center;
+    }
+
+    .modal::before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        margin-right: -4px;
+        vertical-align: middle;
+    }
+
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border: 2px solid red
+    }
+
+    .validate {
+        border-radius: 20px;
+        height: 40px;
+        background-color: red;
+        border: 1px solid red;
+        width: 140px
+    }
+</style>
 <div class="container">
     <div class="main-body mt-5">
         <br>
@@ -24,6 +112,9 @@
                                         class="justify-self-center form-control m-input" placeholder="Name">
                                     <button hidden class="btn btn-dark " onclick="Edit()" id="EditingNamebtn">
                                         edit</button>
+                                    <button hidden class="btn btn-danger " onclick="closeName()"
+                                        id="EditingNameclosebtn">
+                                        close</button>
 
                                 </div>
                             </div>
@@ -46,7 +137,10 @@
                                     <input hidden id="EditingEmail" type="email" name="Name"
                                         class="justify-self-center form-control m-input" placeholder="Name">
                                     <button hidden class="btn btn-dark " onclick="Editemail()" id="Editingemailbtn">
-                                        edit</button>
+                                        Update</button>
+                                    <button hidden class="btn btn-danger " onclick="closeEmail()"
+                                        id="Editingemailclosebtn">
+                                        close</button>
                                 </div>
                             </div>
                             <div id="Email" class="col-sm-12 text-secondary">
@@ -59,7 +153,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Phone</h6>
                             </div>
-                            <div id="mobile" class="col-sm-6 text-secondary" id="mobil">
+                            <div id="mobile" class="col-sm-6 text-secondary" id="mobile">
                                 {{user.Mobile}}
                             </div>
                             <div class="col-sm-3">
@@ -71,7 +165,10 @@
                                     <input hidden id="Editingmobile" type="tel" name="mobile"
                                         class="justify-self-center form-control m-input" placeholder="Name">
                                     <button hidden class="btn btn-dark " onclick="Editmobile()" id="Editingmobilebtn">
-                                        edit</button>
+                                        Update</button>
+                                    <button hidden class="btn btn-danger " onclick="closeMobile()"
+                                        id="EditingMobileclosebtn">
+                                        close</button>
                                 </div>
                             </div>
                             <div id="mobile" class="col-sm-12 text-secondary">
@@ -99,13 +196,54 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="container height-100 d-flex justify-content-center align-items-center">
+                    <div class="position-relative">
+                        <div class="card p-2 text-center">
+                            <h6>Please enter the one time password <br> to verify your mobile number</h6>
+                            <div> <span>A code has been sent to</span> your Number </div>
+                            <form action="" id="verifyOtp" method="post">
+                                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+
+                                    <input class="m-2 text-center form-control rounded" type="number" id="first"
+                                        maxlength="1" name="first" required />
+                                    <input class="m-2 text-center form-control rounded" type="number" id="second"
+                                        maxlength="1" name="second" required /> <input
+                                        class="m-2 text-center form-control rounded" type="number" id="third"
+                                        maxlength="1" name="third" required /> <input
+                                        class="m-2 text-center form-control rounded" type="tel" id="fourth"
+                                        maxlength="1" name="four" required /> <input
+                                        class="m-2 text-center form-control rounded" type="number" id="fifth"
+                                        maxlength="1" name="fifth" required />
+                                    <input class="m-2 text-center form-control rounded" type="number" id="sixth"
+                                        maxlength="1" name="sixth" required />
+                                </div>
+
+                                <div class="mt-4"> <button type="submit"
+                                        class="btn btn-danger px-4 validate">Validate</button> </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                {{!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div> --}}
+            </div>
+        </div>
     </div>
 </div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
 
 <script>
     function editName() {
         document.getElementById('EditingName').removeAttribute("hidden")
         document.getElementById('EditingNamebtn').removeAttribute("hidden")
+        document.getElementById('EditingNameclosebtn').removeAttribute("hidden")
     }
     //  $("EditingNamebtn").click(function () {
     function Edit() {
@@ -129,6 +267,7 @@
                         success: (response) => {
                             document.getElementById('EditingName').setAttribute("hidden", "hidden")
                             document.getElementById('EditingNamebtn').setAttribute("hidden", "hidden")
+                            document.getElementById('EditingNameclosebtn').setAttribute("hidden", "hidden")
                             document.getElementById('Name').innerHTML = response.Name;
                             //  $('#NameArea').load(location.href + '#NameArea')
                         },
@@ -140,9 +279,15 @@
                 }
             })
     }
+    function closeName() {
+        document.getElementById('EditingName').setAttribute("hidden", "hidden")
+        document.getElementById('EditingNamebtn').setAttribute("hidden", "hidden")
+        document.getElementById('EditingNameclosebtn').setAttribute("hidden", "hidden")
+    }
     function EditEmail() {
         document.getElementById('EditingEmail').removeAttribute("hidden")
         document.getElementById('Editingemailbtn').removeAttribute("hidden")
+        document.getElementById('Editingemailclosebtn').removeAttribute("hidden")
     }
     function Editemail() {
         let Email = document.getElementById('EditingEmail').value
@@ -167,6 +312,7 @@
                         document.getElementById('errorname').setAttribute('hidden', 'hidden')
                         document.getElementById('EditingEmail').setAttribute("hidden", "hidden")
                         document.getElementById('Editingemailbtn').setAttribute("hidden", "hidden")
+                        document.getElementById('Editingemailclosebtn').setAttribute("hidden", "hidden")
                         document.getElementById('Email').innerHTML = response.data.email;
                     }
                     else if (response.message) {
@@ -182,9 +328,18 @@
         }
 
     }
+    function closeEmail() {
+        document.getElementById('errorname').setAttribute('hidden', 'hidden')
+        document.getElementById('EditingEmail').setAttribute("hidden", "hidden")
+        document.getElementById('Editingemailbtn').setAttribute("hidden", "hidden")
+        document.getElementById('Editingemailclosebtn').setAttribute("hidden", "hidden")
+
+
+    }
     function editMobile() {
         document.getElementById('Editingmobile').removeAttribute("hidden")
         document.getElementById('Editingmobilebtn').removeAttribute("hidden")
+        document.getElementById('EditingMobileclosebtn').removeAttribute("hidden")
     }
     function Editmobile() {
         let Mobile = document.getElementById('Editingmobile').value
@@ -202,14 +357,20 @@
                 }, method: "POST",
                 success: (response) => {
                     console.log(response)
-                    if (response.data) {
+                    if (response.otpsent) {
+                        $("#myModal").modal();
+
                         document.getElementById('errorname').setAttribute('hidden', 'hidden')
-                        document.getElementById('EditingEmail').setAttribute("hidden", "hidden")
-                        document.getElementById('Editingemailbtn').setAttribute("hidden", "hidden")
-                        document.getElementById('Email').innerHTML = response.data.email;
+                        document.getElementById('Editingmobile').setAttribute("hidden", "hidden")
+                        document.getElementById('Editingmobilebtn').setAttribute("hidden", "hidden")
+                        document.getElementById('EditingMobileclosebtn').setAttribute("hidden", "hidden")
+
+                        //document.getElementById('mobile').innerHTML = response.data.email;
                     }
-                    else if (response.message) {
-                        document.getElementById('errorname').innerHTML = response.message;
+                    else if (response.exist) {
+                        document.getElementById('errormobile').innerHTML = response.exist;
+                        // setTimeout(() => { document.getElementById('errormobile').setAttribute = ('hidden', 'hidden'); }, 5000)
+
                     }
                     else {
                         location.reload()
@@ -224,5 +385,31 @@
         }
 
     }
+    function closeMobile() {
+        document.getElementById('errormobile').setAttribute('hidden', 'hidden')
+        document.getElementById('Editingmobile').setAttribute("hidden", "hidden")
+        document.getElementById('Editingmobilebtn').setAttribute("hidden", "hidden")
+        document.getElementById('EditingMobileclosebtn').setAttribute("hidden", "hidden")
+    }
+    verifyOtp.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const data = new FormData(verifyOtp);
+        const code = $('#first').val() + $('#second').val() + $('#third').val() + $('#fourth').val() + $('#fifth').val() + $('#sixth').val()
+        // alert(vals)
+        $.ajax({
+            url: "/verifyOtp",
+            data: {
+                code,
+            }, method: "POST",
+            success: (response) => {
+                if (response.Mobile) {
+                    $("#myModal").modal('hide')
+                }
+                else if (response.message) {
+                    swal('invalid Otp')
 
+                }
+            }
+        })
+    })
 </script>

@@ -183,22 +183,7 @@ router.get("/category/:id", async (req, res, next) => {
       next(new AppError("error while fetching this Category!!", 404));
     });
 });
-router.get("/productpage/:id", (req, res, next) => {
-  ProductController.findproduct(req.params.id)
-    .then((product) => {
-      if (!product) {
-        next(new AppError("No Products found !", 404));
-      }
-      res.render("user/product-page", {
-        userlogged: req.session.login,
-        product,
-        AllCategeries,
-      });
-    })
-    .catch((err) => {
-      next(new AppError("invalid product  url!!", 404));
-    });
-});
+router.get("/productpage/:id",ProductController.findproduct)
 //Cart
 
 router.get("/cart", Auth.Isauth, cartController.findcart);
@@ -235,6 +220,7 @@ router.post("/delete-address",Auth.Isauth,Controller.deleteaddress)
 router.post("/editName",Auth.Isauth,Controller.EditName)
 router.post("/editEmail",Auth.Isauth,Controller.EditEmail)
 router.post('/editMobile',Auth.Isauth,Controller.EditMobile)
+router.post('/verifyOtp',Controller.VerifyOtp)
 router.route("/changePassword")
 .get(Auth.Isauth,Controller.viewchangePassword)
 .post(Auth.Isauth,Controller.changePassword)

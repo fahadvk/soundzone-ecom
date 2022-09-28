@@ -5,7 +5,8 @@ const Address = require("../models/Address");
 const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
 const { response } = require("../app");
-
+const Twillio = require("../utils/Twillio");
+let Mobile
 module.exports = {
   userlogin: (logindata) => {
     return new Promise(async (resolve, reject) => {
@@ -253,9 +254,41 @@ EditEmail:async(req,res,next)=>{
 },
 EditMobile:async(req,res,next)=>{
   console.log(req.body);
+  let response = {};
 let exist = await User.findOne({Mobile:req.body.Mobile})
 console.log(exist);
+if(exist){
+  response.exist ='Mobile Already Exist';
+  res.json(response)
+}
+ else if(!exist){
+ Twillio.getOtp(req.body.Mobile).then(()=>{
+  response.otpsent = true; 
+  Mobile = req.body.Mobile;
+  req.session.EditngMobile = req.body.Mobile;
+  res.json(response)
+ })
+ }
 
+},
+VerifyOtp:(req,res,next)=>{
+  let Number = req.session.EditMobile || Mobile;
+  console.log(req.body,Number)
+  let response = {}
+  Twillio.checkOtp(req.body.code,Number).then(async(data)=>{
+  if(data)
+  {
+   let updated = await User.findOneAndUpdate({_id:mongoose.Types.ObjectId(req.session.user._id)},{Mobile:Number},{new:true})
+    response.Mobile = updated.Mobile;  
+   res.json(response)
+  }
+  else if(!data)
+  { 
+    response.message = 'failed'
+    res.json(response)
+
+  }
+  })
 }
 
 

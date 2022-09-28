@@ -20,7 +20,7 @@ const Couponschema = new mongoose.Schema(
       enum:[
         "All New Users",
         "All Current Users",
-        "AllUser",
+        "All Users",
         
 
       ]

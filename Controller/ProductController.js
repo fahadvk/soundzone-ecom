@@ -4,7 +4,7 @@ const fs = require("fs");
 const ProductModel = require("../models/products");
 const Category = require("../models/category");
 const SubCategory = require("../models/subcategory");
-const { isValidObjectId } = require("mongoose");
+const { isValidObjectId, default: mongoose } = require("mongoose");
 const { NetworkContext } = require("twilio/lib/rest/supersim/v1/network");
 const AppError = require("../utils/apperr");
 const filestorage = multer.diskStorage({
@@ -97,17 +97,29 @@ exports.editproduct = (id, body, images) => {
     }
   });
 };
-exports.findproduct = (id) => {
-  // console.log(id);
-  return new Promise(async (resolve, reject) => {
-    try {
-      const product = await ProductModel.findById(id);
-      resolve(product);
-    } catch (err) {
-      reject(err);
-    }
-  });
-};
+exports.findproduct = async (req, res, next) => {
+ try{
+  id = mongoose.Types.ObjectId(req.params.id)
+  const product = await ProductModel.findById(id);
+        if (!product) {
+          next(new AppError("No Products found !", 404));
+        }
+        let Nostock = false;
+        let Stock = product.Quantity;
+     (Stock <=0)? Nostock = true:Nostock=false;
+        res.render("user/product-page", {
+          userlogged: req.session.login,
+          product,
+          Nostock,
+          AllCategeries:req.session.Categories,
+        });
+ }
+ catch(err){
+  console.log(err);
+  next(new AppError("Error While Loading Product",500))
+ }
+      }
+
 exports.getall = () => {
   return new Promise(async (resolve, reject) => {
     try {

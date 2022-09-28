@@ -18,7 +18,7 @@ const client = require("twilio")(accountSid, authToken);
 
 module.exports = {
   getOtp: (number) => {
-    try {
+  
       return new Promise(async (resolve, reject) => {
         // let user = await userModel.findOne({ phonenumber: number });
         let response = {};
@@ -39,11 +39,10 @@ module.exports = {
           })
           .catch((e) => {
             console.log(e);
+            reject(e)
           });
       });
-    } catch (error) {
-      next(error);
-    }
+   
   },
 
   checkOtp: (otp, number) => {

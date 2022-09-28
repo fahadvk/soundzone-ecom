@@ -113,7 +113,7 @@ module.exports = {
           // console.log(totalprice);
           res.render("user/cart", {
             Products: products,
-            // total,
+            Nostock: req.session.NoStock,
             cartnull,
             totalprice,
             userlogged: req.session.login,

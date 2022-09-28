@@ -366,7 +366,9 @@
                 if (response.data.status) {
                     updatePrice(response.data.Discount)
                 }
-
+                else {
+                    document.getElementById('Discountfield').innerHTML = 0;
+                }
             })
             // $("#dynamicArea").load(location.href + " #dynamicArea")
 
@@ -374,14 +376,10 @@
         function updatePrice(discount) {
             console.log(discount)
             document.getElementById('Discountfield').innerHTML = discount;
-            let total = document.getElementById("Total").value;
+            let total = document.getElementById("Subtotal").value;
             let Total = total - discount;
             document.getElementById('Total').value = Total;
             document.getElementById('Totalfield').innerHTML = Total;
             console.log(document.getElementById('Total').value)
-
-
-
-
         }
-    </script>
+    </script>62ff35ea1e5918a0000581ab
