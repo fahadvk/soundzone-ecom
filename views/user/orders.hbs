@@ -109,17 +109,10 @@
                         </div>
                 </div>
                 {{else if (eq this.OrderStatus 'Refunded') }}
-                {{!-- <div class="d-flex justify-content-center" style="width: 15%;">
-                    <li style=""> <button onclick="returnorder('{{this.id}}')" class="">
-                        </button></li>
-                </div> --}}
+
                 {{else if (eq this.OrderStatus 'Return-Confirmed-') }}
 
-                {{!-- <div class="d-flex justify-content-center" style="width: 15%;">
-                    <li style=""> <button onclick="returnorder('{{this.id}}')" class=""> <i class="fa fa-undo"
-                                aria-hidden="true"></i>
-                        </button></li>
-                </div> --}}
+
                 {{else}}
 
                 <div class="d-flex justify-content-center" style="width: 15%;">
@@ -139,8 +132,7 @@
     </div>
     {{/each}}
     <section class="d-flex justify-content-center mt-2">
-        {{!-- <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black " class="text-center"
-            href="/myaccount/orders?page=1">First Page</a> --}}
+
         {{#if hasPreviousPage}}
         <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black" class="text-center"
             href="/myaccount/orders?page={{PreviousPage}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
@@ -152,45 +144,10 @@
         <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black;"
             href="/myaccount/orders?page={{inc page}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
         {{/if }}
-        {{!-- <a style="text-decoration: none;padding: .5rem; margin:0 1rem; color:black"
-            href="/myaccount/orders?page={{LastPage}}">Last Page</a> --}}
 
     </section>
 </div>
-{{!-- <table id="order-table" class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each data}}
-        <tr>
-            <th scope="row">{{inc @index}}</th>
-            <td>{{this.id}}</td>
-            {{!--
-            <td>{{}}</td> --}}
-            {{!-- <td>{{this.OrderStatus}}</td>
-            <td>{{this.TotalPrice}}</td>
-            <td>{{date this.createdAt}}</td>
-            <td> <a href="/view-single-order/{{this.id}}" class="">
-                    <i class="fa fa-eye" aria-hidden="true"></i>
-                </a></td>
 
-            <td> <button onclick="cancelorder('{{this.id}}')" class=""> <i style="color: red;" class=" fa fa-ban"
-                        aria-hidden="true"></i>
-                </button></td>
-        </tr>
-        {{/each}}
-
-    </tbody>
-</table> --}}
 </div>
 </div>
 </div>
@@ -235,9 +192,7 @@
 
 <script>
     $(document).ready(function () {
-        // let stat = document.getElementsByName('stat').value
-        //let stat = $('input[name="stat"]').val()
-        //alert(stat)
+
         console.log(stat)
         if (stat == 'Cancelled') {
 

@@ -21,15 +21,17 @@ const OrderController = require("../Controller/OrderController");
 // const Admin = require("../models/admin");
 /* GET home page. */
 let UserCart;
+let CartCount =0;
 let userlogged = false;
 let duplicate = false;
-router.get("/", function (req, res, next) {
+router.get("/", async function (req, res, next) {
   if (req.session.login) {
-    // cartController.findcart(req.session.user).then((doc) => {
-    // UserCart = doc;
-    // console.log(UserCart.Produtcs);
-    // });
+   CartCount = await cartController.getCartCount(req.session.user._id)
+   console.log(CartCount);
+
+
   }
+  req.session.CartCount = CartCount;
   Categery.find()
     .then((Cats) => {
       req.session.Categories = Cats;
@@ -41,6 +43,7 @@ router.get("/", function (req, res, next) {
           UserCart,
           AllCategeries,
           home: true,
+          CartCount,
         });
       });
     })
@@ -176,7 +179,9 @@ router.get("/category/:id", async (req, res, next) => {
         if (products.length === 0) {
           next(new AppError("No Products found in this category !!", 404));
         }
-        res.render("user/Category", { products, subs ,AllCategeries});
+        res.render("user/Category", { products, subs ,AllCategeries,
+        CartCount:req.session.CartCount,
+        userlogged: req.session.login,});
       });
     })
     .catch((err) => {
@@ -199,12 +204,13 @@ router.post("/add-address",Auth.Isauth,Controller.addAddress)
 router.post("/placeorder",Auth.Isauth,OrderController.placeorder)
 router.get("/order-confirm/:id",Auth.Isauth,OrderController.orderconfirmation)
 router.post("/verifycoupon",Auth.Isauth,OrderController.verifycoupon)
+router.get('/showCoupons',Auth.Isauth,Controller.ViewCoupons)
 router.post('/buyNow',Auth.Isauth,OrderController.viewcheckout);
 //User Profile
 // router.post("/verifyPayment",Auth.Isauth,OrderController.verifypayment)
 router.get("/myaccount",Auth.Isauth,Controller.viewProfile)
 router.get("/myaccount/addresses",Auth.Isauth,Controller.viewAddresses)
-
+router.get("/coupons",Auth.Isauth,Controller.ViewCoupons)
 router.post("/view-edit-address",Auth.Isauth,Controller.vieweditaddress)
 
 router.get("/myaccount/orders",Auth.Isauth,OrderController.viewuserOrders)

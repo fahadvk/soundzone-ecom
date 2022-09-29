@@ -17,11 +17,15 @@ const {
 const AppError = require("../../utils/apperr");
 let adminlogged = false;
 
-router.get("/", (req, res) => {
+router.get("/", async(req, res) => {
   if (req.session.adminlogin) {
+// let Stats =   await adminController.getSalesReport()
+
+
     res.render("admin/home", {
       layout: "admin/adminlayout",
       adminlogged: req.session.adminlogin,
+      // Stats,
     });
   } else {
     res.render("admin/login", {
@@ -124,12 +128,14 @@ router.get("/unblockuser/:id",Auth.Adminlogged,(req, res) => {
       next(new AppError("Unblocking failed", 500));
     });
 });
+router.get("/viewWeeklyreport",Auth.Adminlogged,adminController.getSalesReport)
+
 router.post("/verifyPayment",Auth.Isauth, OrderController.verifypayment)
-router.get("/coupons",adminController.viewcoupons)
-router.post('/addcoupon',adminController.addcoupon)
-router.post('/deletecoupon',adminController.Deletecoupon)
-router.get("/orders",OrderController.getallorders)
-router.post("/changeOrderStat",OrderController.updateStatus)
+router.get("/coupons",Auth.Adminlogged,adminController.viewcoupons)
+router.post('/addcoupon',Auth.Adminlogged,adminController.addcoupon)
+router.post('/deletecoupon',Auth.Adminlogged,adminController.Deletecoupon)
+router.get("/orders",Auth.Adminlogged,OrderController.getallorders)
+router.post("/changeOrderStat",Auth.Adminlogged,OrderController.updateStatus)
 router.get("/cancelorder/:id",OrderController.cancelorder)
 // logout
 router.get("/logout", (req, res) => {

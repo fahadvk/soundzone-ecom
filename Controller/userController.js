@@ -6,6 +6,8 @@ const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
 const { response } = require("../app");
 const Twillio = require("../utils/Twillio");
+
+
 let Mobile
 module.exports = {
   userlogin: (logindata) => {
@@ -289,6 +291,26 @@ VerifyOtp:(req,res,next)=>{
 
   }
   })
+},
+ViewCoupons:async(req,res,next)=>{
+  let userId =mongoose.Types.ObjectId(req.session.user._id);
+  try{
+    
+  let availableCoupons = await Coupons.find({ActiveUsers:userId}) 
+  console.log(availableCoupons);
+  if(req.originalUrl == '/coupons'){
+  res.render("user/coupons",{availableCoupons});
+  }
+  else{
+    //res.json(availableCoupons)
+    return availableCoupons;
+  }
+  }
+  catch(error){
+    console.log(error);
+    next(new AppError('Error While viewing coupons'))
+  }
+
 }
 
 

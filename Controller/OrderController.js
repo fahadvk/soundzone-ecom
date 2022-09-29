@@ -8,6 +8,7 @@ const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
 const Products = require("../models/products");
 const { default: mongoose } = require("mongoose");
+const userController = require("./userController");
 var instance = new Razorpay({
   key_id: process.env.Razorpaykey,
   key_secret: process.env.Razorpay_secret,
@@ -23,6 +24,7 @@ module.exports={
           {
             Addresses ={}
           }
+          let Coupons =await userController.ViewCoupons(req,res,next);
           let Total = req.body.subtotal;
          if(req.body.Product){
           let data = await Products.findOne({_id:mongoose.Types.ObjectId(req.body.Product)},"Products.Items Name SellingPrice Images")
@@ -60,6 +62,8 @@ module.exports={
          subtotal :  req.body.subtotal,
          Addresses:Addresses.Addresses, 
         userlogged:req.session.login,
+        CartCount:req.session.CartCount,
+        Coupons,
       Total},
         )
           } catch (error) {
@@ -115,7 +119,7 @@ Order.save().then((data)=>{
     // res.render("Order Confirmed");
     Orders.findOneAndUpdate({_id:data._id},{OrderStatus:"Placed"}).then((updateddata)=>{
     // res.redirect("/order-confirm/data._id")
-    if(! req.session.savedplaceorder.status){
+    if(! req.session.savedplaceorder){
     clearCart(req.session.user._id)
     }
     else {
@@ -171,7 +175,7 @@ try {
   
       response.status = true; 
       res.json(response)
-      if(!req.session.savedplaceorder.status){
+      if(!req.session.savedplaceorder){
       clearCart(req.session.user._id)
       }
       else {
@@ -187,13 +191,14 @@ try {
 orderconfirmation:(req,res,next)=>{
   // console.log(req.params.id)
   try {
-    Orders.findOne({_id:req.params.id}).populate("Products.Items").then((data)=>{
+    Orders.findOne({_id:req.params.id}).populate("Products.Items").then(async(data)=>{
       console.log(data)
       if(!data){
         next(new AppError("can't get any orders",500))
       }
-      // Coupons.find({},{Name,CouponCode}).
-      res.render("user/order-confirmation",{data})
+      await  Coupons.findOneAndUpdate({_id:req.session.Couponid},{$pull:{ActiveUsers:req.session.user._id}})
+      res.render("user/order-confirmation",{data,  userlogged:req.session.login,
+        CartCount:req.session.CartCount})
       
     }).catch((e)=>{
       next(new AppError("Error while loading this page",404))
@@ -207,7 +212,7 @@ orderconfirmation:(req,res,next)=>{
       // console.log(data);
     res.render("admin/orders",{  layout: "admin/adminlayout",data,adminlogged:true})
     }) 
-  }
+  } 
 ,
 viewuserOrders:async(req,res,next)=>{
   const page =parseInt(req.query.page) || 1;
@@ -218,9 +223,11 @@ viewuserOrders:async(req,res,next)=>{
   res.render("user/orders",{data,
     TotalOrders,
     page,
+    CartCount:req.session.CartCount,
   hasNextPage:items_Per_Page * page < TotalOrders,
   hasPreviousPage : page > 1,
   PreviousPage : page -1,
+  userlogged:req.session.login,
    })
 })
  },
@@ -229,6 +236,7 @@ viewuserOrders:async(req,res,next)=>{
   let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
   console.log(orderDetails);
     res.render("user/viewsingle",{orderDetails,userlogged:true,
+      CartCount:req.session.CartCount,
  
   })
   }
@@ -279,6 +287,7 @@ updateStatus:async(req,res,next)=>{
 },
 verifycoupon:(req,res,next)=>{
   let response = {};
+  try {
   Coupons.findOne({
   CouponCode:req.body.check
   }).then(async(data)=>{
@@ -288,11 +297,11 @@ verifycoupon:(req,res,next)=>{
     }
     else{
       if(!data.ActiveUsers.includes(req.session.user._id))
-      { response.message = "Sorry this Coupon is not Available"
+       { 
+        response.message = "Sorry this Coupon is not Available"
         res.json(response);
-      }
-  console.log(data);
-  if(req.body.Subtotal >= data.Minamount)
+       }
+  else if(req.body.Subtotal >= data.Minamount)
   {
     let Discount =req.body.Subtotal * data.Discount/100;
     console.log(Discount);
@@ -301,8 +310,7 @@ verifycoupon:(req,res,next)=>{
   // await Cart.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
       response.status = true;
       response.Discount = Discount;
-       req.session.CouponCode= data.CouponCode;
-    await  Coupons.findOneAndUpdate({_id:data._id},{$pull:{ActiveUsers:req.session.user._id}})
+       req.session.Couponid= data._id;
   res.json(response)
   }
   else{
@@ -311,8 +319,10 @@ verifycoupon:(req,res,next)=>{
   }
 }
   })
+  }catch{
+    next(new AppError('Error found applying coupon'))
+  }
 }
-
 }
 
 

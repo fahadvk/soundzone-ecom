@@ -104,6 +104,7 @@ exports.findproduct = async (req, res, next) => {
         if (!product) {
           next(new AppError("No Products found !", 404));
         }
+        else {
         let Nostock = false;
         let Stock = product.Quantity;
      (Stock <=0)? Nostock = true:Nostock=false;
@@ -113,6 +114,7 @@ exports.findproduct = async (req, res, next) => {
           Nostock,
           AllCategeries:req.session.Categories,
         });
+ }
  }
  catch(err){
   console.log(err);

@@ -3,9 +3,6 @@
     <nav class="navbar navbar-light bg-light justify-content-center">
         {{!-- <a class="navbar-brand ms-5 justify-self-center">AudioZone</a> --}}
         <h4 class="text-primary mt-3">Orders</h4>
-        {{!-- <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Add Category
-        </button> --}}
 
 
 
@@ -43,19 +40,9 @@
                             <td>{{date this.createdAt}}</td>
                             <td>{{this.OrderStatus}}</td>
                             <td>{{this.Paymentmethod}}</td>
-                            {{!-- <td> <select name="statusd" id="status">
-                                    <option va> Pending</option>
-                                    <option> Placed</option>
-                                    <option value=""> Shipped</option>
-                                    <option value="">In-transist</option>
-                                    <option value="">Delivered</option>
-                                    <option value="">Cancelled</option>
-                                    <option value="">Returned</option>
-                                    <option value="">Return-Confirmed</option>
-                                </select></td> --}}
+
                             <td>
-                                {{!-- <button class="btn" onclick="changestat('{{this.id}}',-1)"><i
-                                        class="fa fa-chevron-circle-left" aria-hidden="true"></i></button> --}}
+
                                 <button class="btn" onclick="changestat('{{this.id}}')"><i
                                         class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
                                 {{#if (eq this.OrderStatus 'Cancelled')}}
@@ -63,9 +50,6 @@
                                 <button class="btn" onclick="cancelorder('{{this.id}}')"><i class="fa fa-ban"
                                         aria-hidden="true"></i></button>
                                 {{/if}}
-                                {{!-- <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target=".bd-example-modal-sm">Small modal</button> --}}
-
 
                             </td>
                         </tr>
@@ -77,7 +61,7 @@
 
         <script>
             function changestat(id) {
-                // let x = document.getElementById(Odstatus).value;
+
                 console.log(id)
                 $.ajax({
                     url: "/admin/changeOrderStat",

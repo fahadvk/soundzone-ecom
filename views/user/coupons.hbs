@@ -1,0 +1,51 @@
+<div class="container bg0 p-t-75 p-b-85">
+    <h2 class="text-center">
+        Your Coupons
+    </h2>
+    <div class="row mt-4">
+
+
+        <div>
+
+
+            <div class="row d-flex justify-content-between" id="">
+                {{#each availableCoupons}}
+                <div class="card" style="margin-left: 20px;">
+                    <div class=" card-body">
+                        <h5 class="card-title">CouponName : {{this.Name}}</h5>
+                        {{!-- <input type="hidden" name="" id="myInput" value={{this.CouponCode}}> --}}
+
+                        <input type="text" disabled value="{{this.CouponCode}}" placeholder="{{this.CouponCode}}"
+                            name="" id="myInput{{@index}}"
+                            style="border: dotted; border-color: #333;height: 30%;background-color: rgb(238, 232, 226);  "
+                            class="text-center" size="20%">
+                        <button onclick="myFunction({{@index}})">Copy</button>
+                        {{!-- <textarea disabled id="myInput" class=" card-title text-center" style="border: dotted;">
+                            CouponCode : {{this.CouponCode}}</textarea> --}}
+
+                        <p class="text-success">Max Discount<span>&nbsp;:{{this.MaxDiscount}}</span></p>
+                        <p class="text-danger">Minimum Purchasing Amount :<span class="text-secondary">
+                                {{this.Minamount}}</span></p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction(num) {
+        // Get the text field
+        var copyText = document.getElementById(`myInput${num}`);
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+        swal("Coupon-code copied" + copyText.value);
+    }
+</script>

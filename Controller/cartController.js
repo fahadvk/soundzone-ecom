@@ -3,6 +3,7 @@ const AppError = require("../utils/apperr");
 const UserModel = require("../models/user");
 const Products = require("../models/products");
 const wishlist = require("../models/wishlilst");
+const { default: mongoose } = require("mongoose");
 
 
 module.exports = {
@@ -117,6 +118,7 @@ module.exports = {
             cartnull,
             totalprice,
             userlogged: req.session.login,
+            CartCount:req.session.CartCount
           });
         });
     } catch {
@@ -184,7 +186,8 @@ module.exports = {
       .then((data) => {
         console.log(data);
         res.render("user/wishlist", { data: data.Products,
-          userlogged: req.session.login});
+          userlogged: req.session.login,
+          CartCount:req.session.CartCount,});
       });
   },
   addtowishlist: async (req, res, next) => {
@@ -242,6 +245,30 @@ let response={
   Removefromwishlist :(req,res,next)=>{
    removefromwish(req.session.user._id,req.body.Product)
   },
+  getCartCount:async(userid)=>{
+ let count =await   Cart.aggregate([
+    {
+   $match:{
+    User: mongoose.Types.ObjectId(userid)
+   }
+    } ,
+    
+    {
+         $project: {
+            numberofItems: { $cond: { if: { $isArray: "$Products" }, then: { $size: "$Products" }, else: "NA"} }
+         }
+      }
+      
+   ] )
+   console.log(count);
+   if(count[0].numberofItems)
+   {
+    return 0;
+   }
+   else {
+   return count[0].numberofItems
+   }
+  }
 
 
 };
