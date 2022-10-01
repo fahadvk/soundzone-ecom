@@ -8,6 +8,7 @@ const Categery = require("../../models/category");
 const userController = require("../../Controller/userController");
 const adminController = require("../../Controller/adminController");
 const OrderController = require("../../Controller/OrderController")
+const productController = require("../../Controller/ProductController")
 
 const Auth = require("../../middlewares/auth")
 const { response } = require("../../app");
@@ -35,7 +36,7 @@ router.get("/", async(req, res) => {
   }
 });
 //
-router.post("/login", (req, res) => {
+router.post("/login", (req, res,next) => {
   adminController.adminlogin(req.body).then((response) => {
     if (response.status) {
       req.session.adminlogin = true;
@@ -47,7 +48,9 @@ router.post("/login", (req, res) => {
       req.session.loginError = true;
       res.redirect("/admin");
     }
-  });
+  }).catch((e)=>{
+    next(new AppError('Error While Login',500))
+  })
 });
 
 // router.get("/home", (req, res) => {
@@ -61,8 +64,9 @@ router.post("/login", (req, res) => {
 //   }
 // });
 //user management page
-router.get("/users",Auth.Adminlogged, (req, res) => {
-    User.find((err, docs) => {
+router.get("/users",Auth.Adminlogged, (req, res,next) => {
+  try{ 
+  User.find((err, docs) => {
       res.render("admin/userdata", {
         layout: "admin/adminlayout",
 
@@ -70,7 +74,10 @@ router.get("/users",Auth.Adminlogged, (req, res) => {
         user: docs,
       });
     });
- 
+  }
+  catch(e){
+next(new AppError('Error While Viewing Users List'))
+  }
 });
 //add user
 router.get("/adduser",Auth.Adminlogged, (req, res) => {
@@ -78,23 +85,25 @@ router.get("/adduser",Auth.Adminlogged, (req, res) => {
     res.render("admin/adduser", { layout: "admin/adminlayout" });
 
 });
-router.post("/adduser", (req, res) => {
-  userController.adduser(req.body).then((response) => {
-    if (response.userexist) {
-      res.redirect("/adduser");
-    } else if (response.status) {
-      console.log("user added");
+// router.post("/adduser", (req, res,next) => {
+//   userController.adduser(req.body).then((response) => {
+//     if (response.userexist) {
+//       res.redirect("/adduser");
+//     } else if (response.status) {
+//       console.log("user added");
 
-      res.redirect("/admin");
-    } else {
-      res.render("admin/adduser", {
-        layout: "admin/adminlayout",
-        userexist: response.userexist,
-      });
-    }
-  });
-});
-//block
+//       res.redirect("/admin");
+//     } else {
+//       res.render("admin/adduser", {
+//         layout: "admin/adminlayout",
+//         userexist: response.userexist,
+//       });
+//     }
+//   }).catch((e)=>{
+//     next(new AppError('Error Found While Signup'))
+//   })
+// });
+// //block
 router.get("/blockuser/:id", Auth.Adminlogged,(req, res, next) => {
   console.log(req.params.id);
   adminController
@@ -129,6 +138,10 @@ router.get("/unblockuser/:id",Auth.Adminlogged,(req, res) => {
     });
 });
 router.get("/viewWeeklyreport",Auth.Adminlogged,adminController.getSalesReport)
+router.get("/banners",Auth.Adminlogged,adminController.viewbannerPage)
+router.post('/addbanner',Auth.Adminlogged,productController.uploadBannerImage,adminController.addBanner)
+router.post('/editBanner',Auth.Adminlogged,productController.uploadBannerImage,adminController.EditBanner)
+router.get('/deletebanner/:id',Auth.Adminlogged,adminController.DeleteBanner)
 
 router.post("/verifyPayment",Auth.Isauth, OrderController.verifypayment)
 router.get("/coupons",Auth.Adminlogged,adminController.viewcoupons)

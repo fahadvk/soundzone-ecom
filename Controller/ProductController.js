@@ -121,6 +121,7 @@ exports.findproduct = async (req, res, next) => {
   next(new AppError("Error While Loading Product",500))
  }
       }
+      
 
 exports.getall = () => {
   return new Promise(async (resolve, reject) => {
@@ -174,3 +175,20 @@ exports.DeleteProduct = async (req, res, next) => {
     next(new AppError("Error While Deleting product"));
   }
 };
+
+const bannerstorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/banner");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+
+    cb(null, file.fieldname + new Date().toISOString() + file.originalname);
+  },
+});
+  const uploadBanner = multer({
+    storage: bannerstorage,
+    fileFilter: filefilter,
+  });
+   
+  exports.uploadBannerImage = uploadBanner.single('banner')

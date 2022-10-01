@@ -5,7 +5,36 @@ const Category = require("../models/category");
 const bcrypt = require("bcrypt");
 const { response } = require("../app");
 const Coupons = require("../models/coupons");
-const Order = require("../models/Order")
+const Order = require("../models/Order");
+const Banner = require("../models/Banner");
+const multer = require('multer')
+const fs = require('fs');
+const { default: mongoose } = require("mongoose");
+const AppError = require("../utils/apperr");
+const filestorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/banner");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
+});
+const filefilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/webp"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+
+  
+
 module.exports = {
   adminlogin: (data) => {
     return new Promise(async (resolve, reject) => {
@@ -13,7 +42,7 @@ module.exports = {
       let response = {
         status: false,
       };
-  
+      try {
       let admin = await Admin.findOne({ username: data.email });
       if (admin) {
         let Password = admin.Password;
@@ -38,6 +67,10 @@ module.exports = {
         resolve(response);
     
       }
+    }
+  catch (err) {
+      reject(err)
+    }
     });
   },
 
@@ -93,7 +126,7 @@ module.exports = {
     res.render("admin/coupons",{data,layout:"admin/adminlayout",adminlogged:true})
 })
   },
-  addcoupon:(req,res,next)=>{
+  addcoupon: (req,res,next)=>{
     console.log(req.body);
   
     Coupons.create(req.body).then(async(doc)=>{
@@ -118,9 +151,16 @@ module.exports = {
   },
   getSalesReport: async(req,res,next)=>
   {
-    console.log("ithenth myr")
+    
  let Daywise = await Order.aggregate(
       [
+        {
+        $match:{
+              OrderStatus:{$ne:["Cancelled"] },
+             OrderStatus:{$ne:["Pending"] },
+               OrderStatus:{$ne:["Return-Confirmed"] }
+           }
+    },
  {
           $group:
             {
@@ -129,11 +169,10 @@ module.exports = {
               count: { $sum: 1 }
             }
         },
-        {
-          $sort:{
-            '_id' : -1
-          }
+      { $sort: {
+         '_id': -1
         }
+      }
         
       ]
    )
@@ -148,7 +187,13 @@ module.exports = {
  Daywise = Daywise.slice(-7)
 
   let Monthly = await   Order.aggregate(
-    [
+    [{
+      $match:{
+            OrderStatus:{$ne:["Cancelled"] },
+           OrderStatus:{$ne:["Pending"] },
+             OrderStatus:{$ne:["Return-Confirmed"] }
+         }
+  },
       {
         $group:
           {
@@ -162,6 +207,8 @@ module.exports = {
     
     ]
  ) 
+
+ 
   console.log(Daywise,Monthly)
   let response = {
     todaySale,
@@ -172,7 +219,51 @@ module.exports = {
   }
     res.json(response)
   },
- 
+ viewbannerPage:async(req,res,next)=>{
+  let Banners = await Banner.find({})
+  res.render("admin/banner",{layout:"admin/adminlayout",adminlogged:true,Banners})
+ },
+
+  addBanner:  async (req,res,next)=>{
+req.body.Image = req.file.filename
+  console.log(req.file.filename)
+  await Banner.create(req.body)
+  res.redirect('/admin/banners')
+ },
+ EditBanner:async(req,res,next)=>{
+  let Image
+  try{ 
+    if(req.file?.filename){
+    console.log(req.file,req.body);
+    if(fs.existsSync(`public/banner/${req.body.Image}`)){
+         fs.unlinkSync(`public/banner/${req.body.Image}`)
+    }
+    }
+    else{
+      Image = req.body.Image;
+    }
+     Image = req.file?.filename
+  const updated = await Banner.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.id),{$set:{Image:Image,Heading:req.body.Heading,
+    SubHeading:req.body.SubHeading,Description:req.body.Description}})
+    console.log(updated);
+    res.redirect('/admin/banners')
+  }
+  catch(e){
+    console.log(e)
+   next(new AppError('Error found While Editing',500))
+  }
+ },
+ DeleteBanner:async(req,res,next)=>{
+  try{
+ let doc =  await Banner.findOneAndDelete({_id:mongoose.Types.ObjectId(req.params.id)})
+ fs.unlinkSync(`public/banner/${doc.Image}`)
+
+ }catch(er){
+next(new AppError('Error found while removing the banner',500))
+ }
+}
+
 
 
 };
+

@@ -18,6 +18,7 @@ const categoryController = require("../Controller/categoryController");
 const AppError = require("../utils/apperr");
 const Categery = require("../models/category");
 const OrderController = require("../Controller/OrderController");
+const Banner = require("../models/Banner");
 // const Admin = require("../models/admin");
 /* GET home page. */
 let UserCart;
@@ -25,24 +26,25 @@ let CartCount =0;
 let userlogged = false;
 let duplicate = false;
 router.get("/", async function (req, res, next) {
+  try {
+   let Banners = await Banner.find({})
   if (req.session.login) {
-   CartCount = await cartController.getCartCount(req.session.user._id)
+ CartCount = await cartController.getCartCount(req.session.user._id)
    console.log(CartCount);
-
-
   }
   req.session.CartCount = CartCount;
   Categery.find()
     .then((Cats) => {
       req.session.Categories = Cats;
       AllCategeries = req.session.Categories;
-      ProductController.getall().then((products) => {
+    ProductController.getall().then((products) => {
         res.render("index", {
           userlogged: req.session.login,
           products,
           UserCart,
           AllCategeries,
           home: true,
+           Banners,
           CartCount,
         });
       });
@@ -50,6 +52,10 @@ router.get("/", async function (req, res, next) {
     .catch((e) => {
       next(new AppError("error found while loading Items", 404));
     });
+  }
+  catch(e){
+    next(new AppError('Error Found while loading home Page',500))
+  }
 });
 //signup
 router.get("/signup", function (req, res) {

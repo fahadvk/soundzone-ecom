@@ -5,35 +5,41 @@
 
 
   <!-- Slider -->
+
   <section class="section-slide">
+
     <div class="wrap-slick1">
+
       <div class="slick1">
-        <div class="item-slick1" style="background-image: url()">
+        {{#each Banners}}
+        <div class="item-slick1" style="background-image: url(banner/{{this.Image}})">
           <div class="container h-full">
             <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
               <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
                 <span class="ltext-101 cl2 respon2">
-                  Women Collection 2018
+                  {{this.Heading}}
                 </span>
               </div>
 
               <div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
                 <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-                  NEW SEASON
+                  {{this.SubHeading}}
                 </h2>
               </div>
 
               <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-                <a href="product.html" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                <a href="" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                   Shop Now
                 </a>
               </div>
             </div>
           </div>
         </div>
+        {{/each}}
 
+        {{!--
         <div class="item-slick1"
-          style="background-image: url(https://thumbs.dreamstime.com/b/music-banner-mobile-smartphone-screen-music-application-sound-headphones-audio-voice-radio-beats-black-music-banner-221042724.jpg)">
+          style="background-image: url(https://io.dropinblog.com/uploaded/blogs/34241963/files/featured/42408621_Holo_Audio_CYAN_Banner_1800_71edc437-73b9-4389-a26c-9e2a189365c7.jpg)">
           <div class="container h-full">
             <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
               <div class="layer-slick1 animated visible-false" data-appear="rollIn" data-delay="0">
@@ -53,10 +59,10 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
 
-        <div class="item-slick1"
-          style="background-image: url(https://c4.wallpaperflare.com/wallpaper/55/562/376/headphones-sennheiser-hd800-membranes-wallpaper-preview.jpg)">
+        {{!-- <div class="item-slick1"
+          style="background-image: url(https://snext-final.com/files/topics/1013_ext_35_en_0.jpg)">
           <div class="container h-full">
             <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
               <div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
@@ -78,8 +84,9 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
+
     </div>
   </section>
 

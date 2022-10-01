@@ -276,7 +276,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Your Coupons</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"></span>
                     </button>
@@ -284,7 +284,7 @@
                 <div class="modal-body">
                     {{#each Coupons}}
                     <div class="row d-flex justify-content-between" id="">
-                        <div class="card" style="margin-left: 20px;">
+                        <div class="card" style="margin-left: 15px;">
 
 
                             <div class=" card-body">
@@ -296,9 +296,7 @@
                                     style="border: dotted; border-color: #333;height: 30%;background-color: rgb(210, 197, 182);  "
                                     class="text-center" size="20%">
                                 <button onclick="myFunction({{@index}})">Copy</button>
-                                {{!-- <textarea disabled id="myInput" class=" card-title text-center"
-                                    style="border: dotted;">
-                            CouponCode : {{this.CouponCode}}</textarea> --}}
+
 
                                 <p class="text-success">Max Discount<span>&nbsp;:{{this.MaxDiscount}}</span></p>
                                 <p class="text-danger">Minimum Purchasing Amount :<span class="text-secondary">

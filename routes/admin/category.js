@@ -5,7 +5,7 @@ const Category = require("../../models/category");
 const subcategory = require("../../models/subcategory");
 const { route } = require("../user");
 const multer = require("multer");
-//const upload = multer({ dest: "public/images/category" });
+
 const adminController = require("../../Controller/adminController");
 const categoryController = require("../../Controller/categoryController");
 const SubCategery = require("../../models/subcategory");
@@ -13,7 +13,7 @@ const AppError = require("../../utils/apperr");
 const Products = require("../../models/products");
 const Auth = require("../../middlewares/auth")
 router.get("/",Auth.Adminlogged, (req, res) => {
-  
+  try{
     Category.find((err, docs) => {
       subcategory.find((err, subdocs) => {
         res.render("admin/categories", {
@@ -24,7 +24,10 @@ router.get("/",Auth.Adminlogged, (req, res) => {
         });
       });
     });
- 
+  }
+  catch(e){
+    next(new AppError('Error found While fetching Category',500))
+  }
 });
 
 router.post("/addcategory", (req, res, next) => {
@@ -43,9 +46,12 @@ router.post("/addcategory", (req, res, next) => {
 });
 //edit category
 let editingcat;
-router.get("/editcategory/:id",Auth.Adminlogged, async function (req, res) {
+router.get("/editcategory/:id",Auth.Adminlogged, async function (req, res,next) {
   editingcat = await Category.findById(req.params.id);
-
+if(!editingcat)
+{
+  next(new AppError("can't find the category",500))
+}
   res.render("admin/edit-category", {
     layout: "admin/adminlayout",
     adminlogged: true,
@@ -75,9 +81,6 @@ router.get("/deletecategory/:id",Auth.Adminlogged, async function (req, res, nex
     }
     else{
      res.json( `Can't Delete,! its linked with ${flag.Name}`)
-      //  Swal("Oops!", "Something went wrong!", "error");
-      //  swal("Oops!", "Can't Delete,!", "its linked with ");
-    //  sweetAlert.apply("Oops!", "Can't Delete,!", "its linked with ")
    
     }
    
@@ -88,14 +91,6 @@ router.get("/deletecategory/:id",Auth.Adminlogged, async function (req, res, nex
   }
 });
 
-// router.get("/addsubcategory", (req, res) => {
-//   Categery.find((err, docs) => {
-//     res.render("admin/add-subcategory", {
-//       layout: "admin/adminlayout",
-//       data: docs,
-//     });
-//   });
-// });
 const filestorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/Subcategories");
@@ -118,6 +113,7 @@ const filefilter = (req, file, cb) => {
     cb(null, false);
   }
 };
+
 const upload = multer({
   storage: filestorage,
   fileFilter: filefilter,
@@ -136,19 +132,7 @@ router.post("/addsubcategory", upload.single("image"), (req, res) => {
     });
 });
 
-// router.post("/editsubcategory/:id", async (req, res, next) => {
-//   // editingcat = await Categery.findById(req.params.id);
 
-//   console.log(editingcat.id);
-//   categoryController
-//     .editcategory(editingcat.id, req.body)
-//     .then((response) => {
-//       res.redirect("/admin/category");
-//     })
-//     .catch((e) => {
-//       next(new AppError("failed", 500));
-//     });
-// });
 //Delete SubCategory
 router.get("/deletesubcategory/:id",Auth.Adminlogged, async function (req, res, next) {
   try {

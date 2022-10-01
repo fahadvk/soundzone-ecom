@@ -1,0 +1,131 @@
+<body>
+    <center>
+        <h4 class="text-center mt-5 center">Banner</h4>
+    </center>
+
+
+    <button type="button" class="btn btn-primary me-5 " style=" float:right;" data-bs-toggle="modal"
+        data-bs-target="#exampleModale">
+        Add New Banner
+    </button>
+
+    <div class="row g-4 d-flex text-center justify-content-center ">
+
+
+        <table id="example" class="display table text-center mt-5 " style="width:50%">
+            <thead>
+
+                <tr>
+
+                    <th>
+                        #
+                    </th>
+                    <th>Image</th>
+                    <th>heading</th>
+                    <th>Created At</th>
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            </thead>
+            <tbody>
+                {{#each Banners}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td> <img src="/banner/{{this.Image}}" style="width: 120px;height:70px;" </td>
+                    <td>{{this.Heading}}</td>
+                    <td>{{date this.createdAt}}</td>
+                    <td></td>
+
+
+                    <td> <button class="btn btn-sm btn-outline-primary my-sm-0 " data-bs-toggle="modal"
+                            data-bs-target="#example{{@index}}" style="width: 60px;">Edit</button>
+                        <button class="btn btn-sm  btn-outline-danger my-sm-0 " style="width: 60px;" type=""
+                            onclick="confirmDelete('{{this._id}}')">Delete</button>
+                    </td>
+
+                </tr>
+
+
+                <div class="modal fade" id="example{{@index}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add banner</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/editBanner" method="post" enctype="multipart/form-data">
+                                    <input name="Heading" type="text" class="feedback-input text-dark"
+                                        value="{{this.Heading}}" />
+                                    <input name="SubHeading" type="text" class="feedback-input text-dark"
+                                        value="{{this.SubHeading}}" />
+
+                                    <input name="Description" type="text" class="feedback-input text-dark"
+                                        value="{{this.Description}}" size="30%" />
+
+                                    <input type="file" name="banner" placeholder="image"
+                                        class="feedback-input text-dark">
+                                    <input hidden name="id" value="{{this._id}}">
+                                    <input hidden name="Image" value="{{this.Image}}">
+                                    <input type="submit">
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {{/each}}
+            </tbody>
+        </table>
+        <div class="modal fade" id="exampleModale" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add banner</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/addBanner" method="post" enctype="multipart/form-data">
+                            <input name="Heading" type="text" class="feedback-input text-dark" placeholder="Heading" />
+                            <input name="SubHeading" type="text" class="feedback-input text-dark"
+                                placeholder="SubHeading" />
+                            <input name="Description" type="text" class="feedback-input text-dark"
+                                placeholder="Description" size="30%" />
+
+                            <input type="file" name="banner" placeholder="image" class="feedback-input text-dark">
+                            <input type="submit">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            function confirmDelete(id) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this deletion!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal("This Products is deleting..!", {
+                                icon: "warning"
+                            });
+                            location.assign(`/admin/deletebanner/${id}`);
+                        }
+                    });
+
+            }
+
+        </script>
+</body>
