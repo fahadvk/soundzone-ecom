@@ -7,6 +7,7 @@ const Razorpay = require("razorpay");
 const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
 const Products = require("../models/products");
+const {getCartCount} = require("../Controller/cartController")
 const { default: mongoose } = require("mongoose");
 const userController = require("./userController");
 var instance = new Razorpay({
@@ -16,7 +17,6 @@ var instance = new Razorpay({
 
 module.exports={
     viewcheckout:async(req,res,next)=>{
-      console.log("OOoo")
    let Items = []
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
@@ -27,6 +27,7 @@ module.exports={
           let Coupons =await userController.ViewCoupons(req,res,next);
           let Total = req.body.subtotal;
          if(req.body.Product){
+           console.log(req.body)
           let data = await Products.findOne({_id:mongoose.Types.ObjectId(req.body.Product)},"Products.Items Name SellingPrice Images")
           data.Qty = req.body.Qty
           Items = data;
@@ -118,9 +119,9 @@ Order.save().then((data)=>{
    })
   let response = {}
   if(req.body.Payment === "COD"){
-    // res.render("Order Confirmed");
+   
     Orders.findOneAndUpdate({_id:data._id},{OrderStatus:"Placed"}).then((updateddata)=>{
-    // res.redirect("/order-confirm/data._id")
+
     if(! req.session.savedplaceorder){
     clearCart(req.session.user._id)
     }
@@ -332,5 +333,7 @@ function clearCart(id){
   Cart.findOne({User:id}).then((data)=>{
     data.Products = undefined;
     data.save()
+    getCartCount(id)
+
   })
 }

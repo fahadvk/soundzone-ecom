@@ -141,25 +141,25 @@ module.exports = {
 },
 viewProfile:(req,res,next)=>{
 
-  res.render("user/myaccount",{user:req.session.user})
+  res.render("user/myaccount",{user:req.session.user, CartCount:req.session.CartCount,userlogged:true})
 },
 viewAddresses:async(req,res,next)=>{
  let userAddress = await Address.findOne({User:req.session.user._id})
  if(!userAddress){
   userAddress = {}
  }
-  res.render("user/addresses",{Address:userAddress.Addresses})
+  res.render("user/addresses",{Address:userAddress.Addresses, CartCount:req.session.CartCount,userlogged:true})
 },
 vieweditaddress:async(req,res,next)=>{
   let addressid = req.body.id;
   console.log(addressid);
   findAddress(addressid).then((data)=>{
  console.log(data[0].Addresses);
-res.render("user/edit-address",{data:data[0].Addresses})
+res.render("user/edit-address",{data:data[0].Addresses, CartCount:req.session.CartCount,userlogged:true})
   })  
 },
 ProfileSecurity:(req,res,next)=>{
-  res.render("user/accountsettings",{user:req.session.user,userlogged:true})
+  res.render("user/accountsettings",{user:req.session.user,userlogged:true, CartCount:req.session.CartCount})
 },
 editAddress:async(req,res,next)=>{
   console.log(req.body);
@@ -189,7 +189,7 @@ console.log(req.body);
   { $pull: { Addresses: { _id: req.body.id } } })
 },
 viewchangePassword:(req,res,next)=>{
-  res.render("user/changePassword",{notmatch:req.session.passwordnotmatch,Notmatch:req.session.confirmnotmatch})
+  res.render("user/changePassword",{notmatch:req.session.passwordnotmatch,Notmatch:req.session.confirmnotmatch, CartCount:req.session.CartCount,userlogged:true})
   req.session.passwordnotmatch = null;
 },
 changePassword:async(req,res,next)=>{
@@ -299,7 +299,7 @@ ViewCoupons:async(req,res,next)=>{
   let availableCoupons = await Coupons.find({ActiveUsers:userId}) 
   console.log(availableCoupons);
   if(req.originalUrl == '/coupons'){
-  res.render("user/coupons",{availableCoupons});
+  res.render("user/coupons",{availableCoupons, CartCount:req.session.CartCount,userlogged:true});
   }
   else{
     //res.json(availableCoupons)

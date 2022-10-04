@@ -1,15 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const axios = require("axios");
 require("dotenv").config;
 const twilio = require("../utils/Twillio");
-const jwt = require("jsonwebtoken");
 const mongoose = require("../models/mongoose");
-const Admin = require("../models/admin");
 const cartController = require("../Controller/cartController");
 const User = require("../models/user");
 const Auth = require("../middlewares/auth");
-const Order = require("../models/Order")
 const ProductController = require("../Controller/ProductController");
 const session = require("express-session");
 const Controller = require("../Controller/userController");
@@ -24,17 +20,13 @@ const Banner = require("../models/Banner");
 // const Admin = require("../models/admin");
 /* GET home page. */
 let UserCart;
-let CartCount =0;
 let userlogged = false;
 let duplicate = false;
 router.get("/", async function (req, res, next) {
   try {
    let Banners = await Banner.find({})
-  if (req.session.login) {
- CartCount = await cartController.getCartCount(req.session.user._id)
-   console.log(CartCount);
-  }
-  req.session.CartCount = CartCount;
+  let CartCount = await cartController.getCartCount(req.session.user._id);
+   req.session.CartCount = CartCount
   Categery.find()
     .then((Cats) => {
       req.session.Categories = Cats;
@@ -47,7 +39,7 @@ router.get("/", async function (req, res, next) {
           AllCategeries,
           home: true,
            Banners,
-          CartCount,
+          CartCount:req.session.CartCount,
         });
       });
     })
@@ -131,18 +123,10 @@ router.get("/login", (req, res) => {
 router.post("/confirmotp", function (req, res) {
   res.render("user/confirm");
 });
-
-// router.get("/", (req, res) => {
-//   res.render("admin/login");
-// });
-//user login
 router.post("/userlogin", (req, res,next) => {
   Controller.userlogin(req.body)
-    .then((response) => {
+    .then(async(response) => {
       if (response.status) {
-        // const token = jwt.sign({ user: response.user }, process.env.JwtSecret, {
-        //   expiresIn: process.env.Jwt_Expires,
-        // });
         console.log(response.user);
         req.session.user = response.user;
         req.session.email = response.email;
@@ -150,6 +134,8 @@ router.post("/userlogin", (req, res,next) => {
         req.session.login = true;
         res.redirect(req.session.returnTo || "/");
         delete req.session.returnTo;
+        CartCount = await cartController.getCartCount(req.session.user._id);
+        req.session.CartCount = CartCount;
       } else if (response.usernotfound) {
         req.session.usernotfound = true;
         req.session.wrongpassword = false;

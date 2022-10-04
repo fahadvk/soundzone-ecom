@@ -89,7 +89,7 @@
             </div>
             <div>
               <form action="/checkout" method="post">
-                <input hidden id="Qtybuy" name="Qty">
+                <input hidden id="Qtybuy" name="Qty" value="1">
                 <input hidden value="{{product.id}}" name="Product">
                 <input type="hidden" name="productprice" id="productPrice" value="{{product.SellingPrice}}">
                 <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn3 p-lr-15 trans-04 "
@@ -210,7 +210,6 @@
     if (val === 1 && Qty === -1) { }
     else {
       let value = parseInt(val) + parseInt(Qty)
-
       document.getElementById('Qtybuy').value = value;
     }
   }

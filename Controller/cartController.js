@@ -28,13 +28,14 @@ module.exports = {
           Products,
         });
         console.log(cart);
-        cart.save().then((data) => {
+        cart.save().then(async(data) => {
           console.log(data);
-          let cartid = data._id;
-
-          UserModel.findOneAndUpdate({ _id: User }, { Cart: cartid }).then(
+          let cartid = data._id;  
+          let CartCount = await module.exports.getCartCount(req.session.user._id);
+          req.session.CartCount = CartCount
+         await UserModel.findOneAndUpdate({ _id: User }, { Cart: cartid })
             res.redirect("/cart")
-          );
+          
         });
       } else {
         let UserCart = await Cart.findById(cust.Cart);
@@ -65,11 +66,13 @@ module.exports = {
           UpdateQuantity(product, cust);
           res.redirect("/cart");
         }
-        //adding a new product
+      
         else if (UserCart.Products == "null") {
           response.null = true;
           res.redirect("/cart");
-        } else {
+        }
+          //adding a new product
+        else {
           console.log("dkkkl,", Item, cust.Cart);
 
           await Cart.findOneAndUpdate(
@@ -79,9 +82,9 @@ module.exports = {
             console.log("dk");
             res.redirect("/cart");
           });
+        req.session.CartCount = req.session.CartCount +1;
         }
         cartController.addtocart(product, cust).then((response) => {
-          console.log(response);
           res.redirect("/cart");
         });
       }
@@ -104,14 +107,12 @@ module.exports = {
           {
             cartnull = true;
           }
-          // console.log(total, data);
      else {  
         products = data.Products 
           for (let item of products) {
             totalprice += item.Qty * item.Items.SellingPrice;
           }
          }
-          // console.log(totalprice);
           res.render("user/cart", {
             Products: products,
             Nostock: req.session.NoStock,
@@ -136,8 +137,10 @@ module.exports = {
         { _id: cart },
         { $pull: { Products: { Items: productid } } }
       );
-      this.getCartCount(req.session.user._id)
+      req.session.CartCount = req.session.CartCount -1;
+     
       res.redirect("/cart");
+      module.exports.getCartCount(req.session.user?._id)
       // let index = Products.indexof(product);
     } catch (error) {
       next(new AppError("errorremoving this item!!", 404));
@@ -155,7 +158,9 @@ module.exports = {
       await Cart.findOneAndUpdate(
         { _id: Cartid },
         { $pull: { Products: { Items: Prodid } } }
+
       );
+      req.session.CartCount = req.session.CartCount -1;
      }
     await Cart.findOneAndUpdate(
       {
@@ -169,8 +174,8 @@ module.exports = {
       }
     ) 
     } catch{next(new AppError('Error while changing Qty'))}
-      res.json(data);
-      this.getCartCount(req.session.user._id)
+      res.json("Success");
+      
   },
   getwishlist: (req, res, next) => {
     wishlist
