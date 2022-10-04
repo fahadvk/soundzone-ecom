@@ -16,7 +16,7 @@ var instance = new Razorpay({
 
 module.exports={
     viewcheckout:async(req,res,next)=>{
-      
+      console.log("OOoo")
    let Items = []
         try {
           let Addresses = await Address.findOne({User:req.session.user._id})
@@ -28,7 +28,9 @@ module.exports={
           let Total = req.body.subtotal;
          if(req.body.Product){
           let data = await Products.findOne({_id:mongoose.Types.ObjectId(req.body.Product)},"Products.Items Name SellingPrice Images")
-         Items = data;
+          data.Qty = req.body.Qty
+          Items = data;
+           Total = req.body.productprice * req.body.Qty;
          req.session.placeorder = {
           status:true,
           Items:Items,

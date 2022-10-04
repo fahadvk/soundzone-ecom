@@ -136,15 +136,16 @@ module.exports = {
         { _id: cart },
         { $pull: { Products: { Items: productid } } }
       );
-
+      this.getCartCount(req.session.user._id)
       res.redirect("/cart");
       // let index = Products.indexof(product);
     } catch (error) {
       next(new AppError("errorremoving this item!!", 404));
     }
   },
-  changeQty: async (req, res) => {
+  changeQty: async (req, res,next) => {
     console.log(req.body);
+    try {
     let Cartid = req.session.cartid;
     let Prodid = req.body.Product;
     console.log(Prodid);
@@ -166,18 +167,10 @@ module.exports = {
           "Products.$.Qty": Qty,
         },
       }
-    )
-      .then((data) => {
-        console.log(data);
-        console.log("updated");
-        // res.redirect("/cart");
-        res.json(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-
-    // console.log("change item qty is worked");
+    ) 
+    } catch{next(new AppError('Error while changing Qty'))}
+      res.json(data);
+      this.getCartCount(req.session.user._id)
   },
   getwishlist: (req, res, next) => {
     wishlist
@@ -255,20 +248,17 @@ let response={
     
     {
          $project: {
-            numberofItems: { $cond: { if: { $isArray: "$Products" }, then: { $size: "$Products" }, else: "NA"} }
+            numberofItems: { $cond: { if: { $isArray: "$Products" }, then: { $size: "$Products" }, else: 0 } }
          }
       }
       
    ] )
    console.log(count);
-   if(count[0].numberofItems)
-   {
-    return 0;
-   }
-   else {
+ 
    return count[0].numberofItems
-   }
-  }
+   
+  },
+
 
 
 };
