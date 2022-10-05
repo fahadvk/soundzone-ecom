@@ -60,7 +60,7 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
-                            <div class="ms-3">
+                            <div class="ms-3" style="min-height: 80px;">
                                 <p class="mb-2">Today Sale</p>
                                 <h6 class="mb-0" id="TodaySale"></h6>
                             </div>
@@ -69,7 +69,7 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                            <div class="ms-3">
+                            <div class="ms-3" style="min-height: 80px;">
                                 <p class="mb-2">Today Orders</p>
                                 <h6 class="mb-0 " id="TodayOrders"></h6>
                             </div>
@@ -78,7 +78,7 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-area fa-3x text-primary"></i>
-                            <div class="ms-3">
+                            <div class="ms-3" style="min-height: 80px;">
                                 <p class="mb-2">This month orders</p>
                                 <h6 class="mb-0" id="ThismonthOrders"></h6>
                             </div>
@@ -87,7 +87,7 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-pie fa-3x text-primary"></i>
-                            <div class="ms-3">
+                            <div class="ms-3" style="min-height: 80px;">
                                 <p class="mb-2">Monthly Revenue</p>
                                 <h6 class="mb-0" id="ThismonthRevenue"></h6>
                             </div>
@@ -106,9 +106,12 @@
                     <canvas id="ChartPie" style="width:100%;max-width:600px"></canvas>
 
                 </div>
-                {{!-- <canvas id="PieChart" style="max-width: 600px;padding: 0; "></canvas> --}}
+                <br>
 
 
+            </div>
+            <div class="row  col-sm-4 mt-5 d-flex">
+                <canvas id="PieChart" style="max-width: 600px;padding: 0;"></canvas>
             </div>
             <!-- Back to Top -->
 
@@ -126,18 +129,21 @@
                         let Monthly = response.Monthly;
                         let Today = response.Today;
                         let todaySale = response.todaySale
-                        document.getElementById('TodaySale').innerHTML = daywise[0].totalAmount;
-                        document.getElementById('TodayOrders').innerHTML = daywise[0].count;
-                        document.getElementById('ThismonthOrders').innerHTML = Monthly[0].count;
-                        document.getElementById('ThismonthRevenue').innerHTML = Monthly[0].totalAmount;
+
+                        document.getElementById('TodaySale').innerHTML = response?.todaySale[0]?.totalAmount || 0;
+                        document.getElementById('TodayOrders').innerHTML = response?.todaySale[0]?.count || 0;
+                        document.getElementById('ThismonthOrders').innerHTML = Monthly[0]?.count;
+                        document.getElementById('ThismonthRevenue').innerHTML = Monthly[0]?.totalAmount;
 
                         var xValues = [
                             daywise[0]._id.day,
                             daywise[1]._id.day,
                             daywise[2]._id.day,
                             daywise[3]._id.day,
-                            //daywise[3]._id.day,
                             daywise[4]._id.day,
+                            daywise[5]._id.day,
+                            daywise[6]._id.day,
+
 
 
 
@@ -149,6 +155,9 @@
                             daywise[2].count,
                             daywise[3].count,
                             daywise[4].count,
+                            daywise[5].count,
+                            daywise[6].count,
+
 
                             20,
                             0
@@ -236,40 +245,44 @@
                             config1
                         );
                         //PieChart
-                        /* const Piedata = {
-                             labels: [
-                                 'Red',
-                                 'Blue',
-                                 'Yellow'
-                             ],
-                             datasets: [{
-                                 label: 'My First Dataset',
-                                 data: [300, 50, 100],
-                                 backgroundColor: [
-                                     'rgb(255, 99, 132)',
-                                     'rgb(54, 162, 235)',
-                                     'rgb(255, 205, 86)'
-                                 ],
-                                 hoverOffset: 4
-                             }]
-                         };
-                         const configP = {
-                             type: 'doughnut',
-                             data: Piedata,
-                         };
-                         const PieChart = new Chart(
-                             document.getElementById('PieChart'),
-                             configP,
-                         );
- */
+
+
+                        const CatNames = response.Categorywise.map((val) => {
+                            return val._id
+                        })
+                        let hue = 0;
+                        let colors = []
+                        for (let j = 0; j < CatNames.length; j++) {
+                            let color = "hsl(" + hue + ",100%,50%)"
+                            colors.push(color)
+                            hue += 500
+                        }
 
 
 
 
-
+                        const Counts = response.Categorywise.map((val) => {
+                            return val.count
+                        })
+                        const Piedata = {
+                            labels:
+                                CatNames,
+                            datasets: [{
+                                label: '',
+                                data: Counts,
+                                backgroundColor: colors,
+                                hoverOffset: 4
+                            }]
+                        };
+                        const configP = {
+                            type: 'doughnut',
+                            data: Piedata,
+                        };
+                        const PieChart = new Chart(
+                            document.getElementById('PieChart'),
+                            configP,
+                        );
                     }
-
-
 
                 })
             </script>

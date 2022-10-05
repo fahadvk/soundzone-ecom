@@ -1,8 +1,6 @@
 const userModel = require("../models/user");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
-//const { checkout } = require("/routes/admin");
-
 let config = {
   serviceid: process.env.TwillioMsgId,
   accountSID: process.env.TwillioSid,

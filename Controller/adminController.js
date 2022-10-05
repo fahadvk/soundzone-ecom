@@ -170,21 +170,26 @@ module.exports = {
             }
         },
       { $sort: {
-         '_id': -1
+         '_id.day': -1
+
         }
       }
         
       ]
    )
+ console.log("opopo",Daywise.sort((a,b)=>{return b._id.month - a._id.month}))
    let  Today = new Date().getDate()
    let Month =  new Date().getMonth()
    let Year = new Date().getFullYear()
-  //  console.log(TotalAmounts,Today);
+    console.log(Today);
  let todaySale =  Daywise.filter((data)=>{
      return data._id.day == Today && data._id.year == Year && data._id.month == Month+1
   })
+  console.log("TODAYYYYYY",todaySale)
 
- Daywise = Daywise.slice(-7)
+
+ Daywise = Daywise.slice(0,7)
+ console.log("nksl",Daywise)
 
   let Monthly = await   Order.aggregate(
     [{
@@ -203,18 +208,61 @@ module.exports = {
           }
 
 
-      },
+      },{ $sort: {
+        '_id.month': -1
+
+       }
+     }
     
     ]
  ) 
 
+const Categorywise = await Order.aggregate([
+  {
+    '$unwind': {
+      'path': '$Products'
+    }
+  }, {
+    '$lookup': {
+      'from': 'products', 
+      'localField': 'Products.Items', 
+      'foreignField': '_id', 
+      'as': 'Products.Items'
+    }
+  }, {
+    '$unwind': {
+      'path': '$Products.Items'
+    }
+  }, {
+    '$lookup': {
+      'from': 'categories', 
+      'localField': 'Products.Items.Category', 
+      'foreignField': '_id', 
+      'as': 'Category'
+    }
+  }, {
+    '$group': {
+      '_id': '$Category.Name', 
+      'count': {
+        '$count': {}
+      }
+    }
+  }, {
+    '$unwind': {
+      'path': '$_id'
+    }
+  }
+])
  
-  console.log(Daywise,Monthly)
+
+
+ 
   let response = {
     todaySale,
     Monthly,
     Daywise,
     Today,
+    Categorywise,
 
   }
     res.json(response)

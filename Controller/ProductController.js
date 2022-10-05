@@ -88,11 +88,7 @@ exports.editproduct = (id, body, images) => {
         .catch(() => {
           reject(e);
         });
-      // doc = body;
-
-      // await doc.save();
-      
-    } catch (error) {
+          } catch (error) {
       reject(error);
     }
   });

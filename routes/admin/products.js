@@ -47,17 +47,15 @@ router.post(
         res.send("error ocuured");
       }
     });
-    // console.log(req.body);
-    // ProductController.addproduct(req.body, req.files);
+
   }
 );
-router.get("/editproduct/:id",Auth.Adminlogged, (req, res) => {
-  Products.findById(req.params.id)
-    .populate("Category")
-    .populate("SubCategory")
-    .then((data) => {
-      res.render("admin/edit-product", { data, layout: "admin/adminlayout" });
-    });
+router.get("/editproduct/:id",Auth.Adminlogged, async(req, res) => {
+ let data = await Products.findById(req.params.id)
+ let Cats =  await Category.find({})
+ let Sub = await SubCategory.find({})
+ res.render("admin/edit-product", {Cats,Sub, data, layout: "admin/adminlayout" ,adminlogged:true});
+   
 });
 router.post(
   "/edit-product/:id",
