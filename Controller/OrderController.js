@@ -7,7 +7,6 @@ const Razorpay = require("razorpay");
 const AppError = require("../utils/apperr");
 const Coupons = require("../models/coupons");
 const Products = require("../models/products");
-const {getCartCount} = require("../Controller/cartController")
 const { default: mongoose } = require("mongoose");
 const userController = require("./userController");
 var instance = new Razorpay({
@@ -65,7 +64,7 @@ module.exports={
          subtotal :  req.body.subtotal,
          Addresses:Addresses.Addresses, 
         userlogged:req.session.login,
-        CartCount:req.session.CartCount,
+      
         Coupons,
       Total},
         )
@@ -200,8 +199,8 @@ orderconfirmation:(req,res,next)=>{
         next(new AppError("can't get any orders",500))
       }
       await  Coupons.findOneAndUpdate({_id:req.session.Couponid},{$pull:{ActiveUsers:req.session.user._id}})
-      res.render("user/order-confirmation",{data,  userlogged:req.session.login,
-        CartCount:req.session.CartCount})
+      res.render("user/order-confirmation",{data,  userlogged:req.session.login
+       })
       
     }).catch((e)=>{
       next(new AppError("Error while loading this page",404))
@@ -226,7 +225,7 @@ viewuserOrders:async(req,res,next)=>{
   res.render("user/orders",{data,
     TotalOrders,
     page,
-    CartCount:req.session.CartCount,
+   
   hasNextPage:items_Per_Page * page < TotalOrders,
   hasPreviousPage : page > 1,
   PreviousPage : page -1,
@@ -239,7 +238,7 @@ viewuserOrders:async(req,res,next)=>{
   let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
   console.log(orderDetails);
     res.render("user/viewsingle",{orderDetails,userlogged:true,
-      CartCount:req.session.CartCount,
+     
  
   })
   }
@@ -333,7 +332,7 @@ function clearCart(id){
   Cart.findOne({User:id}).then((data)=>{
     data.Products = undefined;
     data.save()
-    getCartCount(id)
+  
 
   })
 }

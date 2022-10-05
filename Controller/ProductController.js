@@ -108,7 +108,7 @@ exports.findproduct = async (req, res, next) => {
           userlogged: req.session.login,
           product,
           Nostock,
-          CartCount:req.session.CartCount,
+          
           AllCategeries:req.session.Categories,
         });
  }

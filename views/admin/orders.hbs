@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css
+">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
 
 <body>
 
@@ -19,6 +22,19 @@
         <div class="container " style="width: 60%">
             <div id="demo_info" class="box"></div>
             <div id="dynamic">
+
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Minimum date:</td>
+                            <td><input type="text" id="min" name="min"></td>
+                        </tr>
+                        <tr>
+                            <td>Maximum date:</td>
+                            <td><input type="text" id="max" name="max"></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <table id="order-table" class="display table  " style="width:100%;">
                     <thead>
                         <tr>
@@ -108,15 +124,52 @@
         <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
 
         <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+        <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+
         <script>
+
+            let minDate, maxDate;
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var min = minDate.val();
+                    var max = maxDate.val();
+                    var date = new Date(data[4]);
+
+                    if (
+                        (min === null && max === null) ||
+                        (min === null && date <= max) ||
+                        (min <= date && max === null) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
             $(document).ready(function () {
-                $('#order-table').DataTable({
+                // Create date inputs
+                minDate = new DateTime($('#min'), {
+                    format: 'MMMM Do YYYY'
+                });
+                maxDate = new DateTime($('#max'), {
+                    format: 'MMMM Do YYYY'
+                });
+
+                // DataTables initialisation
+                var table = $('#order-table').DataTable({
                     dom: 'Bfrtip',
                     buttons: [
                         'excel', 'pdf'
                     ]
                 });
-            })
+
+                // Refilter the table
+                $('#min, #max').on('change', function () {
+                    table.draw();
+                });
+            });
             table.buttons().container()
                 .appendTo($('.col-sm-6 :eq(0)', table.table().container()));
         </script>

@@ -74,9 +74,10 @@
             <i class="zmdi zmdi-search"></i>
           </div>
 
-          <div>
+          <div onload="count()">
             <a href=" /cart" style="text-decoration: none;color: black;"
-              class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="{{CartCount}}">
+              class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" id="cartCount"
+              data-notify="">
               {{!-- data-notify="10"> --}}
               <i class="zmdi zmdi-shopping-cart"></i></a>
 
@@ -165,7 +166,7 @@
         <a href="#">Home</a>
         {{! <ul class="sub-menu-m">
           <li><a href="index.html">Homepage 1</a></li>
-          <li><a href="home-02.html">Homepage 2</a></li>
+          <li><a href="home-02.html">HomepacartCountge 2</a></li>
           <li><a href="home-03.html">Homepage 3</a></li>
         </ul> }}
         <span class="arrow-main-menu-m">
@@ -182,13 +183,13 @@
         </ul>
       </li>
 
-      <li>
+      {{!-- <li>
         <a href="#" class="label1 rs1" data-label1="hot">Features</a>
-      </li>
+      </li> --}}
 
-      <li>
+      {{!-- <li>
         <a href="#">Blog</a>
-      </li>
+      </li> --}}
 
       <li>
         <a href="#">About</a>
@@ -218,3 +219,26 @@
   </div>
 
 </header>
+<script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
+<script>
+
+
+  addEventListener("DOMContentLoaded", function count() {
+    console.log("lnkdsl")
+    $.ajax({
+      url: "/getCartCount",
+      method: "GET",
+      success: (response) => {
+        console.log("dfjks", response)
+        if (response.status) {
+          document.getElementById('cartCount').dataset.notify = response.count;
+        }
+        else {
+
+        }
+      },
+
+    })
+  })
+
+</script>

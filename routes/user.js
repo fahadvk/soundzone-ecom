@@ -25,8 +25,7 @@ let duplicate = false;
 router.get("/", async function (req, res, next) {
   try {
    let Banners = await Banner.find({})
-  let CartCount = await cartController.getCartCount(req.session.user._id);
-   req.session.CartCount = CartCount
+ 
   Categery.find()
     .then((Cats) => {
       req.session.Categories = Cats;
@@ -39,7 +38,7 @@ router.get("/", async function (req, res, next) {
           AllCategeries,
           home: true,
            Banners,
-          CartCount:req.session.CartCount,
+      
         });
       });
     })
@@ -134,8 +133,7 @@ router.post("/userlogin", (req, res,next) => {
         req.session.login = true;
         res.redirect(req.session.returnTo || "/");
         delete req.session.returnTo;
-        CartCount = await cartController.getCartCount(req.session.user._id);
-        req.session.CartCount = CartCount;
+       
       } else if (response.usernotfound) {
         req.session.usernotfound = true;
         req.session.wrongpassword = false;
@@ -174,7 +172,7 @@ router.get("/category/:id", async (req, res, next) => {
           next(new AppError("No Products found in this category !!", 404));
         }
         res.render("user/Category", { products, subs ,AllCategeries,
-        CartCount:req.session.CartCount,
+      
         userlogged: req.session.login,});
       });
     })
@@ -184,7 +182,7 @@ router.get("/category/:id", async (req, res, next) => {
 });
 router.get("/productpage/:id",ProductController.findproduct)
 //Cart
-
+router.get("/getCartCount",Auth.Isauth,cartController.getCartCount)
 router.get("/cart", Auth.Isauth, cartController.findcart);
 router.post("/add-tocart", Auth.Isauth, cartController.addtocart);
 router.get("/remove-cartitem/:id", cartController.removefromcart);

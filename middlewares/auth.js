@@ -4,7 +4,7 @@ const AppError = require("../utils/apperr");
 exports.Isauth = async (req, res, next) => {
   // if (req.originalUrl != "/add-tocart" && req.originalUrl != "/add-to-wishlist")
   try{
- if(req.method !== "POST"){
+ if(req.method !== "POST" && req.originalUrl !== "/getCartCount"){
   req.session.returnTo = req.originalUrl;
  }
   if (!req.session.login) {

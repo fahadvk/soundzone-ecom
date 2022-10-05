@@ -31,8 +31,8 @@ module.exports = {
         cart.save().then(async(data) => {
           console.log(data);
           let cartid = data._id;  
-          let CartCount = await module.exports.getCartCount(req.session.user._id);
-          req.session.CartCount = CartCount
+   
+          
          await UserModel.findOneAndUpdate({ _id: User }, { Cart: cartid })
             res.redirect("/cart")
           
@@ -82,7 +82,7 @@ module.exports = {
             console.log("dk");
             res.redirect("/cart");
           });
-        req.session.CartCount = req.session.CartCount +1;
+        
         }
         cartController.addtocart(product, cust).then((response) => {
           res.redirect("/cart");
@@ -119,7 +119,7 @@ module.exports = {
             cartnull,
             totalprice,
             userlogged: req.session.login,
-            CartCount:req.session.CartCount
+          
           });
         });
     } catch {
@@ -137,10 +137,10 @@ module.exports = {
         { _id: cart },
         { $pull: { Products: { Items: productid } } }
       );
-      req.session.CartCount = req.session.CartCount -1;
+   
      
       res.redirect("/cart");
-      module.exports.getCartCount(req.session.user?._id)
+    
       // let index = Products.indexof(product);
     } catch (error) {
       next(new AppError("errorremoving this item!!", 404));
@@ -160,7 +160,7 @@ module.exports = {
         { $pull: { Products: { Items: Prodid } } }
 
       );
-      req.session.CartCount = req.session.CartCount -1;
+   
      }
     await Cart.findOneAndUpdate(
       {
@@ -185,7 +185,7 @@ module.exports = {
         console.log(data);
         res.render("user/wishlist", { data: data.Products,
           userlogged: req.session.login,
-          CartCount:req.session.CartCount,});
+          });
       });
   },
   addtowishlist: async (req, res, next) => {
@@ -243,11 +243,11 @@ let response={
   Removefromwishlist :(req,res,next)=>{
    removefromwish(req.session.user._id,req.body.Product)
   },
-  getCartCount:async(userid)=>{
+  getCartCount:async(req,res,next)=>{
  let count =await   Cart.aggregate([
     {
    $match:{
-    User: mongoose.Types.ObjectId(userid)
+    User: mongoose.Types.ObjectId(req.session.user._id)
    }
     } ,
     
@@ -259,8 +259,11 @@ let response={
       
    ] )
    console.log(count);
- 
-   return count[0].numberofItems
+    let response = {
+      count:count[0].numberofItems,
+      status:true
+    }
+   res.json(response)
    
   },
 
