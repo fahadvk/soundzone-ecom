@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/orderPage.css">
+
 <div class="container mt-5">
     <div class="row align-items-center">
         <div class="col-12 mt-5">
@@ -8,7 +9,7 @@
         </div>
 
 
-        <table class="table  " style="">
+        <table class="table" id="order" style="">
             <thead>
                 <tr>
                     <th scope="col"></th>
@@ -20,10 +21,11 @@
                     <th scope="col">Price</th>
 
                     <th scope="col">total</th>
-                    <th scope="col">Status</th>
+                    <th><button onclick="print()">invoice</button></th>
+
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="products">
                 {{#each orderDetails.Products}}
                 <tr>
                     <th scope="row">{{inc @index}}</th>
@@ -48,7 +50,7 @@
                     <td></td>
                     <td>SubTotal</td>
 
-                    <td>{{orderDetails.TotalPrice}}</td>
+                    <td>{{orderDetails.SubTotal}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -56,7 +58,7 @@
                     <td></td>
                     <td>Discount</td>
 
-                    <td>0</td>
+                    <td id="Discount">{{orderDetails.Discount}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -99,7 +101,6 @@
 
     </div>
 </div>
-
 <script>
     window.addEventListener('load', function () {
 
@@ -148,5 +149,20 @@
         }
 
     })
+    function print() {
 
+        var divContents = document.getElementById("order").innerHTML;
+        let Productdetails = document.getElementById('products').innerHTML
+        var a = window.open('', '', 'height=500, width=500');
+        a.document.write('<html>');
+        a.document.write('<body > <h1>  <br>');
+        a.document.write('<table> ')
+        a.document.write()
+        a.document.write(divContents);
+        a.document.write('</table>')
+        a.document.write('</body></html>');
+        a.document.close();
+        a.print();
+
+    }
 </script>

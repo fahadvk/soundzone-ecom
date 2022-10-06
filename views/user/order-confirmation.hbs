@@ -37,7 +37,7 @@
 
 
 
-                        <td>{{mult Qty this.Items.SellingPrice}}</td>
+                        <td>{{data.SubTotal}}</td>
                     </tr>
                     {{/each}}
                     <tr>
@@ -54,7 +54,7 @@
                         <td></td>
                         <td>Discount</td>
 
-                        <td>0</td>
+                        <td>{{data.Discount}}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -72,4 +72,8 @@
 
         </div>
     </div>
+    <script type="text/javascript">
+        function preventBack() { window.history.forward(); }
+        setTimeout("preventBack()", 0); window.onunload = function () { null };
+    </script>
 </body>

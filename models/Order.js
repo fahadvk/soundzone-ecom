@@ -33,13 +33,14 @@ const Orderschema = new mongoose.Schema({
         ]
       },
       SubTotal:{
-        type:String,
+        type:Number,
       },
       TotalPrice:{
            type:Number
       },
       Discount:{
-        type:Number
+        type:Number,
+        default:0,
       },
       OrderStatus:{
         type:String,

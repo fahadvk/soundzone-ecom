@@ -195,6 +195,7 @@
                                     <h6>{{Products.Name}}</h6>
                                     <div style="float: right;d-flex">
                                         <br><br>
+                                        <input type="hidden" name="" value="{{Products.Qty}}">
                                         <i class="text-center me-4 j mb-1">{{Products.Qty}}</i>
                                         <i>X</i>
                                         <i class="text-center">{{Products.SellingPrice}}</i>
@@ -334,7 +335,9 @@
             else {
                 let Total = document.getElementById("Total").value
                 const Subtotal = document.getElementById("Subtotal").value
-                let Discount = document.getElementById("Discountfield").value
+                let Discount = document.getElementById("Discount").value
+
+
                 $.ajax({
                     url: "/placeorder",
                     data: {
@@ -343,7 +346,7 @@
                         Total,
                         Subtotal,
                         Discount,
-                        //   Qty: qty,
+                        //Qty: qty,
                         // val: val,
                     },
 
@@ -441,11 +444,12 @@
         function updatePrice(discount) {
             console.log(discount)
             document.getElementById('Discountfield').innerHTML = discount;
+            document.getElementById('Discount').value = discount
             let total = document.getElementById("Subtotal").value;
             let Total = total - discount;
             document.getElementById('Total').value = Total;
             document.getElementById('Totalfield').innerHTML = Total;
-            console.log(document.getElementById('Total').value)
+
         }
         function showcoupons() {
             $("#CouponModal").modal()

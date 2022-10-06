@@ -31,9 +31,11 @@ module.exports={
           data.Qty = req.body.Qty
           Items = data;
            Total = req.body.productprice * req.body.Qty;
+           req.body.subtotal = req.body.productprice * req.body.Qty;
          req.session.placeorder = {
           status:true,
           Items:Items,
+          Qty:req.body.Qty
         }
          }
          else {
@@ -64,8 +66,7 @@ module.exports={
          subtotal :  req.body.subtotal,
          Addresses:Addresses.Addresses, 
         userlogged:req.session.login,
-      
-        Coupons,
+      Coupons,
       Total},
         )
           } catch (error) {
@@ -92,7 +93,7 @@ let OrderList ={
   console.log('thtu',data);
   data = {
       Items:data._id,
-      Qty:1,
+      Qty:req.session.placeorder.Qty,
         }
     }   
  const Order = new Orders({User: req.session.user._id,
@@ -101,7 +102,7 @@ let OrderList ={
  Address:req.body.Address,
  TotalPrice:req.body.Total,
  Discount:req.body.Discount,
-  SubTotal:req.body.SubTotal
+  SubTotal:req.body.Subtotal
 
 }) 
 
@@ -195,7 +196,7 @@ orderconfirmation:(req,res,next)=>{
   try {
     Orders.findOne({_id:req.params.id}).populate("Products.Items").then(async(data)=>{
       console.log(data)
-      if(!data){
+      if(!data ){
         next(new AppError("can't get any orders",500))
       }
       await  Coupons.findOneAndUpdate({_id:req.session.Couponid},{$pull:{ActiveUsers:req.session.user._id}})
@@ -237,6 +238,10 @@ viewuserOrders:async(req,res,next)=>{
   try {
   let orderDetails =   await Orders.findOne({_id:req.params.id}).populate('Products.Items')
   console.log(orderDetails);
+  if(!orderDetails)
+  {
+    next(new AppError("Can't get any orders",500))
+  }
     res.render("user/viewsingle",{orderDetails,userlogged:true,
      
  
@@ -308,8 +313,8 @@ verifycoupon:(req,res,next)=>{
     let Discount =req.body.Subtotal * data.Discount/100;
     console.log(Discount);
     Discount > data.MaxDiscount ? Discount = data.MaxDiscount:"";
-    response.message = `${data.Name}Coupon applied`
-  // await Cart.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
+    response.message = `Coupon applied`
+   await Orders.findOneAndUpdate({User:req.session.user._id},{Discount:Discount})
       response.status = true;
       response.Discount = Discount;
        req.session.Couponid= data._id;
