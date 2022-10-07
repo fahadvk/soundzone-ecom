@@ -7,6 +7,7 @@ const SubCategory = require("../models/subcategory");
 const { isValidObjectId, default: mongoose } = require("mongoose");
 const { NetworkContext } = require("twilio/lib/rest/supersim/v1/network");
 const AppError = require("../utils/apperr");
+const Orders = require("../models/Order");
 const filestorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/products");
@@ -156,9 +157,12 @@ exports.getProductsByCat = (id) => {
 };
 exports.DeleteProduct = async (req, res, next) => {
   try {
+    let ifAny = await Orders.findOne({'Products.Items':req.params.id})
+    console.log(ifAny)
+    if(!ifAny)
+    {
     let DeletingProd = await ProductModel.findById(req.params.id);
     var files = DeletingProd.Images;
-    // console.log(files);
     let images = files.map((val) => {
       val = `public/products/${val}`;
       return val;
@@ -167,6 +171,7 @@ exports.DeleteProduct = async (req, res, next) => {
     images.forEach((path) => fs.existsSync(path) && fs.unlinkSync(path));
     await ProductModel.findByIdAndDelete(req.params.id);
     res.redirect("/admin/product");
+  }
   } catch (error) {
     console.log(error);
     next(new AppError("Error While Deleting product"));

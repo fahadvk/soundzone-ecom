@@ -244,6 +244,7 @@ let response={
    removefromwish(req.session.user._id,req.body.Product)
   },
   getCartCount:async(req,res,next)=>{
+    try{
  let count =await   Cart.aggregate([
     {
    $match:{
@@ -258,12 +259,24 @@ let response={
       }
       
    ] )
-   console.log(count);
-    let response = {
-      count:count[0].numberofItems,
-      status:true
-    }
-   res.json(response)
+let response={}
+   if (count.length == 0)
+   {
+    response.count = 0
+  res.json({respons})
+   }
+   else {
+    response = {
+     count:count[0].numberofItems,
+     status:true
+   }
+  res.json(response)
+  }
+}
+  catch{
+    next(new AppError("Error found whille loading this page",500))
+  }
+  
    
   },
 
