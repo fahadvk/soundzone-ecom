@@ -3,9 +3,11 @@
 <div class="container mt-5">
     <div class="row align-items-center">
         <div class="col-12 mt-5">
-            <div class="page-title text-center">
+            <div class=" page-title text-center">
                 <h3> Order Details</h3>
+
             </div>
+
         </div>
 
 
@@ -21,7 +23,7 @@
                     <th scope="col">Price</th>
 
                     <th scope="col">total</th>
-                    <th><button onclick="print()">invoice</button></th>
+                    <th> <button id="invoice" onclick="print()">invoice</button></th>
 
                 </tr>
             </thead>
@@ -75,6 +77,7 @@
                     <td>Payment Method</td>
 
                     <td>{{orderDetails.Paymentmethod}}</td>
+                    <td></td>
                 </tr>
             </tbody>
             <input type="hidden" name="status" id="stat" value="{{orderDetails.OrderStatus}}">
@@ -151,18 +154,23 @@
     })
     function print() {
 
+
+        document.getElementById('invoice').setAttribute('hidden', 'hidden')
         var divContents = document.getElementById("order").innerHTML;
+
         let Productdetails = document.getElementById('products').innerHTML
+
         var a = window.open('', '', 'height=500, width=500');
         a.document.write('<html>');
-        a.document.write('<body > <h1>  <br>');
+
+        a.document.write('<body > <h1 style=" position: relative; top: 18px;  left: 10px;"> Invoice</h1> <br>');
         a.document.write('<table> ')
-        a.document.write()
         a.document.write(divContents);
         a.document.write('</table>')
         a.document.write('</body></html>');
         a.document.close();
         a.print();
+        document.getElementById('invoice').removeAttribute('hidden', 'hidden')
 
     }
 </script>

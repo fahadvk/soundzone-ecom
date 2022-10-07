@@ -47,18 +47,14 @@ module.exports = {
             } else {
               console.log("no");
               resolve(response);
-              // resolve({ status: false });
-              // req.session.loginError = true;
-              //res.redirect("/");
+           
             }
           });
         } else {
           console.log("failed");
           response.usernotfound = true;
           resolve(response);
-          // resolve({ status: false });
-          //req.session.loginError = true;
-          // res.redirect("/");
+      
         }
       } catch (error) {
         reject(error);
@@ -104,7 +100,7 @@ module.exports = {
           response.mobile = Mobile;
           response.email = email;
           
-          Coupons.updateMany({$or:[{Category:'NewUser'},{Category:'AllUser'}]},{$push:{ActiveUsers:doc._id}}).then((data)=>{
+          Coupons.updateMany({$or:[{Category:'All Users'},{Category:'All Users'}]},{$push:{ActiveUsers:doc._id}}).then((data)=>{
             resolve(response);
           })
          
@@ -311,11 +307,11 @@ ViewCoupons:async(req,res,next)=>{
     next(new AppError('Error While viewing coupons'))
   }
 
-}
 
+},
 
-};
- function findAddress(addressid){
+},
+function findAddress(addressid){
   return new Promise ((resolve,reject)=>{
  Address.aggregate([
   {

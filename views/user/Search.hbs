@@ -1,0 +1,48 @@
+<body class="animsition">
+
+    <!-- Product -->
+    <br> <br><br>
+    <section class="bg0 p-t-23 p-b-140">
+        <div class="container">
+            <div class="p-b-10">
+                <h67 class="ltext-103 ">{{products.[0].Category.Name}}</h6>
+            </div>
+            {{#if notfound}}
+            <h3>No Products match</h3>
+            {{else}}
+            <div class="row isotope-grid">
+                {{#each products}}
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{this.SubCategory}}">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            {{! <img src=" images/product-03.jpg" alt="IMG-PRODUCT" /> }}
+                            {{!-- <form action="productpage/{{this.id}}" method="post"> --}}
+                                <button type="submit">
+                                    <img src="/products/{{this.Images.[0]}}" />
+                                    <a href="/productpage/{{this._id}}"
+                                        class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+                                        Quick View
+                                    </a>
+                                </button>
+                        </div>
+                        {{!-- </form> --}}
+                        <div class="block2-txt flex-w flex-t p-t-14">
+                            <div class="block2-txt-child1 flex-col-l">
+                                <a href="/productpage/{{this.id}}"
+                                    class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{this.Name}}
+                                </a>
+
+                                <span class="stext-105 cl3"> {{this.SellingPrice}} </span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+    </section>

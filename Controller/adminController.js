@@ -9,6 +9,7 @@ const Order = require("../models/Order");
 const Banner = require("../models/Banner");
 const multer = require('multer')
 const fs = require('fs');
+let Monthly
 const { default: mongoose } = require("mongoose");
 const AppError = require("../utils/apperr");
 const filestorage = multer.diskStorage({
@@ -73,7 +74,51 @@ module.exports = {
     }
     });
   },
+  viewHome:async(req, res,next) => {
+    if (req.session.adminlogin) {
 
+      Monthly = await   Order.aggregate(
+        [{
+          $match:{
+                OrderStatus:{$ne:["Cancelled"] },
+               OrderStatus:{$ne:["Pending"] },
+                 OrderStatus:{$ne:["Return-Confirmed"] }
+             }
+      },
+          {
+            $group:
+              {
+                _id: { year: { $year: "$createdAt" } , month:{$month:"$createdAt"}},
+                totalAmount: { $sum: "$TotalPrice" },
+                count: { $sum: 1 }
+              }
+    
+    
+          },{ $sort: {
+            '_id.month': -1
+    
+           }
+         }
+        
+        ]
+     )
+
+
+
+  res.render("admin/home", {
+        layout: "admin/adminlayout",
+        Monthly,
+        adminlogged: req.session.adminlogin,
+      });
+    } else {
+      res.render("admin/login", {
+        layout: "admin/adminlayout",
+        adminlogged: req.session.adminlogin,
+      
+
+      });
+    }
+  },
   blockuser: (id) => {
     return new Promise(async function (resolve, reject) {
       try {
@@ -189,33 +234,9 @@ module.exports = {
 
 
  Daywise = Daywise.slice(0,7)
- console.log("nksl",Daywise)
-
-  let Monthly = await   Order.aggregate(
-    [{
-      $match:{
-            OrderStatus:{$ne:["Cancelled"] },
-           OrderStatus:{$ne:["Pending"] },
-             OrderStatus:{$ne:["Return-Confirmed"] }
-         }
-  },
-      {
-        $group:
-          {
-            _id: { year: { $year: "$createdAt" } , month:{$month:"$createdAt"}},
-            totalAmount: { $sum: "$TotalPrice" },
-            count: { $sum: 1 }
-          }
 
 
-      },{ $sort: {
-        '_id.month': -1
-
-       }
-     }
-    
-    ]
- ) 
+   
 
 const Categorywise = await Order.aggregate([
   {
@@ -254,8 +275,6 @@ const Categorywise = await Order.aggregate([
   }
 ])
  
-
-
  
   let response = {
     todaySale,

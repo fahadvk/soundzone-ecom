@@ -186,6 +186,20 @@ const bannerstorage = multer.diskStorage({
   const uploadBanner = multer({
     storage: bannerstorage,
     fileFilter: filefilter,
-  });
-   
+  });   
   exports.uploadBannerImage = uploadBanner.single('banner')
+ exports.search =async (req,res,next)=>{
+    console.log(req.body)
+   const search =req.body.search
+   try {
+    const products =await ProductModel.find({ Name: { '$regex': new RegExp(search), '$options': 'si' } } )
+     if(products.length === 0)
+     {
+      var notfound = true
+     }
+
+     res.render("user/Search",{products,userlogged:req.session.userlogged,notfound})
+    } catch (error) {
+      next(new AppError('Error found while Search'))
+    }
+    }

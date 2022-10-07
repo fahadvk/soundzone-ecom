@@ -5,7 +5,7 @@
     <div class="top-bar">
       <div class="content-topbar flex-sb-m h-full container">
         <div class="left-top-bar">
-          Free shipping for standard order over $100
+          Free shipping for All orders
         </div>
 
         <div class="right-top-bar flex-w h-full">
@@ -29,7 +29,8 @@
       <nav class="limiter-menu-desktop container">
         <!-- Logo desktop -->
         <a class="nav-brand text-secondary" href="/">
-          <h5 class="text-secondary">Audio Zone</h5>
+          {{!-- <h5 class="text-secondary">Audio Zone</h5> --}}
+          <img src="/images/icons/logo.svg" style="width: 100px;height: 50px;">
         </a>
 
         <!-- Menu desktop -->
@@ -40,8 +41,8 @@
 
             </li>
 
-            <li class="active-menu">
-              <a href="#">Shop</a>
+            <li class="">
+              <a style="text-decoration: none;">Shop</a>
               <ul class="sub-menu">
                 {{#each AllCategeries}}
                 <li><a href="/category/{{this.id}}">{{this.Name}}</a></li>
@@ -49,13 +50,7 @@
               </ul>
             </li>
 
-            <li class=>
-              <a href="#">Features</a>
-            </li>
 
-            <li>
-              <a href="#">Blog</a>
-            </li>
 
             <li>
               <a href="#">About</a>
@@ -68,32 +63,39 @@
         </div>
 
         <!-- Icon header -->
-        {{#if userlogged}}
+
         <div class="wrap-icon-header flex-w flex-r-m">
           <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
             <i class="zmdi zmdi-search"></i>
           </div>
-
+          {{#if userlogged}}
           <div onload="count()">
             <a href=" /cart" style="text-decoration: none;color: black;"
               class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" id="cartCount"
               data-notify="">
               {{!-- data-notify="10"> --}}
               <i class="zmdi zmdi-shopping-cart"></i></a>
+            {{else}}
+            <div>
+              <a href=" /cart" style="text-decoration: none;color: black;"
+                class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 ">
+                {{!-- data-notify="10"> --}}
+                <i class="zmdi zmdi-shopping-cart"></i></a>
 
-            {{! <i class="zmdi zmdi-shopping-cart"></i> }}
+              {{/if}}
+              {{! <i class="zmdi zmdi-shopping-cart"></i> }}
 
+            </div>
+
+            <a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+              <i class="zmdi zmdi-favorite-outline"></i>
+            </a>
+            <a href="/myaccount" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </a>
           </div>
 
-          <a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-            <i class="zmdi zmdi-favorite-outline"></i>
-          </a>
-          <a href="/myaccount" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-            <i class="fa fa-user" aria-hidden="true"></i>
-          </a>
-        </div>
-
-        {{/if}}
+          {{!-- /{{/if}} --}}
       </nav>
     </div>
   </div>
@@ -183,13 +185,6 @@
         </ul>
       </li>
 
-      {{!-- <li>
-        <a href="#" class="label1 rs1" data-label1="hot">Features</a>
-      </li> --}}
-
-      {{!-- <li>
-        <a href="#">Blog</a>
-      </li> --}}
 
       <li>
         <a href="#">About</a>
@@ -206,10 +201,10 @@
   <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
     <div class="container-search-header">
       <button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-        <img src=" images/icons/icon-close2.png" alt="CLOSE" />
+        <img src=" /images/icons/icon-close2.png" alt="CLOSE" />
       </button>
 
-      <form class="wrap-search-header flex-w p-l-15">
+      <form action="/search" method="post" class="wrap-search-header flex-w p-l-15">
         <button class="flex-c-m trans-04">
           <i class="zmdi zmdi-search"></i>
         </button>

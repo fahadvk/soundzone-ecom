@@ -18,23 +18,7 @@ const {
 const AppError = require("../../utils/apperr");
 let adminlogged = false;
 
-router.get("/", async(req, res) => {
-  if (req.session.adminlogin) {
-// let Stats =   await adminController.getSalesReport()
-
-
-    res.render("admin/home", {
-      layout: "admin/adminlayout",
-      adminlogged: req.session.adminlogin,
-      // Stats,
-    });
-  } else {
-    res.render("admin/login", {
-      layout: "admin/adminlayout",
-      adminlogged: req.session.adminlogin,
-    });
-  }
-});
+router.get("/",adminController.viewHome);
 //
 router.post("/login", (req, res,next) => {
   adminController.adminlogin(req.body).then((response) => {

@@ -222,5 +222,5 @@ router.post('/verifyOtp',Controller.VerifyOtp)
 router.route("/changePassword")
 .get(Auth.Isauth,Controller.viewchangePassword)
 .post(Auth.Isauth,Controller.changePassword)
-
+router.post('/search',ProductController.search)
 module.exports = router;

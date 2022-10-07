@@ -1,8 +1,10 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css
+">
+
 <body>
 
-    {{!--
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -38,8 +40,6 @@
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            {{!-- <img class="rounded-circle me-lg-2" src=" images/user.jpg" alt="" --}} {{!--
-                                style="width: 40px; height: 40px;"> --}}
                             <span class="d-none d-lg-inline-flex">Admin</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
@@ -110,190 +110,250 @@
 
 
             </div>
-            <div class="row  col-sm-4 mt-5 d-flex">
-                <canvas id="PieChart" style="max-width: 600px;padding: 0;"></canvas>
+            <div class="row d-flex">
+                <div class=" col-sm-4 mt-5 d-flex">
+                    <canvas id="PieChart" style="max-width: 600px;padding: 0;"></canvas>
+
+                </div>
             </div>
-
-            <div></div>
-            <!-- Back to Top -->
-
-
-
-            <script>
-
-
-                $.ajax({
-                    url: "/admin/viewWeeklyreport",
-                    method: "GET",
-                    success: (response) => {
-                        console.log(response)
-                        let daywise = response.Daywise;
-                        let Monthly = response.Monthly;
-                        let Today = response.Today;
-                        let todaySale = response.todaySale
-
-                        document.getElementById('TodaySale').innerHTML = response?.todaySale[0]?.totalAmount || 0;
-                        document.getElementById('TodayOrders').innerHTML = response?.todaySale[0]?.count || 0;
-                        document.getElementById('ThismonthOrders').innerHTML = Monthly[0]?.count;
-                        document.getElementById('ThismonthRevenue').innerHTML = Monthly[0]?.totalAmount;
-
-                        var xValues = [
-                            daywise[0]._id.day,
-                            daywise[1]._id.day,
-                            daywise[2]._id.day,
-                            daywise[3]._id.day,
-                            daywise[4]._id.day,
-                            daywise[5]._id.day,
-                            daywise[6]._id.day,
-
-
-
-
-                        ]
-                        var yValues = [
-
-                            daywise[0].count,
-                            daywise[1].count,
-                            daywise[2].count,
-                            daywise[3].count,
-                            daywise[4].count,
-                            daywise[5].count,
-                            daywise[6].count,
-
-
-                            20,
-                            0
-
-                            //daywise[3].count,
-
-                        ];
-
-                        const data = {
-                            labels: xValues,
-                            datasets: [{
-                                label: 'last Week Sales count',
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderColor: 'rgb(255, 99, 132)',
-                                data: yValues,
-                            }]
-                        };
-
-                        const config = {
-                            type: 'line',
-                            data: data,
-                            options: {
-                                legend: { display: true },
-
-                            }
-                        };
-                        const myChart = new Chart(
-                            document.getElementById('myChart'),
-                            config
-                        );
-                        // New Bar
-
-                        // const labels = Utils.months({ count: 7 });
-                        const labels = [daywise[0]._id.day,
-                        daywise[1]._id.day,
-                        daywise[2]._id.day,
-                        daywise[3]._id.day,
-                        daywise[4]._id.day,
-                        ]
-                        const data1 = {
-                            labels: labels,
-                            datasets: [{
-                                label: 'last Week Revenue',
-                                data: [daywise[0].totalAmount,
-                                daywise[1].totalAmount,
-                                daywise[2].totalAmount,
-                                daywise[3].totalAmount,
-                                daywise[4].totalAmount,
-
-                                ],
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 205, 86, 0.2)',
-                                    'rgba(75, 192, 192, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                    'rgba(153, 102, 255, 0.2)',
-                                    'rgba(201, 203, 207, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgb(255, 99, 132)',
-                                    'rgb(255, 159, 64)',
-                                    'rgb(255, 205, 86)',
-                                    'rgb(75, 192, 192)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(153, 102, 255)',
-                                    'rgb(201, 203, 207)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        };
-                        const config1 = {
-                            type: 'bar',
-                            data: data1,
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            },
-                        };
-                        const barChart = new Chart(
-                            document.getElementById('ChartPie'),
-                            config1
-                        );
-                        //PieChart
-
-
-                        const CatNames = response.Categorywise.map((val) => {
-                            return val._id
-                        })
-                        let hue = 0;
-                        let colors = []
-                        for (let j = 0; j < CatNames.length; j++) {
-                            let color = "hsl(" + hue + ",100%,50%)"
-                            colors.push(color)
-                            hue += 500
-                        }
-
-
-
-
-                        const Counts = response.Categorywise.map((val) => {
-                            return val.count
-                        })
-                        const Piedata = {
-                            labels:
-                                CatNames,
-                            datasets: [{
-                                label: '',
-                                data: Counts,
-                                backgroundColor: colors,
-                                hoverOffset: 4
-                            }]
-                        };
-                        const configP = {
-                            type: 'doughnut',
-                            data: Piedata,
-                        };
-                        const PieChart = new Chart(
-                            document.getElementById('PieChart'),
-                            configP,
-                        );
-                    }
-
-                })
-            </script>
-
-            <script>
-
-            </script>
-
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
+    </div>
+    <!-- Back to Top -->
+
+
+
+    <script>
+
+
+        $.ajax({
+            url: "/admin/viewWeeklyreport",
+            method: "GET",
+            success: (response) => {
+                console.log(response)
+                let daywise = response.Daywise;
+                let Monthly = response.Monthly;
+                let Today = response.Today;
+                let todaySale = response.todaySale
+
+                document.getElementById('TodaySale').innerHTML = response?.todaySale[0]?.totalAmount || 0;
+                document.getElementById('TodayOrders').innerHTML = response?.todaySale[0]?.count || 0;
+                document.getElementById('ThismonthOrders').innerHTML = Monthly[0]?.count;
+                document.getElementById('ThismonthRevenue').innerHTML = Monthly[0]?.totalAmount;
+
+                var xValues = [
+                    daywise[0]._id.day,
+                    daywise[1]._id.day,
+                    daywise[2]._id.day,
+                    daywise[3]._id.day,
+                    daywise[4]._id.day,
+                    daywise[5]._id.day,
+                    daywise[6]._id.day,
+
+
+
+
+                ]
+                var yValues = [
+
+                    daywise[0].count,
+                    daywise[1].count,
+                    daywise[2].count,
+                    daywise[3].count,
+                    daywise[4].count,
+                    daywise[5].count,
+                    daywise[6].count,
+
+
+                    20,
+                    0
+
+                    //daywise[3].count,
+
+                ];
+
+                const data = {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'last Week Sales count',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: yValues,
+                    }]
+                };
+
+                const config = {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        legend: { display: true },
+
+                    }
+                };
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+                // New Bar
+
+                // const labels = Utils.months({ count: 7 });
+                const labels = [daywise[0]._id.day,
+                daywise[1]._id.day,
+                daywise[2]._id.day,
+                daywise[3]._id.day,
+                daywise[4]._id.day,
+                ]
+                const data1 = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'last Week Revenue',
+                        data: [daywise[0].totalAmount,
+                        daywise[1].totalAmount,
+                        daywise[2].totalAmount,
+                        daywise[3].totalAmount,
+                        daywise[4].totalAmount,
+
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                const config1 = {
+                    type: 'bar',
+                    data: data1,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    },
+                };
+                const barChart = new Chart(
+                    document.getElementById('ChartPie'),
+                    config1
+                );
+                //PieChart
+
+
+                const CatNames = response.Categorywise.map((val) => {
+                    return val._id
+                })
+                let hue = 0;
+                let colors = []
+                for (let j = 0; j < CatNames.length; j++) {
+                    let color = "hsl(" + hue + ",100%,50%)"
+                    colors.push(color)
+                    hue += 500
+                }
+
+
+
+
+                const Counts = response.Categorywise.map((val) => {
+                    return val.count
+                })
+                const Piedata = {
+                    labels:
+                        CatNames,
+                    datasets: [{
+                        label: '',
+                        data: Counts,
+                        backgroundColor: colors,
+                        hoverOffset: 4
+                    }]
+                };
+                const configP = {
+                    type: 'doughnut',
+                    data: Piedata,
+                };
+                const PieChart = new Chart(
+                    document.getElementById('PieChart'),
+                    configP,
+                );
+            }
+
+        })
+    </script>
+
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+
+    <script>
+
+        let minDate, maxDate;
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = minDate.val();
+                var max = maxDate.val();
+                var date = new Date(data[4]);
+
+                if (
+                    (min === null && max === null) ||
+                    (min === null && date <= max) ||
+                    (min <= date && max === null) ||
+                    (min <= date && date <= max)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        $(document).ready(function () {
+            // Create date inputs
+            minDate = new DateTime($('#min'), {
+                format: 'MMMM Do YYYY'
+            });
+            maxDate = new DateTime($('#max'), {
+                format: 'MMMM Do YYYY'
+            });
+
+            // DataTables initialisation
+            var table = $('#order-table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf'
+                ]
+            });
+
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                table.draw();
+            });
+        });
+        table.buttons().container()
+            .appendTo($('.col-sm-6 :eq(0)', table.table().container()));
+    </script>
 
 </body>

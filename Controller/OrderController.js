@@ -109,7 +109,7 @@ let OrderList ={
 Order.save().then((data)=>{
   console.log(data);
   if(req.session.placeorder)
-  { console.log('dks');
+  { 
     req.session.placeorder = null;
     req.session.savedplaceorder = true;
   }
