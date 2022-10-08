@@ -30,7 +30,7 @@
             </div>
             <br>
 
-            <form action="/add-address" method="post">
+            <form id="address" action="/add-address" method="post" novalidate>
                 <div class="row col-md-6 ">
                     <div class="col-md-6 mb-3">
                         <label for="first_name">First Name
@@ -83,3 +83,51 @@
         </section>
     </div>
 </div>
+<script>
+
+
+    $(document).ready(function () {
+        $("#address").validate({
+            rules: {
+                FirstName: {
+                    required: true,
+                    minlength: 5,
+                    lettersonly: true
+                },
+                Email: {
+                    required: true,
+                    email: true,
+                    noCaps: true
+
+                },
+                Phone: {
+                    required: true,
+                    minlength: 10,
+                    maxlengh: 10
+
+                },
+                House: {
+                    required: true,
+
+                },
+                Address: {
+                    required: true,
+                    minlength: 5,
+                },
+                Pincode: {
+                    required: true,
+                    minlength: 6,
+                    maxlengh: 6
+                },
+                City: {
+                    required: true,
+                },
+                State: {
+                    required: true,
+                },
+
+            },
+
+        });
+    });
+</script>

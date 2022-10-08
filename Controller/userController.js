@@ -140,25 +140,37 @@ viewProfile:(req,res,next)=>{
   res.render("user/myaccount",{user:req.session.user,userlogged:true})
 },
 viewAddresses:async(req,res,next)=>{
+  try{
  let userAddress = await Address.findOne({User:req.session.user._id})
  if(!userAddress){
   userAddress = {}
  }
+
   res.render("user/addresses",{Address:userAddress.Addresses,userlogged:true})
+}
+catch{
+  next(new AppError('error found while viewing address'))
+}
 },
 vieweditaddress:async(req,res,next)=>{
   let addressid = req.body.id;
   console.log(addressid);
+  try{
   findAddress(addressid).then((data)=>{
  console.log(data[0].Addresses);
 res.render("user/edit-address",{data:data[0].Addresses, userlogged:true})
-  })  
+  }) 
+}
+catch{
+  next(new AppError('error found while add address'))
+} 
 },
 ProfileSecurity:(req,res,next)=>{
   res.render("user/accountsettings",{user:req.session.user,userlogged:true, })
 },
 editAddress:async(req,res,next)=>{
   console.log(req.body);
+  try{
   Address.findOneAndUpdate({'Addresses._id':req.body.id},{'$set':{'Addresses.$.FirstName':req.body.FirstName,
    'Addresses.$.LastName':req.body.LastName, 
    'Addresses.$.Phone':req.body.Phone,
@@ -175,14 +187,23 @@ editAddress:async(req,res,next)=>{
     }).catch((e)=>{
       next(new AppError("Error while fetching Address !!",500))
     })
-  
+  }
+  catch{
+    next(new AppError("Error"))
+  }
 
 },
 deleteaddress:async(req,res,next)=>{
 console.log(req.body);
+try{
   await Address.findOneAndUpdate({User:req.session.user._id},
     // {$pull:{'Addresses._id':req.body.id}})
   { $pull: { Addresses: { _id: req.body.id } } })
+}
+catch{
+  next(new AppError('error found while deletion'))
+}
+res.redirect("user/addresses")
 },
 viewchangePassword:(req,res,next)=>{
   res.render("user/changePassword",{notmatch:req.session.passwordnotmatch,Notmatch:req.session.confirmnotmatch,userlogged:true})
@@ -253,6 +274,7 @@ EditEmail:async(req,res,next)=>{
 EditMobile:async(req,res,next)=>{
   console.log(req.body);
   let response = {};
+  try{
 let exist = await User.findOne({Mobile:req.body.Mobile})
 console.log(exist);
 if(exist){
@@ -267,7 +289,10 @@ if(exist){
   res.json(response)
  })
  }
-
+  }
+  catch{
+    next(new AppError("error found while editing"))
+  }
 },
 VerifyOtp:(req,res,next)=>{
   let Number = req.session.EditMobile || Mobile;
@@ -286,7 +311,7 @@ VerifyOtp:(req,res,next)=>{
     res.json(response)
 
   }
-  })
+  }).catch((e)=>{new AppError("error found at verification")})
 },
 ViewCoupons:async(req,res,next)=>{
   let userId =mongoose.Types.ObjectId(req.session.user._id);
@@ -309,8 +334,9 @@ ViewCoupons:async(req,res,next)=>{
 
 
 },
+}
 
-},
+
 function findAddress(addressid){
   return new Promise ((resolve,reject)=>{
  Address.aggregate([
