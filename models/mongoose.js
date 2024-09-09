@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const { create } = require("hbs");
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 const mongoose = require("mongoose");
 const { NetworkContext } = require("twilio/lib/rest/supersim/v1/network");
 const db = process.env.DATABASE;

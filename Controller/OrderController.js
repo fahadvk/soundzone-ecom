@@ -1,7 +1,7 @@
 const  Cart =require("../models/cart")
 const Address = require("../models/Address")
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 const Orders = require("../models/Order")
 const Razorpay = require("razorpay");
 const AppError = require("../utils/apperr");
